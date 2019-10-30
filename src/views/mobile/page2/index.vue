@@ -1,13 +1,16 @@
 <template>
-  <div>page2</div>
+  <div class="page2">
+    <h1>page2</h1>
+    <div class="container"></div>
+  </div>
 </template>
 
 
 <script>
-// import { mapGetters, mapActions, mapState } from "vuex";
-// import _ from "lodash";
+import { mapGetters, mapActions, mapState } from "vuex";
+import _ from "lodash";
 export default {
-  name: "page2",
+  name: "page1",
   watch: {
     // flowData(val) {
     // }
@@ -23,7 +26,7 @@ export default {
     return {};
   },
   computed: {
-    //...mapState([""])
+    ...mapState([""])
   },
   mounted() {},
   beforeCreate() {},
@@ -40,4 +43,10 @@ export default {
 </script>
 
 <style lang="scss">
+.page2 {
+  .container{
+    height: 150px;
+    background: red;
+  }
+}
 </style>
