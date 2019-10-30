@@ -12,7 +12,7 @@
 - [√ 为 sass 提供全局样式，以及全局变量]
 - [√ 预渲染prerender-spa-plugin]
 - [√ 添加 IE 兼容]
-
+- [√ 移动端适配vh]
 ## Build Setup
 
 ``` bash
