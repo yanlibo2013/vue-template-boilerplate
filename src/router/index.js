@@ -24,7 +24,7 @@ export const constantRoutes = [
     path: "",
     // component: Container,
     component: () => import("@/container/index"),
-    redirect: "login",
+    redirect: "/editor/jspluimbchart",
     children: [
       {
         path: "dashboard",
