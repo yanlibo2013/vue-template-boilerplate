@@ -56,10 +56,23 @@ export default {
   methods: {
     // ...mapActions("permission",["getMenuData"]),
     initData() {
-      getMenu().then(res => {
-        // this.getMenuData(res.data.menu);
-        this.$store.dispatch('permission/getMenuData',res.data)
-      });
+      // getMenu().then(res => {
+      //   // this.getMenuData(res.data.menu);
+      //   this.$store.dispatch('permission/getMenuData',res.data)
+      // });
+
+      this.$store.dispatch("permission/getMenuData", [
+        {
+          path: "/editor/jspluimbchart",
+          name: "jspluimbchart",
+          meta: {
+            title: "流程编辑器",
+            icon: "nested",
+            noCache: true,
+            affix: true
+          }
+        }
+      ]);
     }
   },
   mounted() {

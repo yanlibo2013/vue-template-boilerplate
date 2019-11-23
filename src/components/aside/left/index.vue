@@ -11,7 +11,9 @@
         <template slot="title">
           <i class="icon iconfont icon-ir-supply-chain"></i>
           &nbsp;{{ drawNav.group }}
-          <span class="iconNavNub">({{ drawNav.thisIcon.length }})</span>
+          <span
+            class="iconNavNub"
+          >({{ drawNav.thisIcon.length }})</span>
         </template>
         <drag
           class="designIcon"
@@ -22,12 +24,7 @@
           :data-type="drawIcon.type"
           :transfer-data="{ drawIcon }"
         >
-          <el-tooltip
-            class="item"
-            effect="dark"
-            :content="drawIcon.name"
-            placement="top"
-          >
+          <el-tooltip class="item" effect="dark" :content="drawIcon.name" placement="top">
             <div class="item-step-icon">
               <i :class="drawIcon.name | iconFilter"></i>
               <h4>{{ drawIcon.name }}</h4>
@@ -81,12 +78,270 @@ export default {
       console.log("元素正在拖动");
     },
     initData() {
-      getAllStepList().then(res => {
-        this.stepList = this.getLeftAsideData(
-          res.data,
-          _.uniq(this.getGroupData(res.data))
-        );
-      });
+      // getAllStepList().then(res => {
+      //   this.stepList = this.getLeftAsideData(
+      //     res.data,
+      //     _.uniq(this.getGroupData(res.data))
+      //   );
+      // });
+      let data = [
+        {
+          id: "source",
+          name: "source",
+          type: "source",
+          tags: ["IO", "rtcflow"],
+          stepSettings: {},
+          outputConfigurations: {
+            output: [
+              {
+                column: "",
+                type: "",
+                alias: "",
+                description: ""
+              }
+            ]
+          }
+        },
+        {
+          id: "dummy_source",
+          name: "dummy_source",
+          type: "source_dummy",
+          tags: ["IO", "rtcflow"],
+          stepSettings: {
+            dataType: "userClick",
+            storage: "DUMMY"
+          },
+          outputConfigurations: {
+            output: [
+              {
+                column: "",
+                type: "",
+                alias: "",
+                description: ""
+              }
+            ]
+          }
+        },
+        {
+          id: "filter",
+          name: "filter",
+          type: "filter",
+          tags: ["Transform", "rtcflow"],
+          stepSettings: {},
+          inputConfigurations: {
+            input: [
+              {
+                column: "",
+                type: "",
+                alias: "",
+                description: ""
+              }
+            ]
+          },
+          outputConfigurations: {
+            output: [
+              {
+                column: "",
+                type: "",
+                alias: "",
+                description: ""
+              }
+            ]
+          }
+        },
+        {
+          id: "join",
+          name: "join",
+          type: "join",
+          tags: ["Join", "rtcflow"],
+          stepSettings: {},
+          inputConfigurations: {
+            left: [
+              {
+                column: "",
+                type: "",
+                alias: "",
+                description: ""
+              }
+            ],
+            right: [
+              {
+                column: "",
+                type: "",
+                alias: "",
+                description: ""
+              }
+            ]
+          },
+          outputConfigurations: {
+            output: [
+              {
+                column: "",
+                type: "",
+                alias: "",
+                description: ""
+              }
+            ]
+          }
+        },
+        {
+          id: "aggregate",
+          name: "aggregate",
+          type: "aggregate",
+          tags: ["Group", "rtcflow"],
+          stepSettings: {},
+          inputConfigurations: {
+            input: [
+              {
+                column: "",
+                type: "",
+                alias: "",
+                description: ""
+              }
+            ]
+          },
+          outputConfigurations: {
+            output: [
+              {
+                column: "",
+                type: "",
+                alias: "",
+                description: ""
+              }
+            ]
+          }
+        },
+        {
+          id: "transform",
+          name: "transform",
+          type: "transform",
+          tags: ["Transform", "rtcflow"],
+          stepSettings: {},
+          inputConfigurations: {
+            input: [
+              {
+                column: "",
+                type: "",
+                alias: "",
+                description: ""
+              }
+            ]
+          },
+          outputConfigurations: {
+            output: [
+              {
+                column: "",
+                type: "",
+                alias: "",
+                description: ""
+              }
+            ]
+          }
+        },
+        {
+          id: "sql",
+          name: "sql",
+          type: "sql",
+          tags: ["Transform", "rtcflow"],
+          stepSettings: {},
+          inputConfigurations: {
+            input: [
+              {
+                column: "",
+                type: "",
+                alias: "",
+                description: ""
+              }
+            ]
+          },
+          outputConfigurations: {
+            output: [
+              {
+                column: "",
+                type: "",
+                alias: "",
+                description: ""
+              }
+            ]
+          }
+        },
+        {
+          id: "lookup",
+          name: "lookup",
+          type: "lookup",
+          tags: ["Join", "rtcflow"],
+          stepSettings: {},
+          inputConfigurations: {
+            input: [
+              {
+                column: "",
+                type: "",
+                alias: "",
+                description: ""
+              }
+            ]
+          },
+          outputConfigurations: {
+            output: [
+              {
+                column: "",
+                type: "",
+                alias: "",
+                description: ""
+              }
+            ]
+          }
+        },
+        {
+          id: "sink",
+          name: "sink",
+          type: "sink",
+          tags: ["IO", "rtcflow"],
+          stepSettings: {},
+          inputConfigurations: {
+            input: [
+              {
+                column: "",
+                type: "",
+                alias: "",
+                description: ""
+              }
+            ]
+          }
+        },
+        {
+          id: "split",
+          name: "split",
+          type: "split",
+          tags: ["Set", "rtcflow"],
+          stepSettings: {},
+          inputConfigurations: {
+            input: [
+              {
+                column: "",
+                type: "",
+                alias: "",
+                description: ""
+              }
+            ]
+          },
+          outputConfigurations: {
+            output: [
+              {
+                column: "",
+                type: "",
+                alias: "",
+                description: ""
+              }
+            ]
+          }
+        }
+      ];
+
+      this.stepList = this.getLeftAsideData(
+        data,
+        _.uniq(this.getGroupData(data))
+      );
     },
     getLeftAsideData(data, group) {
       return _.map(group, item => {

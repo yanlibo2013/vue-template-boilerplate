@@ -72,8 +72,8 @@
       "alwaysShow": true,
       "children": [
         {
-          "path": "flowlist",
-          "name": "flowlist",
+          "path": "jspluimbchart",
+          "name": "jspluimbchart",
           "meta": {
             "title": "流程编辑器",
             "icon": "nested",
@@ -270,10 +270,7 @@
       "id": "source",
       "name": "source",
       "type": "source",
-      "tags": [
-        "IO",
-        "rtcflow"
-      ],
+      "tags": ["IO", "rtcflow"],
       "stepSettings": {},
       "outputConfigurations": {
         "output": [
@@ -290,10 +287,7 @@
       "id": "dummy_source",
       "name": "dummy_source",
       "type": "source_dummy",
-      "tags": [
-        "IO",
-        "rtcflow"
-      ],
+      "tags": ["IO", "rtcflow"],
       "stepSettings": {
         "dataType": "userClick",
         "storage": "DUMMY"
@@ -313,10 +307,7 @@
       "id": "filter",
       "name": "filter",
       "type": "filter",
-      "tags": [
-        "Transform",
-        "rtcflow"
-      ],
+      "tags": ["Transform", "rtcflow"],
       "stepSettings": {},
       "inputConfigurations": {
         "input": [
@@ -343,10 +334,7 @@
       "id": "join",
       "name": "join",
       "type": "join",
-      "tags": [
-        "Join",
-        "rtcflow"
-      ],
+      "tags": ["Join", "rtcflow"],
       "stepSettings": {},
       "inputConfigurations": {
         "left": [
@@ -381,10 +369,7 @@
       "id": "aggregate",
       "name": "aggregate",
       "type": "aggregate",
-      "tags": [
-        "Group",
-        "rtcflow"
-      ],
+      "tags": ["Group", "rtcflow"],
       "stepSettings": {},
       "inputConfigurations": {
         "input": [
@@ -411,10 +396,7 @@
       "id": "transform",
       "name": "transform",
       "type": "transform",
-      "tags": [
-        "Transform",
-        "rtcflow"
-      ],
+      "tags": ["Transform", "rtcflow"],
       "stepSettings": {},
       "inputConfigurations": {
         "input": [
@@ -441,10 +423,7 @@
       "id": "sql",
       "name": "sql",
       "type": "sql",
-      "tags": [
-        "Transform",
-        "rtcflow"
-      ],
+      "tags": ["Transform", "rtcflow"],
       "stepSettings": {},
       "inputConfigurations": {
         "input": [
@@ -471,10 +450,7 @@
       "id": "lookup",
       "name": "lookup",
       "type": "lookup",
-      "tags": [
-        "Join",
-        "rtcflow"
-      ],
+      "tags": ["Join", "rtcflow"],
       "stepSettings": {},
       "inputConfigurations": {
         "input": [
@@ -501,10 +477,7 @@
       "id": "sink",
       "name": "sink",
       "type": "sink",
-      "tags": [
-        "IO",
-        "rtcflow"
-      ],
+      "tags": ["IO", "rtcflow"],
       "stepSettings": {},
       "inputConfigurations": {
         "input": [
@@ -521,10 +494,7 @@
       "id": "split",
       "name": "split",
       "type": "split",
-      "tags": [
-        "Set",
-        "rtcflow"
-      ],
+      "tags": ["Set", "rtcflow"],
       "stepSettings": {},
       "inputConfigurations": {
         "input": [
@@ -553,10 +523,7 @@
       "name": "type",
       "type": "String",
       "defaultValue": "HDFS",
-      "values": [
-        "HDFS",
-        "KAFKA"
-      ],
+      "values": ["HDFS", "KAFKA"],
       "required": true,
       "advanced": false
     },
@@ -578,10 +545,7 @@
       "name": "format",
       "type": "String",
       "defaultValue": "csv",
-      "values": [
-        "csv",
-        "parquet"
-      ],
+      "values": ["csv", "parquet"],
       "required": true,
       "advanced": false
     },
@@ -632,10 +596,7 @@
       "name": "type",
       "type": "String",
       "defaultValue": "HDFS",
-      "values": [
-        "HDFS",
-        "KAFKA"
-      ],
+      "values": ["HDFS", "KAFKA"],
       "required": true,
       "advanced": false
     },
@@ -657,10 +618,7 @@
       "name": "format",
       "type": "String",
       "defaultValue": "csv",
-      "values": [
-        "csv",
-        "parquet"
-      ],
+      "values": ["csv", "parquet"],
       "required": true,
       "advanced": false
     },

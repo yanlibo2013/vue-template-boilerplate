@@ -12,9 +12,9 @@
           </el-col>
           <el-col :span="6" justify="space-around">
             <div class="grid-content bg-purple-light">
-              <el-button size="small" @click="clearall">清空</el-button>
+              <!-- <el-button size="small" @click="clearall">清空</el-button> -->
               <el-button size="small" @click="reset">还原</el-button>
-              <el-button size="small" @click="saveFlow">保存</el-button>
+              <!-- <el-button size="small" @click="saveFlow">保存</el-button> -->
             </div>
           </el-col>
         </el-row>
@@ -98,14 +98,184 @@ export default {
     ...Vuex.mapState([""])
   },
   mounted() {
-    if (this.$route.query.id) {
-      getFlowItem({ id: this.$route.query.id }).then(res => {
-        let flowData = res.data[0];
-        this.steps = flowData.steps;
-        this.links = flowData.links;
-        this.input1 = flowData.flowName;
-      });
-    }
+    // if (this.$route.query.id) {
+    //   getFlowItem({ id: this.$route.query.id }).then(res => {
+    //     let flowData = res.data[0];
+    //     this.steps = flowData.steps;
+    //     this.links = flowData.links;
+    //     this.input1 = flowData.flowName;
+    //   });
+    // }
+
+    let flowData = {
+      flowName: "flow_1",
+      links: [
+        {
+          name: "con_2824",
+          source: "source_1",
+          sourceOutput: "output",
+          target: "join_3",
+          targetInput: "left",
+          input: "left"
+        },
+        {
+          name: "con_2825",
+          source: "rtc_source_6",
+          sourceOutput: "output",
+          target: "join_3",
+          targetInput: "right",
+          input: "right"
+        },
+        {
+          name: "con_2826",
+          source: "join_3",
+          sourceOutput: "output",
+          target: "lookup_4",
+          targetInput: "input",
+          input: "input"
+        },
+        {
+          name: "con_2827",
+          source: "join_3",
+          sourceOutput: "output",
+          target: "dummy_source_5",
+          targetInput: "input",
+          input: "input"
+        },
+        {
+          name: "con_2828",
+          source: "lookup_4",
+          sourceOutput: "output",
+          target: "sink_2",
+          targetInput: "input",
+          input: "input"
+        },
+        {
+          name: "con_2829",
+          source: "dummy_source_5",
+          sourceOutput: "output",
+          target: "aggregate_7",
+          targetInput: "input",
+          input: "input"
+        },
+        {
+          name: "con_2830",
+          source: "aggregate_7",
+          sourceOutput: "output",
+          target: "sink_8",
+          targetInput: "input",
+          input: "input"
+        }
+      ],
+      steps: [
+        {
+          id: "source_1",
+          name: "source",
+          type: "source",
+          x: -9,
+          y: 110,
+          stepSettings: {},
+          outputConfigurations: {
+            output: []
+          }
+        },
+        {
+          id: "sink_2",
+          name: "sink",
+          type: "sink",
+          x: 1047,
+          y: 87,
+          stepSettings: {},
+          inputConfigurations: {
+            input: []
+          }
+        },
+        {
+          id: "join_3",
+          name: "join",
+          type: "join",
+          x: 367,
+          y: 236,
+          stepSettings: {},
+          inputConfigurations: {
+            input: []
+          },
+          outputConfigurations: {
+            output: []
+          }
+        },
+        {
+          id: "lookup_4",
+          name: "lookup",
+          type: "lookup",
+          x: 721,
+          y: 75,
+          stepSettings: {},
+          inputConfigurations: {
+            input: []
+          },
+          outputConfigurations: {
+            output: []
+          }
+        },
+        {
+          id: "dummy_source_5",
+          name: "dummy_source",
+          type: "source_dummy",
+          x: 283,
+          y: 466,
+          stepSettings: {
+            dataType: "userClick",
+            storage: "DUMMY"
+          },
+          outputConfigurations: {
+            output: []
+          }
+        },
+        {
+          id: "rtc_source_6",
+          name: "source",
+          type: "source",
+          x: -5,
+          y: 242,
+          stepSettings: {},
+          outputConfigurations: {
+            output: []
+          }
+        },
+        {
+          id: "aggregate_7",
+          name: "aggregate",
+          type: "aggregate",
+          x: 773,
+          y: 352,
+          stepSettings: {},
+          inputConfigurations: {
+            input: []
+          },
+          outputConfigurations: {
+            output: []
+          }
+        },
+        {
+          id: "sink_8",
+          name: "sink",
+          type: "sink",
+          x: 1112.7777777777778,
+          y: 395.6111145019532,
+          stepSettings: {},
+          inputConfigurations: {
+            input: []
+          }
+        }
+      ],
+      date: "2019-11-23 10:03:08",
+      id: 1
+    };
+
+    this.steps = flowData.steps;
+    this.links = flowData.links;
+    this.input1 = flowData.flowName;
   },
   beforeCreate() {},
   created() {},

@@ -6,9 +6,7 @@
       <el-col :span="24">
         <div class="grid-content">
           <span>流程筛选</span>
-          <el-button type="primary" icon="el-icon-edit" @click="handleCreate"
-            >添加</el-button
-          >
+          <el-button type="primary" icon="el-icon-edit" @click="handleCreate">添加</el-button>
         </div>
       </el-col>
     </el-row>
@@ -48,18 +46,8 @@
       <el-table-column prop="flowName" label="name"></el-table-column>
       <el-table-column fixed="right" label="操作" width="100">
         <template slot-scope="scope">
-          <el-button
-            type="text"
-            size="small"
-            @click="handleEdit(scope.$index, scope.row)"
-            >编辑</el-button
-          >
-          <el-button
-            type="text"
-            size="small"
-            @click="del(scope.$index, scope.row)"
-            >删除</el-button
-          >
+          <el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+          <el-button type="text" size="small" @click="del(scope.$index, scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -161,7 +149,7 @@ export default {
       //console.log(index, row);
       this.$router.push({
         path: "/editor/jspluimbchart",
-        query: {id:row.id}
+        query: { id: row.id }
       });
     },
     del(index, row) {
@@ -177,9 +165,9 @@ export default {
       this.formType = val;
     },
     initData(val) {
-      getflowlist(val).then(res => {
-        this.tableData = res.data;
-      });
+      // getflowlist(val).then(res => {
+      //   this.tableData = res.data;
+      // });
     }
   }
 };
