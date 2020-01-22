@@ -132,7 +132,8 @@ export default {
         return item.id != this.currentSelectStep.id;
       });
 
-      this.currentSelectStepAction({});
+      //this.currentSelectStepAction({});
+      this.$emit("currentSelectStep", {});
     },
     selectCurrentStep(val) {
       this.stepData = _.map(this.stepData, item => {
@@ -168,7 +169,8 @@ export default {
       callback();
     },
     dblClick(val) {
-      this.currentSelectStepAction(val);
+      //this.currentSelectStepAction(val);
+      this.$emit("currentSelectStep", val);
     },
     setNodeStyle(val) {
       switch (val) {
@@ -228,7 +230,7 @@ export default {
           this.getLabelByValue(
             currentConnection
               ? currentConnection.linkStrategy
-              : this.realtime.flowCepLinksStyle
+              : this.data.flowCepLinksStyle
           )
         );
 
@@ -307,8 +309,9 @@ export default {
       }
     },
     connectionDrag(c) {
-      this.IS_FLOW_CEP_LINK_ADD_ACTION(true);
-      let currenLinksStyle = this.realtime.flowCepLinksStyle;
+      //this.IS_FLOW_CEP_LINK_ADD_ACTION(true);
+      this.$emit("isFlowCepLinkAddAciton", true);
+      let currenLinksStyle = this.data.flowCepLinksStyle;
       this.setLinkStyle(c, currenLinksStyle);
     },
     delConnections(val, fn) {

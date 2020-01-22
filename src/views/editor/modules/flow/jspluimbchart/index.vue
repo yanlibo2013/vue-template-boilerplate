@@ -24,17 +24,9 @@
       <el-container>
         <el-main class="jsplumbchart-main">
           <drop class="drop-workplace" @drop="handleDrop" id="workplace">
-            <!-- <jsplumbchart
-              :data="jsplumbchartOption"
-              @modifyJsplumbchartOption="modifyJsplumbchartOption"
-              @modifyChart="modifyChart"
-              @nodedblClick="nodedblClick"
-              @handleDrop="handleDrop"
-              ref="jsplumbchart"
-            ></jsplumbchart>-->
-
             <jsplumbchartsub
               :data="{
+                flowCepLinksStyle:flowCepLinksStyle,
                 steps: steps,
                 links: links,
                 container: 'workplace-sub',
@@ -42,6 +34,8 @@
                 jsPlumb: jsPlumb
               }"
               @modifyChart="modifyChart"
+              @isFlowCepLinkAddAciton="isFlowCepLinkAddAciton"
+              @currentSelectStep="currentSelectStep"
               ref="jsplumbchart"
             ></jsplumbchartsub>
           </drop>
@@ -118,7 +112,8 @@ export default {
       links: [],
       steps: [],
       jsPlumb: jsPlumb,
-      matrix: ""
+      matrix: "",
+      flowCepLinksStyle: "NEXT"
     };
   },
   computed: {
@@ -152,6 +147,8 @@ export default {
   destroyed: function() {},
   methods: {
     //...mapActions([""]),
+    currentSelectStep() {},
+    isFlowCepLinkAddAciton(val) {},
     modifyJsplumbchartOption(val) {
       this.jsplumbchartOption = val;
     },
