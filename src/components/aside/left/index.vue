@@ -83,12 +83,47 @@ export default {
       console.log("元素正在拖动");
     },
     initData() {
-      getAllStepList().then(res => {
-        this.stepList = this.getLeftAsideData(
-          res.data,
-          _.uniq(this.getGroupData(res.data))
-        );
-      });
+      // getAllStepList().then(res => {
+      //   this.stepList = this.getLeftAsideData(
+      //     res.data,
+      //     _.uniq(this.getGroupData(res.data))
+      //   );
+      // });
+
+      let result = [
+        {
+          eventType: "StartEvent",
+          id: "",
+          name: "",
+          quantifier: { strategy: "ONE_OR_MORE" },
+          loopingContiguity: "CONSECUTIVE",
+          loopingGreedy: "GREEDY",
+          skipStrategy: "NO_SKIP",
+          skipToPatternName: ""
+        },
+        {
+          eventType: "ConditionEvent",
+          id: "",
+          name: "",
+          quantifier: {},
+          loopingContiguity: "CONSECUTIVE",
+          loopingGreedy: "GREEDY"
+        }
+      ];
+
+      result = [
+        {
+          group: "Events",
+          thisIcon: _.map(result, item => {
+            return {
+              ...item,
+              name: item.eventType
+            };
+          })
+        }
+      ];
+
+      this.stepList = result;
     },
     getLeftAsideData(data, group) {
       return _.map(group, item => {

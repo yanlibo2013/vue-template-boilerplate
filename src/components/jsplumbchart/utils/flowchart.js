@@ -1,6 +1,7 @@
 /* eslint-disable */
 //节点类型
 export function nodeClass(type) {
+	// console.log('export function nodeClass(type) {',val)
 	switch (type) {
 		//dataflow 端点左1，右-1
 		case 'source':
@@ -146,7 +147,7 @@ export var origin = {
 	connector: [ 'Flowchart', { stub: [ 5, 5 ], gap: 10, cornerRadius: 5, alwaysRespectStubs: true } ], //连接线的样式种类有[Bezier],[Flowchart],[StateMachine ],[Straight ]
 	isTarget: false, //是否可以放置（连线终点）
 	maxConnections: 1, // 设置连接点最多可以连接几条线,-1表示无限大
-	connectorOverlays: [ [ 'Arrow', { width: 10, length: 10, location: 1 } ] ]
+	connectorOverlays: [ [ 'Arrow', { width: 10, length: 10, location: 1 } ] ],
 };
 export var destination = {
 	//终点
@@ -165,7 +166,7 @@ export const addEndpointToNode = (jsplumbInstance, self, steps, flowData, _) => 
 	jsplumbInstance.deleteEveryEndpoint();
 	self.$nextTick(() => {
 		steps.forEach((data, index) => {
-			let drawType = data.type,
+			let drawType = data.eventType,
 				dataIndex = data.id;
 
 			//节点锚点添加
@@ -376,12 +377,12 @@ export const addEndpointToNode = (jsplumbInstance, self, steps, flowData, _) => 
 				);
 				jsplumbInstance.addEndpoint(
 					dataIndex,
-					{ anchors: 'LeftMiddle', maxConnections: drawType == 'sql' ? -1 : 1 },
+					{ anchors: 'LeftMiddle' },
 					{ uuid: dataIndex + 'input' + 'destination', ...destination }
 				);
 			}
 			jsplumbInstance.draggable(dataIndex, {
-				// containment: 'parent',
+				containment: 'parent',
 				start(params) {
 					// 拖动开始
 					// console.log(params);
@@ -502,13 +503,23 @@ export const addMultioutput = (list) => {
 	return result;
 };
 
-export const connect = (jsplumbInstance, self, links, connectCallback) => {
+export const connect = (jsplumbInstance, self, links, connectCallback,connecting) => {
 	self.$nextTick(() => {
 		//节点之间连线
 		links.forEach((item) => {
 			jsplumbInstance.connect({
-				uuids: [ item.source + item.sourceOutput + 'origin', item.target + item.input + 'destination' ]
+				//uuids: [ item.source + item.sourceOutput + 'origin', item.target + item.input + 'destination' ]
+				uuids: [ item.source + 'outputorigin', item.target + 'inputdestination' ]
 			});
+
+			connecting(item.linkStrategy);
+
+			//console.log([ item.source + item.sourceOutput + 'origin', item.target + item.input + 'destination' ]);
+
+			// jsplumbInstance.connect({
+			// 	source: item.source,
+			// 	target: item.target
+			// });
 		});
 		connectCallback();
 	});

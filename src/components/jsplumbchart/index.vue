@@ -1,24 +1,33 @@
 <template>
   <div class="jsplumb-chart">
-    <div class="cavansClass" id="cavans">
-      <flowchartNode
-        :data="{stepData:stepData}"
-        @dblClick="dblClick"
-        @copyNode="copyNode"
-        @delNode="delNode"
-        v-show="nodeType=='flowchartnode'"
-      ></flowchartNode>
+    <div class="cavansClass" id="cavans-sub">
+      <div
+        v-for="(data,index) in stepData"
+        :id="data.id"
+        :key="index"
+        :class="setNodeStyle(data.eventType)"
+        :data-sign="data.name"
+        :data-type="data.eventType"
+        :style="'left:'+data.x+'px;top:'+data.y+'px;position:absolute;margin:0'"
+        @dblclick="dblClick(data)"
+      >
+        <span v-show="data.eventType=='StartEvent'">开始</span>
+        <span v-show="data.eventType=='ConditionEvent'">条件</span>
+
+        <div v-show="data.id==currentSelectStep.id" class="resize top"></div>
+        <div v-show="data.id==currentSelectStep.id" class="resize left"></div>
+        <div v-show="data.id==currentSelectStep.id" class="resize bottom"></div>
+        <div v-show="data.id==currentSelectStep.id" class="resize right"></div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 /* eslint-disable */
-// import { mapGetters, mapActions, mapState } from "vuex";
-import getInstance from "./lib/getInstance";
+import { mapGetters, mapActions, mapState } from "vuex";
+import getInstance from "./utils/getInstance";
 import _ from "lodash";
-import flowchartNode from "./node/flowchatNode/index.vue";
-import panzoom from "./lib/pan";
 import {
   message,
   filterLinkData,
@@ -31,18 +40,18 @@ import {
   getNodeType,
   setClass,
   connect
-} from "./lib/flowchart";
+} from "./utils/flowchart";
 
 export default {
   watch: {
     data(val) {
+      // console.log(" data(val) {");
       this.stepData = this.data.steps;
       this.links = this.data.links;
-      this.nodeType = this.data.nodeType;
-      this.containerRect = val.containerRect;
+      // this.nodeType = this.data.nodeType;
     },
-    stepData(val) {
-      this.$emit("modifyChart", { stepData: val, links: this.links });
+    "realtime.currentSelectStep"(val) {
+      this.currentSelectStep = val;
     },
     links(val) {
       this.$emit("modifyChart", { stepData: this.stepData, links: val });
@@ -51,13 +60,10 @@ export default {
   props: {
     data: {
       type: Object,
-      default: {}
+      default: false
     }
   },
-  components: {
-    flowchartNode
-    // cepNode
-  },
+  components: {},
   data: function() {
     return {
       jsplumbInstance: getInstance({
@@ -65,53 +71,31 @@ export default {
         container: this.data.container,
         delConnections: this.delConnections,
         completedConnect: this.completedConnect,
+        connectionDrag: this.connectionDrag,
         jsPlumb: this.data.jsPlumb
       }),
       stepData: [],
       links: [],
-      nodeClass: nodeClass,
-      nodeIcon: nodeIcon,
-      setClass: setClass,
-      instanceZoom: "",
       nodeType: "",
-      isPanZoomInit: true,
-      cssText: "",
-      containerRect: ""
+      currentSelectStep: {}
     };
   },
   computed: {
-    //...mapState([""])
+    ...mapState(["realtime"])
   },
-  mounted() {},
+  mounted() {
+    this.$nextTick(() => {
+      this.initEvent();
+    });
+  },
   beforeCreate() {},
   created() {},
   beforeMount() {},
   beforeUpdate() {},
   updated() {
     this.$nextTick(() => {
-      if (this.containerRect) {
-        let lastStep = _.last(this.stepData);
-        let result = this.modifyNodePositon({ x: lastStep.x, y: lastStep.y });
-        this.stepData = _.map(_.cloneDeep(this.stepData), item => {
-          if (lastStep.id == item.id) {
-            return {
-              ...item,
-              x: result.x,
-              y: result.y
-            };
-          } else {
-            return item;
-          }
-        });
-
-        this.$emit("modifyJsplumbchartOption", {
-          ...this.data,
-          steps: this.stepData,
-          links: this.links,
-          containerRect: ""
-        });
-      }
-
+      //console.log('document.getElementById("cavans-sub")',document.getElementById("cavans-sub").childNodes);
+      // this.removChildNodes();
       this.drawJsplumbChart(
         {
           jsplumbInstance: this.jsplumbInstance,
@@ -121,91 +105,82 @@ export default {
         },
         () => {
           this.getLinksData();
-          if (this.isPanZoomInit) {
-            panzoom.init(this.jsplumbInstance, false);
-            this.isPanZoomInit = false;
-
-            if (!this.data.matrix) {
-              return;
-            }
-
-            this.canvasMoveTo(this.data.matrix, transformOrigin => {
-              this.jsplumbInstance.pan.moveTo(
-                transformOrigin.x,
-                transformOrigin.y
-              );
-              this.jsplumbInstance.pan.zoomAbs(
-                transformOrigin.x,
-                transformOrigin.y,
-                transformOrigin.scale
-              );
-            });
-          }
-        }
+          // this.IS_FLOW_CEP_LINK_ADD_ACTION(false);
+          this.$emit("modifyChart", {
+            stepData: this.stepData,
+            links: this.links
+          });
+        },
+        this.connecting
       );
     });
   },
   beforeDestroy() {},
   destroyed: function() {},
   methods: {
-    //...mapActions([""]),
-    getScale(instance) {
-      let container = instance.getContainer();
-      let scale1;
-      if (instance.pan) {
-        const { scale } = instance.pan.getTransform();
-        scale1 = scale;
-      } else {
-        const matrix = window.getComputedStyle(container).transform;
-        scale1 = matrix && matrix.split(", ")[3] * 1;
-      }
-      instance.setZoom(scale1);
-      return scale1;
-    },
-
-    modifyNodePositon(val) {
-      let jsplumbInstance = this.jsplumbInstance;
-      const containerRect = this.containerRect;
-      let scale = this.getScale(this.jsplumbInstance);
-      let left = (val.x - containerRect.left) / scale;
-      let top = (val.y - containerRect.top) / scale;
-      left -= 20;
-      top -= 25;
-      return {
-        x: left,
-        y: top
+    ...mapActions(["currentSelectStepAction", "IS_FLOW_CEP_LINK_ADD_ACTION"]),
+    initEvent() {
+      // delete node
+      document.onkeydown = e => {
+        if (e.keyCode == 46) {
+          this.delAllselected(this.stepData);
+        }
       };
     },
-    canvasMoveTo(data, fn) {
-      // let matrix = data
-      //   .split("(")[1]
-      //   .split(")")[0]
-      //   .split(",");
-      // let result = {
-      //   x: parseInt(matrix[4]),
-      //   y: parseInt(matrix[5])
-      // };
-
-      fn(data);
-    },
-    setCavansMatrix(data) {
-      let source = _.filter(data, val => {
-        return val.type == "source";
+    delAllselected(data) {
+      this.stepData = _.filter(data, item => {
+        return item.id != this.currentSelectStep.id;
       });
 
-      return source[0].stepSettings && source[0].stepSettings.matrix;
+      this.currentSelectStepAction({});
     },
-    setNodeTemplate(val) {
+    selectCurrentStep(val) {
+      this.stepData = _.map(this.stepData, item => {
+        if (val.id == item.id) {
+          return {
+            ...item,
+            isSelected: true
+          };
+        } else {
+          if (!this.mulSelect) {
+            delete item.isSelected;
+          }
+
+          return item;
+        }
+      });
+    },
+    selectCurrentStepAfter(val, callback) {
+      this.stepData = _.map(this.stepData, item => {
+        if (val.id == item.id) {
+          return {
+            ...item,
+            isSelected: true
+          };
+        } else {
+          if (!this.mulSelect) {
+            delete item.isSelected;
+          }
+
+          return item;
+        }
+      });
+      callback();
+    },
+    dblClick(val) {
+      this.currentSelectStepAction(val);
+    },
+    setNodeStyle(val) {
       switch (val) {
-        case "flowchartnode":
-          return flowchartNode;
-        case "cepNode":
-          return cepNode;
+        case "StartEvent":
+          return "circle";
+        case "ConditionEvent":
+          return "diamond";
         default:
           "";
       }
     },
-    drawJsplumbChart(data, connectCallback) {
+    drawJsplumbChart(data, connectCallback, connecting) {
       addEndpointToNode(
         data.jsplumbInstance,
         data.self,
@@ -225,91 +200,148 @@ export default {
         },
         _
       );
-      connect(data.jsplumbInstance, data.self, data.links, connectCallback);
+      connect(
+        data.jsplumbInstance,
+        data.self,
+        data.links,
+        connectCallback,
+        connecting
+      );
     },
-    completedConnect() {
-      this.getLinksData();
+    completedConnect(c) {
+      let connLabel = this.getValueByLabel(
+        c.connection.getOverlay("label").getLabel()
+      );
+
+      let currentConnection = this.getBeforeLinks(
+        c.connection.sourceId,
+        c.connection.targetId
+      );
+
+      if (currentConnection) {
+        this.setLinkStyle(c.connection, currentConnection.linkStrategy);
+      }
+
+      c.connection
+        .getOverlay("label")
+        .setLabel(
+          this.getLabelByValue(
+            currentConnection
+              ? currentConnection.linkStrategy
+              : this.realtime.flowCepLinksStyle
+          )
+        );
+
+      this.getLinksData(c);
+    },
+    getLabelByValue(val) {
+      switch (val) {
+        case "NEXT":
+          return "紧邻";
+        case "FOLLOWED_BY":
+          return "相近";
+
+        case "FOLLOWED_BY_ANY":
+          return "任意";
+        case "NOT_NEXT":
+          return "不要紧邻";
+        case "NOT_FOLLOWED_BY":
+          return "不要相近";
+
+        default:
+          "";
+      }
+    },
+    getValueByLabel(val) {
+      switch (val) {
+        case "紧邻":
+          return "NEXT";
+        case "相近":
+          return "FOLLOWED_BY";
+
+        case "任意":
+          return "FOLLOWED_BY_ANY";
+        case "不要紧邻":
+          return "NOT_NEXT";
+        case "不要相近":
+          return "NOT_FOLLOWED_BY";
+
+        default:
+          "";
+      }
+    },
+    connecting(linkStrategy) {
+      return linkStrategy;
+      //console.log("connecting(linkStrategy){", linkStrategy);
+
+      // c.connection
+      //   .getOverlay("label")
+      //   .setLabel(this.getLabelByValue(linkStrategy));
+    },
+    setLinkStyle(c, currenLinksStyle) {
+      //紧邻 default style
+
+      //相近
+      if (currenLinksStyle == "FOLLOWED_BY") {
+        // c.canvas.classList.add("style:stroke: darkblue;");
+        c.canvas.classList.add("FOLLOWED_BY");
+      }
+
+      //       任意
+      // FOLLOWED_BY_ANY
+
+      if (currenLinksStyle == "FOLLOWED_BY_ANY") {
+        c.canvas.classList.add("FOLLOWED_BY_ANY");
+      }
+      // 不要紧邻
+      // NOT_NEXT
+
+      if (currenLinksStyle == "NOT_NEXT") {
+        c.canvas.classList.add("NOT_NEXT");
+      }
+      // 不要相近
+      // NOT_FOLLOWED_BY
+
+      if (currenLinksStyle == "NOT_FOLLOWED_BY") {
+        c.canvas.classList.add("NOT_FOLLOWED_BY");
+      }
+    },
+    connectionDrag(c) {
+      this.IS_FLOW_CEP_LINK_ADD_ACTION(true);
+      let currenLinksStyle = this.realtime.flowCepLinksStyle;
+      this.setLinkStyle(c, currenLinksStyle);
     },
     delConnections(val, fn) {
       fn();
       this.getLinksData();
     },
-    delNode(val) {
-      this.stepData = _.filter(_.cloneDeep(this.stepData), item => {
-        return item.id != val;
+    getLinksData(c) {
+      this.links = _.map(this.jsplumbInstance.getAllConnections(), item => {
+        let currentConnection = this.getBeforeLinks(
+          item.sourceId,
+          item.targetId
+        );
+
+        return {
+          name: item.id,
+          source: item.sourceId,
+          target: item.targetId,
+          linkStrategy: this.getValueByLabel(
+            item.getOverlay("label").getLabel()
+          )
+        };
       });
     },
-    dblClick(val) {
-      this.$emit("nodedblClick", val);
-    },
-    getLinksData() {
-      this.links = filterLinkData(
-        _.map(this.jsplumbInstance.getAllConnections(), item => {
-          return {
-            name: item.id,
-            source: item.sourceId,
-            sourceOutput: item.endpoints[0].canvas.nextSibling.textContent,
-            target: item.targetId,
-            targetInput: item.target.dataset.type,
-            input: item.endpoints[1].canvas.nextSibling.textContent
-          };
-        }),
-        _
-      );
+    getBeforeLinks(sourceId, targetId) {
+      return _.find(this.data.links, item => {
+        return item.source == sourceId && item.target == targetId;
+      });
     },
     reset() {
-      this.stepData = [];
-      this.links = [];
-      this.jsplumbInstance.deleteEveryEndpoint("workplace");
+      this.modifyStepData({ stepData: [], links: [] });
     },
-
-    copyNode(val) {
-      let node = {
-        ...val,
-        x: val.x + 50,
-        y: val.y + 50,
-        id: val.type + "_" + (this.stepData.length + 1) + "_copy"
-        // id: "rtc_" + val.type + "_" + (this.stepData.length + 1)
-      };
-      this.$emit("handleDrop", node);
-    },
-    setLineSplit(step) {
-      //console.log("setLineSplit(step){", step); //outputConfigurations
-
-      if (step.type == "split") {
-        let outputConfigurations = _.toArray(step.outputConfigurations);
-
-        switch (outputConfigurations.length) {
-          case 21:
-          case 20:
-            return "height: 280px; top: -100px;";
-          case 19:
-          case 18:
-          case 17:
-            return "height: 270px; top: -95px;";
-
-          case 16:
-          case 15:
-            return "height: 270px; top: -90px;";
-          case 14:
-          case 13:
-          case 12:
-            return "height: 190px; top: -50px;";
-          case 11:
-          case 10:
-            return "height: 155px; top: -43px;";
-          case 9:
-          case 8:
-            // case 7:
-            return "height: 120px; top: -35px;";
-          case 7:
-          case 6:
-          case 5:
-            return "height: 120px; top: -25px;";
-          default:
-            return "height: 70px; top: 0px;";
-        }
-      }
+    modifyStepData(val) {
+      this.$emit("modifyChart", { stepData: val.steps, links: this.links });
     }
   }
 };
@@ -322,10 +354,94 @@ export default {
   height: 100%;
   position: absolute;
 
+  // .aLabel {
+  //   background-color: white;
+  //   opacity: 0.8;
+  //   padding: 0.3em;
+  //   border-radius: 0.5em;
+  //   // border: 1px solid #346789;
+  //   cursor: pointer;
+  // }
+
+  // 相近
+  .FOLLOWED_BY {
+    //stroke: darkblue;
+    stroke-dasharray: 20;
+
+    //fill: red
+  }
+
+  // 任意
+  .FOLLOWED_BY_ANY {
+    stroke-dasharray: 10;
+    //color: aqua !important;
+  }
+
+  // 不要紧邻
+  .NOT_NEXT {
+    stroke-dasharray: 15;
+    //color: beige;
+  }
+
+  // 不要相近
+  .NOT_FOLLOWED_BY {
+    stroke-dasharray: 5;
+    //color: darkkhaki;
+  }
+
   .cavansClass {
     height: 100%;
     width: 100%;
     position: relative;
+
+    .circle {
+      background-image: url(./images/circle.png);
+      width: 75px;
+      height: 75px;
+      line-height: 75px;
+      background-size: 100%;
+      cursor: pointer;
+      text-align: center;
+    }
+    .diamond {
+      background-image: url(./images/diamond.png);
+      width: 75px;
+      height: 75px;
+      line-height: 75px;
+      background-size: 100%;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .resize {
+      width: 8px;
+      height: 8px;
+      background-color: #ddd;
+      border: 1px solid #000;
+      position: absolute;
+      &.left {
+        top: 50%;
+        left: -4px;
+        cursor: ew-resize;
+      }
+      &.right {
+        top: 50%;
+        right: -4px;
+        cursor: ew-resize;
+      }
+      &.top {
+        top: -4px;
+        left: 50%;
+        margin-left: -4px;
+        cursor: ns-resize;
+      }
+      &.bottom {
+        bottom: -4px;
+        left: 50%;
+        margin-left: -4px;
+        cursor: ns-resize;
+      }
+    }
   }
 }
 </style>
