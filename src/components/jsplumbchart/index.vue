@@ -89,28 +89,28 @@ export default {
   beforeUpdate() {},
   updated() {
     this.$nextTick(() => {
-      if (this.containerRect) {
-        let lastStep = _.last(this.stepData);
-        let result = this.modifyNodePositon({ x: lastStep.x, y: lastStep.y });
-        this.stepData = _.map(_.cloneDeep(this.stepData), item => {
-          if (lastStep.id == item.id) {
-            return {
-              ...item,
-              x: result.x,
-              y: result.y
-            };
-          } else {
-            return item;
-          }
-        });
+      // if (this.containerRect) {
+      //   let lastStep = _.last(this.stepData);
+      //   let result = this.modifyNodePositon({ x: lastStep.x, y: lastStep.y });
+      //   this.stepData = _.map(_.cloneDeep(this.stepData), item => {
+      //     if (lastStep.id == item.id) {
+      //       return {
+      //         ...item,
+      //         x: result.x,
+      //         y: result.y
+      //       };
+      //     } else {
+      //       return item;
+      //     }
+      //   });
 
-        this.$emit("modifyJsplumbchartOption", {
-          ...this.data,
-          steps: this.stepData,
-          links: this.links,
-          containerRect: ""
-        });
-      }
+      //   this.$emit("modifyJsplumbchartOption", {
+      //     ...this.data,
+      //     steps: this.stepData,
+      //     links: this.links,
+      //     containerRect: ""
+      //   });
+      // }
 
       this.drawJsplumbChart(
         {
@@ -121,26 +121,26 @@ export default {
         },
         () => {
           this.getLinksData();
-          if (this.isPanZoomInit) {
-            panzoom.init(this.jsplumbInstance, false);
-            this.isPanZoomInit = false;
+          // if (this.isPanZoomInit) {
+          //   panzoom.init(this.jsplumbInstance, false);
+          //   this.isPanZoomInit = false;
 
-            if (!this.data.matrix) {
-              return;
-            }
+          //   if (!this.data.matrix) {
+          //     return;
+          //   }
 
-            this.canvasMoveTo(this.data.matrix, transformOrigin => {
-              this.jsplumbInstance.pan.moveTo(
-                transformOrigin.x,
-                transformOrigin.y
-              );
-              this.jsplumbInstance.pan.zoomAbs(
-                transformOrigin.x,
-                transformOrigin.y,
-                transformOrigin.scale
-              );
-            });
-          }
+          //   this.canvasMoveTo(this.data.matrix, transformOrigin => {
+          //     this.jsplumbInstance.pan.moveTo(
+          //       transformOrigin.x,
+          //       transformOrigin.y
+          //     );
+          //     this.jsplumbInstance.pan.zoomAbs(
+          //       transformOrigin.x,
+          //       transformOrigin.y,
+          //       transformOrigin.scale
+          //     );
+          //   });
+          // }
         }
       );
     });

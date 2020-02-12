@@ -58,7 +58,7 @@ import {
   getSteoConfigData
 } from "@/api/flow";
 export default {
-  name:"jsplumb-chart",
+  name: "jsplumb-chart",
   watch: {
     // flowData(val) {
     // }
@@ -125,8 +125,8 @@ export default {
           links: this.links,
           container: "workplace",
           nodeType: "flowchartnode",
-          jsPlumb: this.jsPlumb,
-          matrix: flowData.matrix&&JSON.parse(flowData.matrix)
+          jsPlumb: this.jsPlumb
+          // matrix: flowData.matrix&&JSON.parse(flowData.matrix)
         };
       });
     }
@@ -172,7 +172,8 @@ export default {
     handleDrop(val) {
       let stepData = "";
       let containerRect = "";
-      let container = this.$refs.jsplumbchart.jsplumbInstance.getContainer();
+      //let container = this.$refs.jsplumbchart.jsplumbInstance.getContainer();
+      let container = "";
       // add step
       if (val.drawIcon) {
         stepData = this.getCurrentNode(val, container);
@@ -213,7 +214,7 @@ export default {
       instance.setZoom(scale1);
       return scale1;
     },
-    getCurrentNode(data,container) {
+    getCurrentNode(data, container) {
       let uuid = jsPlumbUtil.uuid();
       let stepId = data.drawIcon.id + "_" + (this.steps.length + 1);
       let newstepid = this.isExitStepID(stepId)
@@ -223,12 +224,8 @@ export default {
         id: this.isExitStepID(newstepid) ? newstepid + "_new" : newstepid,
         name: data.drawIcon.name,
         type: data.drawIcon.type,
-        // x: left,
-        // y: top,
         // x: event.offsetX,
         // y: event.offsetY,
-        // x: event.pageX,
-        // y: event.pageY,
         x: _.isElement(container) ? event.pageX : event.offsetX,
         y: _.isElement(container) ? event.pageY : event.offsetY,
         stepSettings: data.drawIcon.stepSettings
@@ -291,10 +288,10 @@ export default {
         flowName: this.input1,
         links: this.links,
         steps: this.steps,
-        date: moment().format("YYYY-MM-DD HH:mm:ss"),
-        matrix: JSON.stringify(
-          this.$refs.jsplumbchart.jsplumbInstance.pan.getTransform()
-        )
+        date: moment().format("YYYY-MM-DD HH:mm:ss")
+        // matrix: JSON.stringify(
+        //   this.$refs.jsplumbchart.jsplumbInstance.pan.getTransform()
+        // )
       };
 
       if (this.$route.query.id) {
