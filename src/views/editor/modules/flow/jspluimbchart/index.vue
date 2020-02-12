@@ -45,11 +45,12 @@
 </template>
 
 <script>
-import vaside from "@/components/aside/left/index";
-import jsplumbchart from "@/components/jsplumbchart/index";
-
+import "@/assets/jsplumbchart/dist/jsplumbchart.css";
+import * as jsplumbchart from "@/assets/jsplumbchart/dist/jsplumbchart.umd.min.js";
 // import "@/components/jsplumbchart/dist/jsplumbchart.css";
 // import * as jsplumbchart from "@/components/jsplumbchart/dist/jsplumbchart.umd.min.js";
+import vaside from "@/components/aside/left/index";
+// import jsplumbchart from "@/components/jsplumbchart/index";
 import stepdialog from "@/components/dialog/index";
 import {
   addFlow,
@@ -58,7 +59,6 @@ import {
   getSteoConfigData
 } from "@/api/flow";
 export default {
-  name: "jsplumb-chart",
   watch: {
     // flowData(val) {
     // }
@@ -69,8 +69,8 @@ export default {
     //   default: false
     // }
   },
-  components: { vaside, stepdialog, jsplumbchart },
-  // components: { vaside, stepdialog },
+  // components: { vaside, stepdialog, jsplumbchart },
+  components: { vaside, stepdialog },
   data: function() {
     return {
       jsplumbchartOption: {
