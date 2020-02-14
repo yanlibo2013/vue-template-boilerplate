@@ -45,12 +45,10 @@
 </template>
 
 <script>
-import "@/assets/jsplumbchart/dist/jsplumbchart.css";
-import * as jsplumbchart from "@/assets/jsplumbchart/dist/jsplumbchart.umd.min.js";
-// import "@/components/jsplumbchart/dist/jsplumbchart.css";
-// import * as jsplumbchart from "@/components/jsplumbchart/dist/jsplumbchart.umd.min.js";
+// import "@/assets/jsplumbchart/dist/jsplumbchart.css";
+// import * as jsplumbchart from "@/assets/jsplumbchart/dist/jsplumbchart.umd.min.js";
 import vaside from "@/components/aside/left/index";
-// import jsplumbchart from "@/components/jsplumbchart/index";
+import jsplumbchart from "@/components/jsplumbchart/index";
 import stepdialog from "@/components/dialog/index";
 import {
   addFlow,
@@ -69,8 +67,8 @@ export default {
     //   default: false
     // }
   },
-  // components: { vaside, stepdialog, jsplumbchart },
-  components: { vaside, stepdialog },
+  components: { vaside, stepdialog, jsplumbchart },
+  // components: { vaside, stepdialog },
   data: function() {
     return {
       jsplumbchartOption: {
@@ -78,7 +76,6 @@ export default {
         links: this.links,
         container: "workplace",
         nodeType: "flowchartnode",
-        jsPlumb: jsPlumb,
         containerRect: ""
       },
       nodeTab: [
