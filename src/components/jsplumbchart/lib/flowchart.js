@@ -132,7 +132,7 @@ export var connectorHoverStyle = {
 };
 export var origin = {
 	//起点
-	endpoint: [ 'Dot', { radius: 8 } ], //端点的形状
+	endpoint: ['Dot', { radius: 8 }], //端点的形状
 	connectorStyle: connectorPaintStyle, //连接线的颜色，大小样式
 	connectorHoverStyle: connectorHoverStyle,
 	paintStyle: {
@@ -143,22 +143,22 @@ export var origin = {
 	}, //端点的颜色样式
 	//anchor: "AutoDefault",
 	isSource: true, //是否可以拖动（作为连线起点）
-	connector: [ 'Flowchart', { stub: [ 5, 5 ], gap: 10, cornerRadius: 5, alwaysRespectStubs: true } ], //连接线的样式种类有[Bezier],[Flowchart],[StateMachine ],[Straight ]
+	connector: ['Flowchart', { stub: [5, 5], gap: 10, cornerRadius: 5, alwaysRespectStubs: true }], //连接线的样式种类有[Bezier],[Flowchart],[StateMachine ],[Straight ]
 	isTarget: false, //是否可以放置（连线终点）
 	maxConnections: 1, // 设置连接点最多可以连接几条线,-1表示无限大
-	connectorOverlays: [ [ 'Arrow', { width: 10, length: 10, location: 1 } ] ]
+	connectorOverlays: [['Arrow', { width: 10, length: 10, location: 1 }]]
 };
 export var destination = {
 	//终点
-	endpoint: [ 'Dot', { radius: 6 } ], //端点的形状
+	endpoint: ['Dot', { radius: 6 }], //端点的形状
 	connectorStyle: connectorPaintStyle, //连接线的颜色，大小样式
 	connectorHoverStyle: connectorHoverStyle,
 	paintStyle: { fill: '#4e5568' }, //端点的颜色样式
 	isSource: false, //是否可以拖动（作为连线起点）
-	connector: [ 'Straight', { stub: [ 5, 5 ], gap: 10, cornerRadius: 5, alwaysRespectStubs: true } ], //连接线的样式种类有[Bezier],[Flowchart],[StateMachine ],[Straight ]
+	connector: ['Straight', { stub: [5, 5], gap: 10, cornerRadius: 5, alwaysRespectStubs: true }], //连接线的样式种类有[Bezier],[Flowchart],[StateMachine ],[Straight ]
 	isTarget: true, //是否可以放置（连线终点）
 	maxConnections: 1, // 设置连接点最多可以连接几条线,-1表示无限大
-	connectorOverlays: [ [ 'Arrow', { width: 10, length: 10, location: 1 } ] ]
+	connectorOverlays: [['Arrow', { width: 10, length: 10, location: 1 }]]
 };
 
 export const addEndpointToNode = (jsplumbInstance, self, steps, flowData, _) => {
@@ -196,43 +196,43 @@ export const addEndpointToNode = (jsplumbInstance, self, steps, flowData, _) => 
 					{ uuid: dataIndex + 'output' + 'origin', ...origin }
 				);
 			} else if (specialNodeClass(drawType) == 'classD_D1') {
-				//return;
-				let anchors = addMultioutput(getOutputConfigurations(data.outputConfigurations, _));
 
-				// console.log("data", data);
-				// console.log("anchors", anchors);
-				// console.log(
-				//   "getOutputConfigurations(data.outputConfigurations, _)",
-				//   getOutputConfigurations(data.outputConfigurations, _)
-				// );
-				// console.log("data.outputConfigurations", data.outputConfigurations);
-				// console.log(_.toArray(data.outputConfigurations));
-
-				// let keyList = getKeyList(data.outputConfigurations);
-				// console.log("keyList", keyList);
-
-				_.forEach(anchors, (val, index) => {
-					//let label = "output" + (index + 1);
-					jsplumbInstance.addEndpoint(
-						dataIndex,
-						{
-							anchors: val.value,
-							maxConnections: -1,
-							overlays: [
-								[
-									'Label',
-									{
-										location: [ 3.5, 0 ],
-										// location: index % 2 == 0 ? [3.5, 0] : [-3.5, 0],
-										label: val.key,
-										cssClass: 'endpointSourceLabelMult'
-									}
-								]
+				jsplumbInstance.addEndpoint(
+					dataIndex,
+					{
+						anchors: [1, 0.3, 0, 0],
+						maxConnections: -1,
+						overlays: [
+							[
+								'Label',
+								{
+									location: [1.5, -0.5],
+									label: 'yes',
+									cssClass: 'endpointSourceLabel'
+								}
 							]
-						},
-						{ uuid: dataIndex + val.key + 'origin', ...origin }
-					);
-				});
+						]
+					},
+					{ uuid: dataIndex + 'yes' + 'origin', ...origin }
+				);
+				jsplumbInstance.addEndpoint(
+					dataIndex,
+					{
+						anchors: [1, 0.7, 0, 0],
+						maxConnections: -1,
+						overlays: [
+							[
+								'Label',
+								{
+									location: [1.5, 1.3],
+									label: 'no',
+									cssClass: 'endpointSourceLabel'
+								}
+							]
+						]
+					},
+					{ uuid: dataIndex + 'no' + 'origin', ...origin }
+				);
 
 				//left
 
@@ -250,13 +250,13 @@ export const addEndpointToNode = (jsplumbInstance, self, steps, flowData, _) => 
 				jsplumbInstance.addEndpoint(
 					dataIndex,
 					{
-						anchors: [ 1, 0.3, 0, 0 ],
+						anchors: [1, 0.3, 0, 0],
 						maxConnections: -1,
 						overlays: [
 							[
 								'Label',
 								{
-									location: [ 1.5, -0.5 ],
+									location: [1.5, -0.5],
 									label: 'ok',
 									cssClass: 'endpointSourceLabel'
 								}
@@ -268,13 +268,13 @@ export const addEndpointToNode = (jsplumbInstance, self, steps, flowData, _) => 
 				jsplumbInstance.addEndpoint(
 					dataIndex,
 					{
-						anchors: [ 1, 0.7, 0, 0 ],
+						anchors: [1, 0.7, 0, 0],
 						maxConnections: -1,
 						overlays: [
 							[
 								'Label',
 								{
-									location: [ 1.5, 1.3 ],
+									location: [1.5, 1.3],
 									label: 'error',
 									cssClass: 'endpointSourceLabel'
 								}
@@ -297,12 +297,12 @@ export const addEndpointToNode = (jsplumbInstance, self, steps, flowData, _) => 
 				jsplumbInstance.addEndpoint(
 					dataIndex,
 					{
-						anchors: [ 0, 0.3, 0, 0 ],
+						anchors: [0, 0.3, 0, 0],
 						overlays: [
 							[
 								'Label',
 								{
-									location: [ -1, -0.5 ],
+									location: [-1, -0.5],
 									label: 'left',
 									cssClass: 'endpointSourceLabel'
 								}
@@ -314,12 +314,12 @@ export const addEndpointToNode = (jsplumbInstance, self, steps, flowData, _) => 
 				jsplumbInstance.addEndpoint(
 					dataIndex,
 					{
-						anchors: [ 0, 0.7, 0, 0 ],
+						anchors: [0, 0.7, 0, 0],
 						overlays: [
 							[
 								'Label',
 								{
-									location: [ -1, 1.5 ],
+									location: [-1, 1.5],
 									label: 'right',
 									cssClass: 'endpointSourceLabel'
 								}
@@ -337,12 +337,12 @@ export const addEndpointToNode = (jsplumbInstance, self, steps, flowData, _) => 
 				jsplumbInstance.addEndpoint(
 					dataIndex,
 					{
-						anchors: [ 0, 0.3, 0, 0 ],
+						anchors: [0, 0.3, 0, 0],
 						overlays: [
 							[
 								'Label',
 								{
-									location: [ -1, -0.5 ],
+									location: [-1, -0.5],
 									label: 'input1',
 									cssClass: 'endpointSourceLabel'
 								}
@@ -354,12 +354,12 @@ export const addEndpointToNode = (jsplumbInstance, self, steps, flowData, _) => 
 				jsplumbInstance.addEndpoint(
 					dataIndex,
 					{
-						anchors: [ 0, 0.7, 0, 0 ],
+						anchors: [0, 0.7, 0, 0],
 						overlays: [
 							[
 								'Label',
 								{
-									location: [ -1, 1.5 ],
+									location: [-1, 1.5],
 									label: 'input2',
 									cssClass: 'endpointSourceLabel'
 								}
@@ -495,7 +495,7 @@ export const addMultioutput = (list) => {
 	let result = [];
 
 	for (let j = 0; j < list.length; j++) {
-		result.push({ key: list[j].key, value: [ 1, y, 0, 0 ] });
+		result.push({ key: list[j].key, value: [1, y, 0, 0] });
 		y += distance;
 	}
 
@@ -507,7 +507,7 @@ export const connect = (jsplumbInstance, self, links, connectCallback) => {
 		//节点之间连线
 		links.forEach((item) => {
 			jsplumbInstance.connect({
-				uuids: [ item.source + item.sourceOutput + 'origin', item.target + item.input + 'destination' ]
+				uuids: [item.source + item.sourceOutput + 'origin', item.target + item.input + 'destination']
 			});
 		});
 		connectCallback();
