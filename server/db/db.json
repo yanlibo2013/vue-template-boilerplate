@@ -98,7 +98,30 @@
       "id": 13
     }
   ],
-  "flowlist": [],
+  "flowlist": [
+    {
+      "flowName": "士大夫士大夫士大夫",
+      "links": [],
+      "steps": [
+        {
+          "eventType": "StartEvent",
+          "id": "StartEvent_cep_1",
+          "name": "StartEvent",
+          "quantifier": {
+            "strategy": "ONE_OR_MORE"
+          },
+          "loopingContiguity": "CONSECUTIVE",
+          "loopingGreedy": "GREEDY",
+          "skipStrategy": "NO_SKIP",
+          "skipToPatternName": "",
+          "x": 844,
+          "y": 99
+        }
+      ],
+      "date": "2020-02-25 16:24:14",
+      "id": 1
+    }
+  ],
   "steplist": [
     {
       "id": "source",

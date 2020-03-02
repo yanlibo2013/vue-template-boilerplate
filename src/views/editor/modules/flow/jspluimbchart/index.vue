@@ -301,9 +301,9 @@ export default {
         links: this.links,
         steps: this.steps,
         date: moment().format("YYYY-MM-DD HH:mm:ss"),
-        matrix: JSON.stringify(
-          this.$refs.jsplumbchart.jsplumbInstance.pan.getTransform()
-        )
+        // matrix: JSON.stringify(
+        //   this.$refs.jsplumbchart.jsplumbInstance.pan.getTransform()
+        // )
       };
 
       if (this.$route.query.id) {

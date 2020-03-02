@@ -17,7 +17,8 @@ const state = {
   formItemList: [],
   adList: [],
   adForm: {},
-  splitEndpoint: []
+  splitEndpoint: [],
+  currentSelectStep: {},
 };
 
 const mutations = {
@@ -77,6 +78,9 @@ const mutations = {
   },
   SET_AD_FORM: (state, data) => {
     state.adForm = data;
+  },
+  CURRENT_SELECT_CEP_STEP: (state, data) => {
+    state.currentSelectStep = data;
   }
 };
 
@@ -137,7 +141,11 @@ const actions = {
   },
   getSplitEndpoint({ commit }, data) {
     commit("SET_SPLIT_ENDPOINT", data);
-  }
+  },
+  //currentSelectStepAction
+  currentSelectStepAction({ commit }, data) {
+    commit("CURRENT_SELECT_CEP_STEP", data);
+  },
 };
 
 export default {

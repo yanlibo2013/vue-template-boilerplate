@@ -2,22 +2,28 @@
   <div class="jsplumb-chart">
     <div class="cavansClass" id="cavans-sub">
       <div
-        v-for="(data,index) in stepData"
+        v-for="(data, index) in stepData"
         :id="data.id"
         :key="index"
         :class="setNodeStyle(data.eventType)"
         :data-sign="data.name"
         :data-type="data.eventType"
-        :style="'left:'+data.x+'px;top:'+data.y+'px;position:absolute;margin:0'"
+        :style="
+          'left:' +
+            data.x +
+            'px;top:' +
+            data.y +
+            'px;position:absolute;margin:0'
+        "
         @dblclick="dblClick(data)"
       >
-        <span v-show="data.eventType=='StartEvent'">开始</span>
-        <span v-show="data.eventType=='ConditionEvent'">条件</span>
+        <span v-show="data.eventType == 'StartEvent'">开始</span>
+        <span v-show="data.eventType == 'ConditionEvent'">条件</span>
 
-        <div v-show="data.id==currentSelectStep.id" class="resize top"></div>
-        <div v-show="data.id==currentSelectStep.id" class="resize left"></div>
-        <div v-show="data.id==currentSelectStep.id" class="resize bottom"></div>
-        <div v-show="data.id==currentSelectStep.id" class="resize right"></div>
+        <div v-show="data.id == currentSelectStep.id" class="resize top"></div>
+        <div v-show="data.id == currentSelectStep.id" class="resize left"></div>
+        <div v-show="data.id == currentSelectStep.id" class="resize bottom"></div>
+        <div v-show="data.id == currentSelectStep.id" class="resize right"></div>
       </div>
     </div>
   </div>
@@ -132,8 +138,8 @@ export default {
         return item.id != this.currentSelectStep.id;
       });
 
-      //this.currentSelectStepAction({});
-      this.$emit("currentSelectStep", {});
+      // this.currentSelectStepAction({});
+      this.$store.dispatch("realtime/currentSelectStepAction", {});
     },
     selectCurrentStep(val) {
       this.stepData = _.map(this.stepData, item => {
@@ -170,7 +176,7 @@ export default {
     },
     dblClick(val) {
       //this.currentSelectStepAction(val);
-      this.$emit("currentSelectStep", val);
+      this.$store.dispatch("realtime/currentSelectStepAction", val);
     },
     setNodeStyle(val) {
       switch (val) {
@@ -230,7 +236,7 @@ export default {
           this.getLabelByValue(
             currentConnection
               ? currentConnection.linkStrategy
-              : this.data.flowCepLinksStyle
+              : this.realtime.flowCepLinksStyle
           )
         );
 
@@ -309,9 +315,8 @@ export default {
       }
     },
     connectionDrag(c) {
-      //this.IS_FLOW_CEP_LINK_ADD_ACTION(true);
-      this.$emit("isFlowCepLinkAddAciton", true);
-      let currenLinksStyle = this.data.flowCepLinksStyle;
+      this.IS_FLOW_CEP_LINK_ADD_ACTION(true);
+      let currenLinksStyle = this.realtime.flowCepLinksStyle;
       this.setLinkStyle(c, currenLinksStyle);
     },
     delConnections(val, fn) {
