@@ -196,7 +196,11 @@ export const addEndpointToNode = (jsplumbInstance, self, steps, flowData, _) => 
 					{ uuid: dataIndex + 'output' + 'origin', ...origin }
 				);
 			} else if (specialNodeClass(drawType) == 'classD_D1') {
-				//return;
+				console.log('data.outputConfigurations', data.outputConfigurations);
+				console.log(
+					'getOutputConfigurations(data.outputConfigurations, _)',
+					getOutputConfigurations(data.outputConfigurations, _)
+				);
 				let anchors = addMultioutput(getOutputConfigurations(data.outputConfigurations, _));
 
 				// console.log("data", data);
