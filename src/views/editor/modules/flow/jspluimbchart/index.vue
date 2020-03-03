@@ -10,6 +10,7 @@
               </el-input>
             </div>
           </el-col>
+
           <el-col :span="6" justify="space-around">
             <div class="grid-content bg-purple-light">
               <el-button size="small" @click="clearall">清空</el-button>
@@ -67,11 +68,16 @@ export default {
     //   default: false
     // }
   },
-  components: { vaside, stepdialog, jsplumbchart },
+  components: {
+    vaside,
+    stepdialog,
+    jsplumbchart
+  },
   // components: { vaside, stepdialog },
   data: function() {
     return {
       jsplumbchartOption: {
+        isPanZoom: true,
         steps: this.steps,
         links: this.links,
         container: "workplace",
@@ -114,13 +120,16 @@ export default {
   },
   mounted() {
     if (this.$route.query.id) {
-      getFlowItem({ id: this.$route.query.id }).then(res => {
+      getFlowItem({
+        id: this.$route.query.id
+      }).then(res => {
         let flowData = res.data[0];
         this.steps = flowData.steps;
         this.links = flowData.links;
         this.input1 = flowData.flowName;
         this.matrix = flowData.matrix;
         this.jsplumbchartOption = {
+          isPanZoom: true,
           steps: this.steps,
           links: this.links,
           container: "workplace",
@@ -129,6 +138,8 @@ export default {
           matrix: flowData.matrix && JSON.parse(flowData.matrix),
           enablePanZoom: this.enablePanZoom
         };
+
+        //console.log("this.jsplumbchartOption",this.jsplumbchartOption);
       });
     }
   },
@@ -144,22 +155,6 @@ export default {
     modifyJsplumbchartOption(val) {
       this.jsplumbchartOption = val;
     },
-    addCssRules() {
-      const css = ".jtk-connector path { stroke-dasharray: 10;}";
-      const style = document.createElement("style");
-      if (style.styleSheet) {
-        console.log(" if (style.styleSheet) { if");
-        style.styleSheet.cssText = css;
-      } else {
-        console.log("else");
-        style.appendChild(document.createTextNode(css));
-        style.setAttribute("id", "addCssRules");
-      }
-      document.getElementsByTagName("head")[0].appendChild(style);
-    },
-    removeCssRules() {
-      document.getElementById("addCssRules").remove();
-    },
     handleDragover() {
       //console.log("handleDragover(){");
     },
@@ -171,15 +166,17 @@ export default {
       };
     },
     handleDrop(val) {
-      console.log("handleDrop(val) { enablePanZoom",this.enablePanZoom);
+
       let stepData = "";
       let containerRect = "";
       let container = this.enablePanZoom?this.$refs.jsplumbchart.jsplumbInstance.getContainer():"";
       // add step
       if (val.drawIcon) {
-        stepData = this.getCurrentNode(val, container);
+        stepData = this.getCurrentNode(
+          val,
+          this.jsplumbchartOption.isPanZoom ? container : ""
+        );
         containerRect = container && container.getBoundingClientRect();
-        console.log("containerRect",containerRect);
       } else {
         // copy step
         stepData = this.copyNode(val);
@@ -285,18 +282,32 @@ export default {
         return;
       }
 
-      let data = {
-        flowName: this.input1,
-        links: this.links,
-        steps: this.steps,
-        date: moment().format("YYYY-MM-DD HH:mm:ss"),
-        matrix: JSON.stringify(
-          this.$refs.jsplumbchart.jsplumbInstance.pan.getTransform()
-        )
-      };
+      let data = {};
+
+      if (this.jsplumbchartOption.isPanZoom) {
+        data = {
+          flowName: this.input1,
+          links: this.links,
+          steps: this.steps,
+          date: moment().format("YYYY-MM-DD HH:mm:ss"),
+          matrix: JSON.stringify(
+            this.$refs.jsplumbchart.jsplumbInstance.pan.getTransform()
+          )
+        };
+      } else {
+        data = {
+          flowName: this.input1,
+          links: this.links,
+          steps: this.steps,
+          date: moment().format("YYYY-MM-DD HH:mm:ss")
+        };
+      }
 
       if (this.$route.query.id) {
-        modifyFlow({ ...data, id: this.$route.query.id }).then(res => {
+        modifyFlow({
+          ...data,
+          id: this.$route.query.id
+        }).then(res => {
           this.$router.go(-1);
         });
       } else {
@@ -530,26 +541,33 @@ export default {
 
   .el-row {
     margin-bottom: 20px;
+
     &:last-child {
       margin-bottom: 0;
     }
+
     height: 100%;
   }
+
   .el-col {
     border-radius: 4px;
     height: 100%;
   }
+
   .bg-purple-dark {
     background: #99a9bf;
   }
+
   .bg-purple {
     background: #d3dce6;
   }
+
   .bg-purple-light {
     // background: #e5e9f2;
     display: flex;
     justify-content: start;
   }
+
   .grid-content {
     border-radius: 4px;
     min-height: 36px;
@@ -558,6 +576,7 @@ export default {
     align-items: center;
     padding-left: 25px;
   }
+
   .row-bg {
     padding: 10px 0;
     background-color: #f9fafc;

@@ -39,14 +39,21 @@ export default {
       this.stepData = this.data.steps;
       this.links = this.data.links;
       this.nodeType = this.data.nodeType;
+      this.operationType = val.operationType;
       this.containerRect = val.containerRect;
       this.enablePanZoom=val.enablePanZoom;
     },
     stepData(val) {
-      this.$emit("modifyChart", { stepData: val, links: this.links });
+      this.$emit("modifyChart", {
+        stepData: val,
+        links: this.links
+      });
     },
     links(val) {
-      this.$emit("modifyChart", { stepData: this.stepData, links: val });
+      this.$emit("modifyChart", {
+        stepData: this.stepData,
+        links: val
+      });
     }
   },
   props: {
@@ -84,7 +91,9 @@ export default {
   computed: {
     //...mapState([""])
   },
-  mounted() {},
+  mounted() {
+    //this.containerRect = this.jsplumbInstance.getContainer() ? this.jsplumbInstance.getContainer().getBoundingClientRect() : ""
+  },
   beforeCreate() {},
   created() {},
   beforeMount() {},
@@ -93,7 +102,10 @@ export default {
     this.$nextTick(() => {
       if (this.enablePanZoom&&this.containerRect) {
         let lastStep = _.last(this.stepData);
-        let result = this.modifyNodePositon({ x: lastStep.x, y: lastStep.y });
+        let result = this.modifyNodePositon({
+          x: lastStep.x,
+          y: lastStep.y
+        });
         this.stepData = _.map(_.cloneDeep(this.stepData), item => {
           if (lastStep.id == item.id) {
             return {
@@ -114,6 +126,12 @@ export default {
         });
       }
 
+      // console.log("this.stepData", this.stepData);
+      // console.log("this.links", this.links);
+
+      // if (!this.stepData || !this.links) {
+      //     return;
+      // }
       this.drawJsplumbChart(
         {
           jsplumbInstance: this.jsplumbInstance,
