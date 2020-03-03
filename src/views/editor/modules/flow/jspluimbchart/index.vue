@@ -106,7 +106,7 @@ export default {
       steps: [],
       jsPlumb: jsPlumb,
       matrix: "",
-      enablePanZoom: true
+      enablePanZoom: false
     };
   },
   computed: {
@@ -171,13 +171,15 @@ export default {
       };
     },
     handleDrop(val) {
+      console.log("handleDrop(val) { enablePanZoom",this.enablePanZoom);
       let stepData = "";
       let containerRect = "";
-      let container = this.$refs.jsplumbchart.jsplumbInstance.getContainer();
+      let container = this.enablePanZoom?this.$refs.jsplumbchart.jsplumbInstance.getContainer():"";
       // add step
       if (val.drawIcon) {
         stepData = this.getCurrentNode(val, container);
         containerRect = container && container.getBoundingClientRect();
+        console.log("containerRect",containerRect);
       } else {
         // copy step
         stepData = this.copyNode(val);
@@ -188,7 +190,8 @@ export default {
         ...this.jsplumbchartOption,
         steps: this.steps,
         links: this.links,
-        containerRect: containerRect
+        containerRect: containerRect,
+        enablePanZoom:this.enablePanZoom
       };
     },
     isExitStepID(val) {
