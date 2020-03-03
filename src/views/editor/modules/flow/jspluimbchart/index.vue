@@ -12,8 +12,6 @@
           </el-col>
           <el-col :span="6" justify="space-around">
             <div class="grid-content bg-purple-light">
-              <!-- <el-button size="small" @click="addCssRules">addCssRules</el-button>
-              <el-button size="small" @click="removeCssRules">removeCssRules</el-button>-->
               <el-button size="small" @click="clearall">清空</el-button>
               <el-button size="small" @click="reset">还原</el-button>
               <el-button size="small" @click="saveFlow">保存</el-button>
@@ -58,7 +56,7 @@ import {
   getSteoConfigData
 } from "@/api/flow";
 export default {
-  name:"jsplumb-chart",
+  name: "jsplumb-chart",
   watch: {
     // flowData(val) {
     // }
@@ -79,7 +77,8 @@ export default {
         container: "workplace",
         nodeType: "flowchartnode",
         jsPlumb: jsPlumb,
-        containerRect: ""
+        containerRect: "",
+        enablePanZoom:this.enablePanZoom
       },
       nodeTab: [
         {
@@ -106,7 +105,8 @@ export default {
       links: [],
       steps: [],
       jsPlumb: jsPlumb,
-      matrix: ""
+      matrix: "",
+      enablePanZoom: true
     };
   },
   computed: {
@@ -126,7 +126,8 @@ export default {
           container: "workplace",
           nodeType: "flowchartnode",
           jsPlumb: this.jsPlumb,
-          matrix: flowData.matrix&&JSON.parse(flowData.matrix)
+          matrix: flowData.matrix && JSON.parse(flowData.matrix),
+          enablePanZoom: this.enablePanZoom
         };
       });
     }
@@ -213,7 +214,7 @@ export default {
       instance.setZoom(scale1);
       return scale1;
     },
-    getCurrentNode(data,container) {
+    getCurrentNode(data, container) {
       let uuid = jsPlumbUtil.uuid();
       let stepId = data.drawIcon.id + "_" + (this.steps.length + 1);
       let newstepid = this.isExitStepID(stepId)
@@ -223,12 +224,6 @@ export default {
         id: this.isExitStepID(newstepid) ? newstepid + "_new" : newstepid,
         name: data.drawIcon.name,
         type: data.drawIcon.type,
-        // x: left,
-        // y: top,
-        // x: event.offsetX,
-        // y: event.offsetY,
-        // x: event.pageX,
-        // y: event.pageY,
         x: _.isElement(container) ? event.pageX : event.offsetX,
         y: _.isElement(container) ? event.pageY : event.offsetY,
         stepSettings: data.drawIcon.stepSettings
