@@ -84,8 +84,7 @@ export default {
       nodeType: "",
       isPanZoomInit: true,
       cssText: "",
-      containerRect: "",
-      enablePanZoom:this.data.enablePanZoom
+      containerRect: ""
     };
   },
   computed: {
@@ -126,12 +125,6 @@ export default {
         });
       }
 
-      // console.log("this.stepData", this.stepData);
-      // console.log("this.links", this.links);
-
-      // if (!this.stepData || !this.links) {
-      //     return;
-      // }
       this.drawJsplumbChart(
         {
           jsplumbInstance: this.jsplumbInstance,
@@ -140,6 +133,8 @@ export default {
           links: this.links
         },
         () => {
+          console.log(' this.drawJsplumbChart( callback');
+          console.log("this.enablePanZoom",this.enablePanZoom);
           this.getLinksData();
           if (this.enablePanZoom&&this.isPanZoomInit) {
             panzoom.init(this.jsplumbInstance, false);

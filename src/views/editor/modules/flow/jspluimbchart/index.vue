@@ -77,14 +77,13 @@ export default {
   data: function() {
     return {
       jsplumbchartOption: {
-        isPanZoom: true,
         steps: this.steps,
         links: this.links,
         container: "workplace",
         nodeType: "flowchartnode",
         jsPlumb: jsPlumb,
         containerRect: "",
-        enablePanZoom:this.enablePanZoom
+        enablePanZoom:false
       },
       nodeTab: [
         {
@@ -111,8 +110,7 @@ export default {
       links: [],
       steps: [],
       jsPlumb: jsPlumb,
-      matrix: "",
-      enablePanZoom:true
+      matrix: ""
     };
   },
   computed: {
@@ -129,14 +127,13 @@ export default {
         this.input1 = flowData.flowName;
         this.matrix = flowData.matrix;
         this.jsplumbchartOption = {
-          isPanZoom: true,
+          ...this.jsplumbchartOption,
           steps: this.steps,
           links: this.links,
           container: "workplace",
           nodeType: "flowchartnode",
           jsPlumb: this.jsPlumb,
-          matrix: flowData.matrix && JSON.parse(flowData.matrix),
-          enablePanZoom: this.enablePanZoom
+          matrix: flowData.matrix && JSON.parse(flowData.matrix)
         };
 
         //console.log("this.jsplumbchartOption",this.jsplumbchartOption);
@@ -167,14 +164,15 @@ export default {
     },
     handleDrop(val) {
 
+      console.log('handleDrop(val) {',this.jsplumbchartOption);
       let stepData = "";
       let containerRect = "";
-      let container = this.enablePanZoom?this.$refs.jsplumbchart.jsplumbInstance.getContainer():"";
+      let container = this.jsplumbchartOption.enablePanZoom?this.$refs.jsplumbchart.jsplumbInstance.getContainer():"";
       // add step
       if (val.drawIcon) {
         stepData = this.getCurrentNode(
           val,
-          this.jsplumbchartOption.isPanZoom ? container : ""
+          this.jsplumbchartOption.enablePanZoom ? container : ""
         );
         containerRect = container && container.getBoundingClientRect();
       } else {
@@ -187,8 +185,7 @@ export default {
         ...this.jsplumbchartOption,
         steps: this.steps,
         links: this.links,
-        containerRect: containerRect,
-        enablePanZoom:this.enablePanZoom
+        containerRect: containerRect
       };
     },
     isExitStepID(val) {
