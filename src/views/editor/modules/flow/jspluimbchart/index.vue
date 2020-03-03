@@ -106,7 +106,7 @@ export default {
       steps: [],
       jsPlumb: jsPlumb,
       matrix: "",
-      enablePanZoom: false
+      enablePanZoom: true
     };
   },
   computed: {
