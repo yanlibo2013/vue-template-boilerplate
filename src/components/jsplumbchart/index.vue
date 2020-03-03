@@ -133,8 +133,6 @@ export default {
           links: this.links
         },
         () => {
-          console.log(' this.drawJsplumbChart( callback');
-          console.log("this.enablePanZoom",this.enablePanZoom);
           this.getLinksData();
           if (this.enablePanZoom&&this.isPanZoomInit) {
             panzoom.init(this.jsplumbInstance, false);
