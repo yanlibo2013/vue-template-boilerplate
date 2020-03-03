@@ -41,10 +41,6 @@ export default {
       this.nodeType = this.data.nodeType;
       this.containerRect = val.containerRect;
       this.enablePanZoom=val.enablePanZoom;
-
-
-      console.log('data(val) { this.enablePanZoom',this.enablePanZoom)
-      console.log("this.data",this.data);
     },
     stepData(val) {
       this.$emit("modifyChart", { stepData: val, links: this.links });
@@ -94,10 +90,8 @@ export default {
   beforeMount() {},
   beforeUpdate() {},
   updated() {
-    console.log("updated() {",this.enablePanZoom);
     this.$nextTick(() => {
       if (this.enablePanZoom&&this.containerRect) {
-        console.log('if (this.enablePanZoom&&this.containerRect) {');
         let lastStep = _.last(this.stepData);
         let result = this.modifyNodePositon({ x: lastStep.x, y: lastStep.y });
         this.stepData = _.map(_.cloneDeep(this.stepData), item => {
@@ -130,7 +124,6 @@ export default {
         () => {
           this.getLinksData();
           if (this.enablePanZoom&&this.isPanZoomInit) {
-            console.log('  if (this.enablePanZoom&&this.isPanZoomInit) {');
             panzoom.init(this.jsplumbInstance, false);
             this.isPanZoomInit = false;
 
@@ -186,14 +179,6 @@ export default {
       };
     },
     canvasMoveTo(data, fn) {
-      // let matrix = data
-      //   .split("(")[1]
-      //   .split(")")[0]
-      //   .split(",");
-      // let result = {
-      //   x: parseInt(matrix[4]),
-      //   y: parseInt(matrix[5])
-      // };
 
       fn(data);
     },
