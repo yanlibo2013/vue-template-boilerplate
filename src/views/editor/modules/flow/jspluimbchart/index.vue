@@ -152,8 +152,32 @@ export default {
   methods: {
     //...mapActions([""]),
     addGroup(){
-      console.log(this.steps);
-      console.log(this.links);
+            let selectedSteps = _.filter(this.steps, item => {
+        return item.isSelected == true;
+      });
+
+      let steps= _.map(_.cloneDeep(selectedSteps), item => {
+          delete item.isSelected;
+          return item;
+      });
+
+      let links=_.filter(this.links,item=>{
+        let isSource= _.find(steps,subitem=>{
+          return subitem.id==item.source
+        });
+
+        let isTarget=_.find(steps,subitem=>{
+          return subitem.id==item.target
+        });
+
+        if(isSource&&isTarget){
+          return item
+        }
+
+      });
+
+      console.log("steps",steps);
+      console.log("links",links);
 
     },
     modifyJsplumbchartOption(val) {
