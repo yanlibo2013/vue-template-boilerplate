@@ -13,6 +13,7 @@
 
           <el-col :span="6" justify="space-around">
             <div class="grid-content bg-purple-light">
+              <el-button size="small" @click="addGroup">add group</el-button>
               <el-button size="small" @click="clearall">清空</el-button>
               <el-button size="small" @click="reset">还原</el-button>
               <el-button size="small" @click="saveFlow">保存</el-button>
@@ -150,6 +151,11 @@ export default {
   destroyed: function() {},
   methods: {
     //...mapActions([""]),
+    addGroup(){
+      console.log(this.steps);
+      console.log(this.links);
+
+    },
     modifyJsplumbchartOption(val) {
       this.jsplumbchartOption = val;
     },
@@ -313,7 +319,10 @@ export default {
       }
     },
     modifyChart(val) {
-      this.steps = val.stepData;
+      console.log(' modifyChart(val) {',val);
+      // this.steps = val.stepData?val.stepData:this.stepData;
+      // this.links = val.links?val.links:this.links;
+       this.steps = val.stepData;
       this.links = val.links;
 
       this.jsplumbchartOption = {

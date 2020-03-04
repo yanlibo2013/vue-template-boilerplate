@@ -6,6 +6,7 @@
         @dblClick="dblClick"
         @copyNode="copyNode"
         @delNode="delNode"
+        @modifyStepData="modifyStepData"
         v-show="nodeType=='flowchartnode'"
       ></flowchartNode>
     </div>
@@ -163,6 +164,9 @@ export default {
   destroyed: function() {},
   methods: {
     //...mapActions([""]),
+    modifyStepData(val){
+      this.stepData=val;
+    },
     getScale(instance) {
       let container = instance.getContainer();
       let scale1;

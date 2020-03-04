@@ -91,12 +91,9 @@ export default {
       //   this.mousedownBody(e);
       // };
 
-      //cavans
-
-
-      document.onmousedown = e => {
+      document.getElementById("cavans").onmousedown = e => {
         this.mousedownBody(e);
-      };
+      }
     },
     mousedownBody(event) {
       if (this.mouserOverConnect) {
@@ -120,7 +117,7 @@ export default {
     multSe3lectStep(val) {
       this.mulSelect = true;
       this.selectCurrentStep(val);
-     
+      this.$emit("modifyStepData",this.stepData);
     },
     selectCurrentStep(val) {
       if (this.isDeleCopyStep) {
