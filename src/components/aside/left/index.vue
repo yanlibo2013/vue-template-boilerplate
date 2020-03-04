@@ -88,6 +88,8 @@ export default {
           res.data,
           _.uniq(this.getGroupData(res.data))
         );
+
+        console.log("this.stepList ",this.stepList );
       });
     },
     getLeftAsideData(data, group) {

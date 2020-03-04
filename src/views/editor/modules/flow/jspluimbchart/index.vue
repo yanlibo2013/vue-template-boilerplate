@@ -35,7 +35,7 @@
           </drop>
         </el-main>
         <el-aside width="250px">
-          <vaside></vaside>
+          <vaside ref="vaside"></vaside>
         </el-aside>
       </el-container>
     </el-container>
@@ -178,6 +178,13 @@ export default {
 
       console.log("steps",steps);
       console.log("links",links);
+
+    console.log("stepslist",this.$refs.vaside.stepList);
+    let result=_.find(this.$refs.vaside.stepList,item=>{
+      return item.group=="IO"
+    });
+
+    console.log("result",result);
 
     },
     modifyJsplumbchartOption(val) {
