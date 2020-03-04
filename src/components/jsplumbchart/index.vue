@@ -41,7 +41,7 @@ export default {
       this.nodeType = this.data.nodeType;
       this.operationType = val.operationType;
       this.containerRect = val.containerRect;
-      this.enablePanZoom=val.enablePanZoom;
+      this.enablePanZoom = val.enablePanZoom;
     },
     stepData(val) {
       this.$emit("modifyChart", {
@@ -99,7 +99,7 @@ export default {
   beforeUpdate() {},
   updated() {
     this.$nextTick(() => {
-      if (this.enablePanZoom&&this.containerRect) {
+      if (this.enablePanZoom && this.containerRect) {
         let lastStep = _.last(this.stepData);
         let result = this.modifyNodePositon({
           x: lastStep.x,
@@ -135,7 +135,7 @@ export default {
         },
         () => {
           this.getLinksData();
-          if (this.enablePanZoom&&this.isPanZoomInit) {
+          if (this.enablePanZoom && this.isPanZoomInit) {
             panzoom.init(this.jsplumbInstance, false);
             this.isPanZoomInit = false;
 
@@ -191,7 +191,6 @@ export default {
       };
     },
     canvasMoveTo(data, fn) {
-
       fn(data);
     },
     setCavansMatrix(data) {

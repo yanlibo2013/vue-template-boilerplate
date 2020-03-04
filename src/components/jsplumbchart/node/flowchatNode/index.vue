@@ -9,6 +9,8 @@
       :data-type="data.type"
       :style="'left:'+data.x+'px;top:'+data.y+'px;position:absolute;margin:0'"
       @dblclick="dblClick(data)"
+      @click.ctrl="multSe3lectStep(data)"
+      @mouseup="mouseUpStep"
     >
       <i class="icon iconfont icon-ir-designIconBg designIconBg"></i>
       <i
@@ -26,6 +28,11 @@
       <em id="removeDes" class="fa fa-trash-o" title="删除" @click="delNode(data.id)"></em>
 
       <div class="line-split" v-show="data.type=='split'" :style="setLineSplit(data)"></div>
+
+      <div v-show="data.isSelected" class="resize top"></div>
+      <div v-show="data.isSelected" class="resize left"></div>
+      <div v-show="data.isSelected" class="resize bottom"></div>
+      <div v-show="data.isSelected" class="resize right"></div>
     </div>
   </div>
 </template>
@@ -52,13 +59,18 @@ export default {
       stepData: [],
       nodeClass: nodeClass,
       nodeIcon: nodeIcon,
-      setClass: setClass
+      setClass: setClass,
+      mulSelect: false
     };
   },
   computed: {
     //...mapState([""])
   },
-  mounted() {},
+  mounted() {
+    this.$nextTick(() => {
+      this.initEvent();
+    });
+  },
   beforeCreate() {},
   created() {},
   beforeMount() {},
@@ -68,6 +80,67 @@ export default {
   destroyed: function() {},
   methods: {
     //...mapActions([""]),
+    initEvent() {
+      // document.onkeydown = e => {
+      //   if (e.keyCode == 46) {
+      //     this.delAllselected(this.stepData);
+      //   }
+      // };
+
+      // document.onmousedown = e => {
+      //   this.mousedownBody(e);
+      // };
+
+      //cavans
+
+
+      document.onmousedown = e => {
+        this.mousedownBody(e);
+      };
+    },
+    mousedownBody(event) {
+      if (this.mouserOverConnect) {
+        return;
+      }
+
+      this.stepData = _.map(this.stepData, item => {
+        delete item.isSelected;
+        return item;
+      });
+    },
+    delAllselected(data) {
+      this.stepData = _.filter(data, item => {
+        return !item.isSelected;
+      });
+    },
+
+    mouseUpStep() {
+      this.mulSelect = false;
+    },
+    multSe3lectStep(val) {
+      this.mulSelect = true;
+      this.selectCurrentStep(val);
+     
+    },
+    selectCurrentStep(val) {
+      if (this.isDeleCopyStep) {
+        return;
+      }
+      this.stepData = _.map(this.stepData, item => {
+        if (val.id == item.id) {
+          return {
+            ...item,
+            isSelected: true
+          };
+        } else {
+          if (!this.mulSelect) {
+            delete item.isSelected;
+          }
+
+          return item;
+        }
+      });
+    },
 
     delNode(val) {
       this.$emit("delNode", val);
@@ -78,6 +151,7 @@ export default {
     copyNode(val) {
       this.$emit("copyNode", val);
     },
+
     setLineSplit(step) {
       if (step.type == "split") {
         let outputConfigurations = _.toArray(step.outputConfigurations);
@@ -137,7 +211,7 @@ export default {
     margin-right: 15px;
     margin-bottom: 20px;
     float: left;
-    cursor:pointer;
+    cursor: pointer;
   }
 
   .designIconBig i {
@@ -270,6 +344,36 @@ export default {
     // z-index: 12;
     // opacity: 0.8;
     cursor: default;
+  }
+
+  .resize {
+    width: 8px;
+    height: 8px;
+    background-color: #ddd;
+    border: 1px solid #000;
+    position: absolute;
+    &.left {
+      top: 50%;
+      left: -4px;
+      cursor: ew-resize;
+    }
+    &.right {
+      top: 50%;
+      right: -4px;
+      cursor: ew-resize;
+    }
+    &.top {
+      top: -4px;
+      left: 50%;
+      margin-left: -4px;
+      cursor: ns-resize;
+    }
+    &.bottom {
+      bottom: -4px;
+      left: 50%;
+      margin-left: -4px;
+      cursor: ns-resize;
+    }
   }
 }
 </style>
