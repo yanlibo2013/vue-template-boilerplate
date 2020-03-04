@@ -319,9 +319,6 @@ export default {
       }
     },
     modifyChart(val) {
-      console.log(' modifyChart(val) {',val);
-      // this.steps = val.stepData?val.stepData:this.stepData;
-      // this.links = val.links?val.links:this.links;
        this.steps = val.stepData;
       this.links = val.links;
 
