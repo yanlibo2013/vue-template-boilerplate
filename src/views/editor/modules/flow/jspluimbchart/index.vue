@@ -81,6 +81,7 @@ export default {
         links: this.links,
         container: "workplace",
         nodeType: "flowchartnode",
+        flowType: "flink",
         jsPlumb: jsPlumb,
         containerRect: "",
         enablePanZoom:false
@@ -131,7 +132,6 @@ export default {
           steps: this.steps,
           links: this.links,
           container: "workplace",
-          nodeType: "flowchartnode",
           jsPlumb: this.jsPlumb,
           matrix: flowData.matrix && JSON.parse(flowData.matrix)
         };
@@ -163,8 +163,6 @@ export default {
       };
     },
     handleDrop(val) {
-
-      console.log('handleDrop(val) {',this.jsplumbchartOption);
       let stepData = "";
       let containerRect = "";
       let container = this.jsplumbchartOption.enablePanZoom?this.$refs.jsplumbchart.jsplumbInstance.getContainer():"";

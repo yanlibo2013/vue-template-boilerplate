@@ -161,7 +161,7 @@ export var destination = {
 	connectorOverlays: [ [ 'Arrow', { width: 10, length: 10, location: 1 } ] ]
 };
 
-export const addEndpointToNode = (jsplumbInstance, self, steps, flowData, _) => {
+export const addEndpointToNode = (jsplumbInstance, self, steps,flowType, flowData, _) => {
 	jsplumbInstance.deleteEveryEndpoint();
 	self.$nextTick(() => {
 		steps.forEach((data, index) => {
@@ -196,60 +196,79 @@ export const addEndpointToNode = (jsplumbInstance, self, steps, flowData, _) => 
 					{ uuid: dataIndex + 'output' + 'origin', ...origin }
 				);
 			} else if (specialNodeClass(drawType) == 'classD_D1') {
-				console.log('data.outputConfigurations', data.outputConfigurations);
-				console.log(
-					'getOutputConfigurations(data.outputConfigurations, _)',
-					getOutputConfigurations(data.outputConfigurations, _)
-				);
-				let anchors = addMultioutput(getOutputConfigurations(data.outputConfigurations, _));
 
-				// console.log("data", data);
-				// console.log("anchors", anchors);
-				// console.log(
-				//   "getOutputConfigurations(data.outputConfigurations, _)",
-				//   getOutputConfigurations(data.outputConfigurations, _)
-				// );
-				// console.log("data.outputConfigurations", data.outputConfigurations);
-				// console.log(_.toArray(data.outputConfigurations));
-
-				// let keyList = getKeyList(data.outputConfigurations);
-				// console.log("keyList", keyList);
-
-				_.forEach(anchors, (val, index) => {
-					//let label = "output" + (index + 1);
+				if(flowType==="flink"){
+					let anchors = addMultioutput(getOutputConfigurations(data.outputConfigurations, _));
+					_.forEach(anchors, (val, index) => {
+						jsplumbInstance.addEndpoint(
+							dataIndex,
+							{
+								anchors: val.value,
+								maxConnections: -1,
+								overlays: [
+									[
+										'Label',
+										{
+											location: [ 3.5, 0 ],
+											label: val.key,
+											cssClass: 'endpointSourceLabelMult'
+										}
+									]
+								]
+							},
+							{ uuid: dataIndex + val.key + 'origin', ...origin }
+						);
+					});
+					//left
+					jsplumbInstance.addEndpoint(
+						dataIndex,
+						{ anchors: 'LeftMiddle' },
+						{ uuid: dataIndex + 'input' + 'destination', ...destination }
+					);
+				}else{
 					jsplumbInstance.addEndpoint(
 						dataIndex,
 						{
-							anchors: val.value,
+							anchors: [ 1, 0.3, 0, 0 ],
 							maxConnections: -1,
 							overlays: [
 								[
 									'Label',
 									{
-										location: [ 3.5, 0 ],
-										// location: index % 2 == 0 ? [3.5, 0] : [-3.5, 0],
-										label: val.key,
-										cssClass: 'endpointSourceLabelMult'
+										location: [ 1.5, -0.5 ],
+										label: 'ok',
+										cssClass: 'endpointSourceLabel'
 									}
 								]
 							]
 						},
-						{ uuid: dataIndex + val.key + 'origin', ...origin }
+						{ uuid: dataIndex + 'ok' + 'origin', ...origin }
 					);
-				});
-
-				//left
-
-				jsplumbInstance.addEndpoint(
-					dataIndex,
-					{ anchors: 'LeftMiddle' },
-					{ uuid: dataIndex + 'input' + 'destination', ...destination }
-				);
-				// jsplumbInstance.addEndpoint(
-				//   dataIndex,
-				//   { anchors: "LeftMiddle" },
-				//   { uuid: dataIndex + "input" + "destination", ...destination }
-				// );
+					jsplumbInstance.addEndpoint(
+						dataIndex,
+						{
+							anchors: [ 1, 0.7, 0, 0 ],
+							maxConnections: -1,
+							overlays: [
+								[
+									'Label',
+									{
+										location: [ 1.5, 1.3 ],
+										label: 'error',
+										cssClass: 'endpointSourceLabel'
+									}
+								]
+							]
+						},
+						{ uuid: dataIndex + 'error' + 'origin', ...origin }
+					);
+					jsplumbInstance.addEndpoint(
+						dataIndex,
+						{ anchors: 'LeftMiddle' },
+						{ uuid: dataIndex + 'input' + 'destination', ...destination }
+					);
+				}
+			
 			} else if (specialNodeClass(drawType) == 'classD_D2') {
 				jsplumbInstance.addEndpoint(
 					dataIndex,

@@ -127,6 +127,7 @@ export default {
 
       this.drawJsplumbChart(
         {
+          ...this.data,
           jsplumbInstance: this.jsplumbInstance,
           self: this,
           flowData: this.stepData,
@@ -215,6 +216,7 @@ export default {
         data.jsplumbInstance,
         data.self,
         data.flowData,
+        data.flowType,
         val => {
           this.stepData = _.map(this.stepData, item => {
             if (item.id == val.id) {
