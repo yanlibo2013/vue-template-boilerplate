@@ -4,36 +4,53 @@
       v-for="(data,index) in stepData"
       :id="data.id"
       :key="index"
-      :class="'designIconBig '+setClass(nodeClass(data.type))"
+      :class="data.type==='group'?'group-container':'designIconBig '+setClass(nodeClass(data.type))"
       :data-sign="data.name"
       :data-type="data.type"
       :style="'left:'+data.x+'px;top:'+data.y+'px;position:absolute;margin:0'"
       @dblclick="dblClick(data)"
       @click.ctrl="multSe3lectStep(data)"
       @mouseup="mouseUpStep"
-      v-show="data.type!='group'"
     >
-      <i class="icon iconfont icon-ir-designIconBg designIconBg"></i>
-      <i
-        id="changeSte"
-        :class="nodeIcon(data.type) == 'iconTrue'?'icon iconfont icon-ir-d-'+data.type:'icon iconfont icon-ir-d-default'"
-      ></i>
-      <h4 :title="data.name">{{data.name}}</h4>
-      <h5>ID:{{data.id}}</h5>
-      <em
-        id="copeDes"
-        class="icon iconfont icon-ir-copy"
-        title="复制"
-        @click.prevent="copyNode(data)"
-      ></em>
-      <em id="removeDes" class="fa fa-trash-o" title="删除" @click="delNode(data.id)"></em>
+      <!-- node -->
+      <div v-if="data.type!='group'">
+        <i class="icon iconfont icon-ir-designIconBg designIconBg"></i>
+        <i
+          id="changeSte"
+          :class="nodeIcon(data.type) == 'iconTrue'?'icon iconfont icon-ir-d-'+data.type:'icon iconfont icon-ir-d-default'"
+        ></i>
+        <h4 :title="data.name">{{data.name}}</h4>
+        <h5>ID:{{data.id}}</h5>
+        <em
+          id="copeDes"
+          class="icon iconfont icon-ir-copy"
+          title="复制"
+          @click.prevent="copyNode(data)"
+        ></em>
+        <em id="removeDes" class="fa fa-trash-o" title="删除" @click="delNode(data.id)"></em>
 
-      <div class="line-split" v-show="data.type=='split'" :style="setLineSplit(data)"></div>
+        <div class="line-split" v-show="data.type=='split'" :style="setLineSplit(data)"></div>
 
-      <div v-show="data.isSelected" class="resize top"></div>
-      <div v-show="data.isSelected" class="resize left"></div>
-      <div v-show="data.isSelected" class="resize bottom"></div>
-      <div v-show="data.isSelected" class="resize right"></div>
+        <div v-show="data.isSelected" class="resize top"></div>
+        <div v-show="data.isSelected" class="resize left"></div>
+        <div v-show="data.isSelected" class="resize bottom"></div>
+        <div v-show="data.isSelected" class="resize right"></div>
+      </div>
+
+      <!-- group -->
+
+      <div v-else>
+        <div class="title">{{data.id}}</div>
+        <div class="del" delete-all></div>
+        <div class="node-collapse"></div>
+      </div>
+
+      <!-- <div class="group-container" group="one" v-else>
+        <div class="title"></div>
+        <div class="del" delete-all></div>
+        <div class="node-collapse"></div>
+        <div id="c1_1" class="w" style="left:30px;top:35px">1.1</div>
+      </div>-->
     </div>
   </div>
 </template>
@@ -82,19 +99,9 @@ export default {
   methods: {
     //...mapActions([""]),
     initEvent() {
-      // document.onkeydown = e => {
-      //   if (e.keyCode == 46) {
-      //     this.delAllselected(this.stepData);
-      //   }
-      // };
-
-      // document.onmousedown = e => {
-      //   this.mousedownBody(e);
-      // };
-
       document.getElementById("cavans").onmousedown = e => {
         this.mousedownBody(e);
-      }
+      };
     },
     mousedownBody(event) {
       if (this.mouserOverConnect) {
@@ -118,7 +125,7 @@ export default {
     multSe3lectStep(val) {
       this.mulSelect = true;
       this.selectCurrentStep(val);
-      this.$emit("modifyStepData",this.stepData);
+      this.$emit("modifyStepData", this.stepData);
     },
     selectCurrentStep(val) {
       if (this.isDeleCopyStep) {
@@ -372,6 +379,74 @@ export default {
       margin-left: -4px;
       cursor: ns-resize;
     }
+  }
+
+  ////////////////////////////////group start//////////////////////
+
+  .group-container {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    border-radius: 12px;
+    background-color: WhiteSmoke;
+    font-size: 12px;
+    cursor: move;
+  }
+
+  .group-container ul {
+    margin-left: 25px;
+    padding: 0;
+  }
+
+  .group-container ul li {
+    list-style-type: circle;
+    margin-bottom: 7px;
+  }
+
+  .group-container.collapsed {
+    height: 40px;
+  }
+
+  .title {
+    background-color: #abc1bb;
+    padding-right: 16px;
+    font-size: 13px;
+    height: 30px;
+    line-height: 30px;
+    padding-left: 10px;
+  }
+
+  .del,
+  .node-collapse {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: white;
+    padding: 1px;
+    cursor: pointer;
+    font-size: 13px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    text-align: center;
+    display: block;
+  }
+
+  .del:after {
+    content: "X";
+  }
+
+  .node-collapse {
+    right: 29px;
+    text-align: center;
+  }
+
+  .node-collapse:after {
+    content: "-";
+  }
+
+  .group-container.collapsed .node-collapse:after {
+    content: "+";
   }
 }
 </style>

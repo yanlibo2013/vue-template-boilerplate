@@ -204,7 +204,6 @@ export default {
       };
     },
     handleDrop(val) {
-      console.log("handleDrop(val) {", val);
       let stepData = "";
       let containerRect = "";
       let container = this.jsplumbchartOption.enablePanZoom
@@ -221,8 +220,6 @@ export default {
         // copy step
         stepData = this.copyNode(val);
       }
-
-      console.log("stepData", stepData);
       this.steps.push(stepData);
 
       this.jsplumbchartOption = {

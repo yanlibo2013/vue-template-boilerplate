@@ -168,6 +168,32 @@ export const addEndpointToNode = (jsplumbInstance, self, steps, flowType, flowDa
 			let drawType = data.type,
 				dataIndex = data.id;
 
+			if (drawType == 'group') {
+				if (_.isEmpty(jsplumbInstance._groups && jsplumbInstance._groups[dataIndex])) {
+					//jsplumbInstance.removeGroup(dataIndex, true);
+					jsplumbInstance.addGroup({
+						el: document.querySelector('#' + dataIndex),
+						id: dataIndex,
+						constrain: true,
+						anchor: 'Continuous',
+						endpoint: 'Blank',
+						droppable: false
+					});
+				}
+
+				//jsplumbInstance.draggable(c1_1);
+				// jsplumbInstance.addGroup({
+				// 	el: document.querySelector('#' + dataIndex),
+				// 	id: dataIndex,
+				// 	constrain: true,
+				// 	anchor: 'Continuous',
+				// 	endpoint: 'Blank',
+				// 	droppable: false
+				// });
+				//jsplumbInstance.addToGroup('one', c1_1);
+				return;
+			}
+
 			//节点锚点添加
 			//左侧无，右侧一个起点
 			if (nodeClass(drawType) == 'classD_A') {
@@ -390,9 +416,6 @@ export const addEndpointToNode = (jsplumbInstance, self, steps, flowType, flowDa
 					{ uuid: dataIndex + 'input2' + 'destination', ...destination }
 				);
 			} else {
-				if (drawType == 'group') {
-					return;
-				}
 				jsplumbInstance.addEndpoint(
 					dataIndex,
 					{ anchors: 'RightMiddle', maxConnections: -1 },

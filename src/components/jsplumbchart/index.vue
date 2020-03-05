@@ -215,6 +215,7 @@ export default {
       }
     },
     drawJsplumbChart(data, connectCallback) {
+      console.log('   drawJsplumbChart(data, connectCallback) {',data);
       addEndpointToNode(
         data.jsplumbInstance,
         data.self,
@@ -235,6 +236,10 @@ export default {
         },
         _
       );
+
+      if(_.last(data.steps).type=="group"){
+        return;
+      }
       connect(data.jsplumbInstance, data.self, data.links, connectCallback);
     },
     completedConnect() {
