@@ -1,47 +1,47 @@
 <template>
   <div class="flowchart-node" id="flowchartnode">
     <div
-      v-for="(data,index) in stepData"
-      :id="data.id"
+      v-for="(item,index) in stepData"
+      :id="item.id"
       :key="index"
-      :class="data.type==='group'?'group-container':'designIconBig '+setClass(nodeClass(data.type))"
-      :data-sign="data.name"
-      :data-type="data.type"
-      :style="'left:'+data.x+'px;top:'+data.y+'px;position:absolute;margin:0'"
-      @dblclick="dblClick(data)"
-      @click.ctrl="multSe3lectStep(data)"
+      :class="item.type==='group'?'group-container':'designIconBig '+setClass(nodeClass(item.type))"
+      :data-sign="item.name"
+      :data-type="item.type"
+      :style="'left:'+item.x+'px;top:'+item.y+'px;position:absolute;margin:0'"
+      @dblclick="dblClick(item)"
+      @click.ctrl="multSe3lectStep(item)"
       @mouseup="mouseUpStep"
     >
       <!-- node -->
-      <div v-if="data.type!='group'">
+      <div v-if="item.type!='group'">
         <i class="icon iconfont icon-ir-designIconBg designIconBg"></i>
         <i
           id="changeSte"
-          :class="nodeIcon(data.type) == 'iconTrue'?'icon iconfont icon-ir-d-'+data.type:'icon iconfont icon-ir-d-default'"
+          :class="nodeIcon(item.type) == 'iconTrue'?'icon iconfont icon-ir-d-'+item.type:'icon iconfont icon-ir-d-default'"
         ></i>
-        <h4 :title="data.name">{{data.name}}</h4>
-        <h5>ID:{{data.id}}</h5>
+        <h4 :title="item.name">{{item.name}}</h4>
+        <h5>ID:{{item.id}}</h5>
         <em
           id="copeDes"
           class="icon iconfont icon-ir-copy"
           title="复制"
-          @click.prevent="copyNode(data)"
+          @click.prevent="copyNode(item)"
         ></em>
-        <em id="removeDes" class="fa fa-trash-o" title="删除" @click="delNode(data.id)"></em>
+        <em id="removeDes" class="fa fa-trash-o" title="删除" @click="delNode(item.id)"></em>
 
-        <div class="line-split" v-show="data.type=='split'" :style="setLineSplit(data)"></div>
+        <div class="line-split" v-show="item.type=='split'" :style="setLineSplit(item)"></div>
 
-        <div v-show="data.isSelected" class="resize top"></div>
-        <div v-show="data.isSelected" class="resize left"></div>
-        <div v-show="data.isSelected" class="resize bottom"></div>
-        <div v-show="data.isSelected" class="resize right"></div>
+        <div v-show="item.isSelected" class="resize top"></div>
+        <div v-show="item.isSelected" class="resize left"></div>
+        <div v-show="item.isSelected" class="resize bottom"></div>
+        <div v-show="item.isSelected" class="resize right"></div>
       </div>
 
       <!-- group -->
 
       <div v-else>
-        <div class="title">{{data.id}}</div>
-        <div class="del" delete-all></div>
+        <div class="title">{{item.id}}</div>
+        <div class="del" @click="delNode(item.id)"></div>
         <div class="node-collapse"></div>
       </div>
 
@@ -98,6 +98,7 @@ export default {
   destroyed: function() {},
   methods: {
     //...mapActions([""]),
+
     initEvent() {
       document.getElementById("cavans").onmousedown = e => {
         this.mousedownBody(e);
@@ -146,7 +147,9 @@ export default {
         }
       });
     },
-
+    // delGroup(jsplumbInstance,id) {
+    //   jsplumbInstance.removeGroup(id, true);
+    // },
     delNode(val) {
       this.$emit("delNode", val);
     },
