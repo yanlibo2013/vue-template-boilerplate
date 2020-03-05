@@ -85,8 +85,7 @@ export default {
         flowType: "flink",
         jsPlumb: jsPlumb,
         containerRect: "",
-        enablePanZoom:true
-
+        enablePanZoom: true
       },
       nodeTab: [
         {
@@ -151,41 +150,45 @@ export default {
   destroyed: function() {},
   methods: {
     //...mapActions([""]),
-    addGroup(){
-            let selectedSteps = _.filter(this.steps, item => {
+    addGroup() {
+      let selectedSteps = _.filter(this.steps, item => {
         return item.isSelected == true;
       });
 
-      let steps= _.map(_.cloneDeep(selectedSteps), item => {
-          delete item.isSelected;
+      let steps = _.map(_.cloneDeep(selectedSteps), item => {
+        delete item.isSelected;
+        return item;
+      });
+
+      let links = _.filter(this.links, item => {
+        let isSource = _.find(steps, subitem => {
+          return subitem.id == item.source;
+        });
+
+        let isTarget = _.find(steps, subitem => {
+          return subitem.id == item.target;
+        });
+
+        if (isSource && isTarget) {
           return item;
-      });
-
-      let links=_.filter(this.links,item=>{
-        let isSource= _.find(steps,subitem=>{
-          return subitem.id==item.source
-        });
-
-        let isTarget=_.find(steps,subitem=>{
-          return subitem.id==item.target
-        });
-
-        if(isSource&&isTarget){
-          return item
         }
-
       });
 
-      console.log("steps",steps);
-      console.log("links",links);
+      console.log("steps", steps);
+      console.log("links", links);
 
-    console.log("stepslist",this.$refs.vaside.stepList);
-    let result=_.find(this.$refs.vaside.stepList,item=>{
-      return item.group=="IO"
-    });
+      let subflow = { steps: steps, links: links };
 
-    console.log("result",result);
+      console.log("subflow", subflow);
+      console.log(JSON.stringify(subflow));
 
+      console.log("stepslist", this.$refs.vaside.stepList);
+      let result = _.find(this.$refs.vaside.stepList, item => {
+        return item.group == "Set";
+      });
+
+      console.log("result", result);
+      console.log(JSON.stringify(result));
     },
     modifyJsplumbchartOption(val) {
       this.jsplumbchartOption = val;
@@ -201,9 +204,12 @@ export default {
       };
     },
     handleDrop(val) {
+      console.log("handleDrop(val) {", val);
       let stepData = "";
       let containerRect = "";
-      let container = this.jsplumbchartOption.enablePanZoom?this.$refs.jsplumbchart.jsplumbInstance.getContainer():"";
+      let container = this.jsplumbchartOption.enablePanZoom
+        ? this.$refs.jsplumbchart.jsplumbInstance.getContainer()
+        : "";
       // add step
       if (val.drawIcon) {
         stepData = this.getCurrentNode(
@@ -215,6 +221,8 @@ export default {
         // copy step
         stepData = this.copyNode(val);
       }
+
+      console.log("stepData", stepData);
       this.steps.push(stepData);
 
       this.jsplumbchartOption = {
@@ -286,6 +294,11 @@ export default {
             ...node,
             ...inputConfigurations
           };
+        case "group":
+          return {
+            ...node,
+            subflow:data.drawIcon.subflow
+          };
         default:
           return {
             ...node,
@@ -350,7 +363,7 @@ export default {
       }
     },
     modifyChart(val) {
-       this.steps = val.stepData;
+      this.steps = val.stepData;
       this.links = val.links;
 
       this.jsplumbchartOption = {

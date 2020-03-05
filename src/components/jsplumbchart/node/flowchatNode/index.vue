@@ -11,6 +11,7 @@
       @dblclick="dblClick(data)"
       @click.ctrl="multSe3lectStep(data)"
       @mouseup="mouseUpStep"
+      v-show="data.type!='group'"
     >
       <i class="icon iconfont icon-ir-designIconBg designIconBg"></i>
       <i

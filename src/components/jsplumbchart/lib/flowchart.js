@@ -161,7 +161,7 @@ export var destination = {
 	connectorOverlays: [ [ 'Arrow', { width: 10, length: 10, location: 1 } ] ]
 };
 
-export const addEndpointToNode = (jsplumbInstance, self, steps,flowType, flowData, _) => {
+export const addEndpointToNode = (jsplumbInstance, self, steps, flowType, flowData, _) => {
 	jsplumbInstance.deleteEveryEndpoint();
 	self.$nextTick(() => {
 		steps.forEach((data, index) => {
@@ -196,8 +196,7 @@ export const addEndpointToNode = (jsplumbInstance, self, steps,flowType, flowDat
 					{ uuid: dataIndex + 'output' + 'origin', ...origin }
 				);
 			} else if (specialNodeClass(drawType) == 'classD_D1') {
-
-				if(flowType==="flink"){
+				if (flowType === 'flink') {
 					let anchors = addMultioutput(getOutputConfigurations(data.outputConfigurations, _));
 					_.forEach(anchors, (val, index) => {
 						jsplumbInstance.addEndpoint(
@@ -225,7 +224,7 @@ export const addEndpointToNode = (jsplumbInstance, self, steps,flowType, flowDat
 						{ anchors: 'LeftMiddle' },
 						{ uuid: dataIndex + 'input' + 'destination', ...destination }
 					);
-				}else{
+				} else {
 					jsplumbInstance.addEndpoint(
 						dataIndex,
 						{
@@ -268,7 +267,6 @@ export const addEndpointToNode = (jsplumbInstance, self, steps,flowType, flowDat
 						{ uuid: dataIndex + 'input' + 'destination', ...destination }
 					);
 				}
-			
 			} else if (specialNodeClass(drawType) == 'classD_D2') {
 				jsplumbInstance.addEndpoint(
 					dataIndex,
@@ -392,6 +390,9 @@ export const addEndpointToNode = (jsplumbInstance, self, steps,flowType, flowDat
 					{ uuid: dataIndex + 'input2' + 'destination', ...destination }
 				);
 			} else {
+				if (drawType == 'group') {
+					return;
+				}
 				jsplumbInstance.addEndpoint(
 					dataIndex,
 					{ anchors: 'RightMiddle', maxConnections: -1 },
