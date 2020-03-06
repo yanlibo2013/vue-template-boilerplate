@@ -7,8 +7,20 @@
     ></i>
     <h4 :title="item.name">{{item.name}}</h4>
     <h5>ID:{{item.id}}</h5>
-    <em id="copeDes" class="icon iconfont icon-ir-copy" title="复制" @click.prevent="copyNode(item)"></em>
-    <em id="removeDes" class="fa fa-trash-o" title="删除" @click="delNode(item.id)"></em>
+    <em
+      id="copeDes"
+      class="icon iconfont icon-ir-copy"
+      title="复制"
+      @click.prevent="copyNode(item)"
+      v-show="itemType!='group'"
+    ></em>
+    <em
+      id="removeDes"
+      class="fa fa-trash-o"
+      title="删除"
+      @click="delNode(item.id)"
+      v-show="itemType!='group'"
+    ></em>
 
     <div class="line-split" v-show="item.type=='split'" :style="setLineSplit(item)"></div>
 
@@ -34,13 +46,16 @@ export default {
     item: {
       type: Object,
       default: false
+    },
+    itemType: {
+      type: String
     }
   },
   components: {},
   data: function() {
     return {
-    //   item: "",
-       nodeIcon: nodeIcon,
+      //   item: "",
+      nodeIcon: nodeIcon
     };
   },
   computed: {

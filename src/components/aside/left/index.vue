@@ -90,7 +90,7 @@ export default {
         );
 
         //console.log("this.stepList ",this.stepList );
-        let subflow={"steps":[{"id":"sink_1","name":"sink","type":"sink","x":523,"y":187,"stepSettings":{},"inputConfigurations":{"input":[]}},{"id":"source_2","name":"source","type":"source","x":110,"y":78,"stepSettings":{},"outputConfigurations":{"output":[]}}],"links":[{"name":"con_55","source":"source_2","sourceOutput":"output","target":"sink_1","targetInput":"input","input":"input"}]}
+        let subflow={"steps":[{"id":"sink_1_define","name":"sink","type":"sink","x":523,"y":187,"stepSettings":{},"inputConfigurations":{"input":[]}},{"id":"source_2_define","name":"source","type":"source","x":110,"y":78,"stepSettings":{},"outputConfigurations":{"output":[]}}],"links":[{"name":"con_55","source":"source_2","sourceOutput":"output","target":"sink_1","targetInput":"input","input":"input"}]}
         let jsonData={"group":"Define","thisIcon":[{"subflow":subflow,"id":"group","name":"group1","type":"group","tags":["Set","rtcflow"],"stepSettings":{},"inputConfigurations":{"input":[{"column":"","type":"","alias":"","description":""}]},"outputConfigurations":{"output":[{"column":"","type":"","alias":"","description":""}]}}]}
 
         this.stepList=[

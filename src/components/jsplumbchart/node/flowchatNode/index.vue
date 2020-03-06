@@ -63,6 +63,7 @@
         >
           <vitem
             :item="subitem"
+            :itemType="'group'"
             @copyNode="copyNode"
             @delNode="delNode"
             @setLineSplit="setLineSplit"
