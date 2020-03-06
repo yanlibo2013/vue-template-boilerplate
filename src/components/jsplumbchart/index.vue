@@ -137,7 +137,10 @@ export default {
         () => {
           this.getLinksData();
           if (this.enablePanZoom && this.isPanZoomInit) {
-            panzoom.init(this.jsplumbInstance, false);
+            let pan=panzoom.init(this.jsplumbInstance, false);
+            if(!pan){
+              return;
+            }
             this.isPanZoomInit = false;
 
             if (!this.data.matrix) {
@@ -236,9 +239,9 @@ export default {
         _
       );
 
-      if(!_.last(data.steps)||_.last(data.steps).type=="group"){
-        return;
-      }
+      // if(!_.last(data.steps)||_.last(data.steps).type=="group"){
+      //   return;
+      // }
       connect(data.jsplumbInstance, data.self, data.links, connectCallback);
     },
     completedConnect() {

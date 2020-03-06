@@ -8,7 +8,10 @@ const panzoom = require("panzoom");
 
 function init(instance, shouldIgnore) {
   const mainContainer = instance.getContainer();
-  const mainContainerWrap = mainContainer.parentNode;
+  if(!mainContainer){
+    return;
+  }
+  const mainContainerWrap = mainContainer?mainContainer.parentNode:"";
   const pan = panzoom(mainContainer, {
     smoothScroll: false,
     bounds: false,
