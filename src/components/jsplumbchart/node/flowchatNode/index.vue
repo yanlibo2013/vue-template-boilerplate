@@ -13,7 +13,7 @@
       @mouseup="mouseUpStep"
     >
       <!-- node -->
-      <div v-if="item.type!='group'">
+      <!-- <div v-if="item.type!='group'">
         <i class="icon iconfont icon-ir-designIconBg designIconBg"></i>
         <i
           id="changeSte"
@@ -35,7 +35,15 @@
         <div v-show="item.isSelected" class="resize left"></div>
         <div v-show="item.isSelected" class="resize bottom"></div>
         <div v-show="item.isSelected" class="resize right"></div>
-      </div>
+      </div>-->
+
+      <vitem
+        v-if="item.type!='group'"
+        :item="item"
+        @copyNode="copyNode"
+        @delNode="delNode"
+        @setLineSplit="setLineSplit"
+      ></vitem>
 
       <!-- group -->
 
@@ -43,14 +51,24 @@
         <div class="title">{{item.id}}</div>
         <div class="del" @click="delNode(item.id)"></div>
         <div class="node-collapse"></div>
+        <div
+          v-for="(subitem,index) in item.subflow.steps"
+          :id="subitem.id"
+          :key="index"
+          :class="subitem.type==='group'?'group-container':'designIconBig '+setClass(nodeClass(subitem.type))"
+          :data-sign="subitem.name"
+          :data-type="subitem.type"
+          :style="'left:'+subitem.x+'px;top:'+subitem.y+'px;position:absolute;margin:0'"
+          @dblclick="dblClick(subitem)"
+        >
+          <vitem
+            :item="subitem"
+            @copyNode="copyNode"
+            @delNode="delNode"
+            @setLineSplit="setLineSplit"
+          ></vitem>
+        </div>
       </div>
-
-      <!-- <div class="group-container" group="one" v-else>
-        <div class="title"></div>
-        <div class="del" delete-all></div>
-        <div class="node-collapse"></div>
-        <div id="c1_1" class="w" style="left:30px;top:35px">1.1</div>
-      </div>-->
     </div>
   </div>
 </template>
@@ -59,6 +77,7 @@
 <script>
 import _ from "lodash";
 import { setClass, nodeClass, nodeIcon } from "../../lib/flowchart";
+import vitem from "./item";
 export default {
   watch: {
     data(val) {
@@ -71,7 +90,9 @@ export default {
       default: {}
     }
   },
-  components: {},
+  components: {
+    vitem
+  },
   data: function() {
     return {
       stepData: [],
@@ -388,8 +409,8 @@ export default {
 
   .group-container {
     position: absolute;
-    width: 200px;
-    height: 200px;
+    width: 500px;
+    height: 250px;
     border-radius: 12px;
     background-color: WhiteSmoke;
     font-size: 12px;

@@ -220,6 +220,9 @@ export default {
         // copy step
         stepData = this.copyNode(val);
       }
+      
+      console.log("stepData",stepData);
+      
       this.steps.push(stepData);
 
       this.jsplumbchartOption = {
