@@ -4,6 +4,7 @@
       v-for="(item,index) in stepData"
       :id="item.id"
       :key="index"
+      :group="item.type==='group'?item.id:''"
       :class="item.type==='group'?'group-container':'designIconBig '+setClass(nodeClass(item.type))"
       :data-sign="item.name"
       :data-type="item.type"
@@ -13,29 +14,6 @@
       @mouseup="mouseUpStep"
     >
       <!-- node -->
-      <!-- <div v-if="item.type!='group'">
-        <i class="icon iconfont icon-ir-designIconBg designIconBg"></i>
-        <i
-          id="changeSte"
-          :class="nodeIcon(item.type) == 'iconTrue'?'icon iconfont icon-ir-d-'+item.type:'icon iconfont icon-ir-d-default'"
-        ></i>
-        <h4 :title="item.name">{{item.name}}</h4>
-        <h5>ID:{{item.id}}</h5>
-        <em
-          id="copeDes"
-          class="icon iconfont icon-ir-copy"
-          title="复制"
-          @click.prevent="copyNode(item)"
-        ></em>
-        <em id="removeDes" class="fa fa-trash-o" title="删除" @click="delNode(item.id)"></em>
-
-        <div class="line-split" v-show="item.type=='split'" :style="setLineSplit(item)"></div>
-
-        <div v-show="item.isSelected" class="resize top"></div>
-        <div v-show="item.isSelected" class="resize left"></div>
-        <div v-show="item.isSelected" class="resize bottom"></div>
-        <div v-show="item.isSelected" class="resize right"></div>
-      </div>-->
 
       <vitem
         v-if="item.type!='group'"
@@ -410,12 +388,13 @@ export default {
 
   .group-container {
     position: absolute;
-    width: 500px;
-    height: 250px;
+    width: 1000px;
+    height: 300px;
     border-radius: 12px;
     background-color: WhiteSmoke;
     font-size: 12px;
     cursor: move;
+    z-index: 1000;
   }
 
   .group-container ul {
