@@ -159,9 +159,9 @@ export default {
       // console.log(' delNode(val) {',val);
       // console.log('this.jsplumbInstance',this.data.jsplumbInstance);
       // // //jsplumbInstance.removeGroup(dataIndex, true);if (_.isEmpty(jsplumbInstance._groups && jsplumbInstance._groups[dataIndex])) {
-      if(val.type=="group"){
-       this.data.jsplumbInstance.removeGroup(val.id, true);
-      }
+      // if(val.type=="group"){
+      //  this.data.jsplumbInstance.removeGroup(val.id, true);
+      // }
       this.$emit("delNode", val);
     },
     dblClick(val) {
@@ -402,8 +402,8 @@ export default {
 
 .group-container {
   position: absolute;
-  width: 1000px;
-  height: 700px;
+  width: 700px;
+  height: 300px;
   border-radius: 12px;
   background-color: WhiteSmoke;
   font-size: 12px;
@@ -432,9 +432,10 @@ export default {
 
 .title {
   background-color: #abc1bb;
-  padding-right: 16px;
+  padding:0 16px;
   font-size: 13px;
   height: 30px;
+  line-height: 30px;
 }
 
 .del, .node-collapse {

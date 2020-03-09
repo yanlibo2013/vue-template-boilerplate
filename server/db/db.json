@@ -246,10 +246,18 @@
       "flowName": "更多法规规定",
       "links": [
         {
-          "name": "con_60",
+          "name": "con_9",
           "source": "source_1",
           "sourceOutput": "output",
           "target": "sink_4",
+          "targetInput": "input",
+          "input": "input"
+        },
+        {
+          "name": "con_14",
+          "source": "source_2_define_fd609168-5ee9-44f8-b035-d0c86aae6b11",
+          "sourceOutput": "output",
+          "target": "sink_1_define_fd609168-5ee9-44f8-b035-d0c86aae6b11",
           "targetInput": "input",
           "input": "input"
         }
@@ -304,9 +312,53 @@
           "inputConfigurations": {
             "input": []
           }
+        },
+        {
+          "id": "group_5",
+          "name": "group1",
+          "type": "group",
+          "x": 289,
+          "y": 512,
+          "stepSettings": {},
+          "subflow": {
+            "steps": [
+              {
+                "id": "sink_1_define_fd609168-5ee9-44f8-b035-d0c86aae6b11",
+                "name": "sink",
+                "type": "sink",
+                "x": 107,
+                "y": 158,
+                "stepSettings": {},
+                "inputConfigurations": {
+                  "input": []
+                }
+              },
+              {
+                "id": "source_2_define_fd609168-5ee9-44f8-b035-d0c86aae6b11",
+                "name": "source",
+                "type": "source",
+                "x": 496,
+                "y": 131,
+                "stepSettings": {},
+                "outputConfigurations": {
+                  "output": []
+                }
+              }
+            ],
+            "links": [
+              {
+                "name": "con_55",
+                "source": "source_2_define_fd609168-5ee9-44f8-b035-d0c86aae6b11",
+                "sourceOutput": "output",
+                "target": "sink_1_define_fd609168-5ee9-44f8-b035-d0c86aae6b11",
+                "targetInput": "input",
+                "input": "input"
+              }
+            ]
+          }
         }
       ],
-      "date": "2020-01-26 21:41:21",
+      "date": "2020-03-09 18:18:24",
       "id": 2
     },
     {
