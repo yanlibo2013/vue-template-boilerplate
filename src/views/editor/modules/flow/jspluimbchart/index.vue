@@ -220,9 +220,7 @@ export default {
         // copy step
         stepData = this.copyNode(val);
       }
-      
-      console.log("stepData",stepData);
-      
+
       this.steps.push(stepData);
 
       this.jsplumbchartOption = {
@@ -295,9 +293,25 @@ export default {
             ...inputConfigurations
           };
         case "group":
+          let uuid = jsPlumbUtil.uuid();
           return {
             ...node,
             subflow:data.drawIcon.subflow
+            // subflow: {
+            //   steps: _.map(data.drawIcon.subflow.steps, item => {
+            //     return {
+            //       ...item,
+            //       id: item.id + uuid
+            //     };
+            //   }),
+            //   links: _.map(data.drawIcon.subflow.links, item => {
+            //     return {
+            //       ...item,
+            //       source: item.source + uuid,
+            //       target: item.target + uuid
+            //     };
+            //   })
+            // }
           };
         default:
           return {
