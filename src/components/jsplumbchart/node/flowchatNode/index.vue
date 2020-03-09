@@ -26,9 +26,14 @@
       <!-- group -->
 
       <div v-else>
-        <div class="title">{{item.id}}</div>
+        <!-- <div class="title">{{item.id}}</div>
         <div class="del" @click="delNode(item.id)"></div>
-        <div class="node-collapse"></div>
+        <div class="node-collapse"></div>-->
+
+        <div class="title">{{item.id}}</div>
+        <div class="del" @click="delNode(item)"></div>
+        <!-- <div class="node-collapse"></div> -->
+        <div class="collapsed node-collapse"></div>
         <div
           v-for="(subitem,index) in item.subflow.steps"
           :id="subitem.id"
@@ -149,11 +154,20 @@ export default {
     },
     // delGroup(jsplumbInstance,id) {
     //   jsplumbInstance.removeGroup(id, true);
-    // },
+    // },jsplumbInstance
     delNode(val) {
-      this.$emit("delNode", val);
+      // console.log(' delNode(val) {',val);
+      // console.log('this.jsplumbInstance',this.data.jsplumbInstance);
+      // // //jsplumbInstance.removeGroup(dataIndex, true);if (_.isEmpty(jsplumbInstance._groups && jsplumbInstance._groups[dataIndex])) {
+      if(val.type=="group"){
+       this.data.jsplumbInstance.removeGroup(val.id, true);
+      }
+      this.$emit("delNode", val.id);
     },
     dblClick(val) {
+      if(val.type=="group"){
+        return;
+      }
       this.$emit("dblClick", val);
     },
     copyNode(val) {
@@ -386,71 +400,124 @@ export default {
 
   ////////////////////////////////group start//////////////////////
 
-  .group-container {
-    position: absolute;
-    width: 1000px;
-    height: 300px;
-    border-radius: 12px;
-    background-color: WhiteSmoke;
-    font-size: 12px;
-    cursor: move;
-    z-index: 1000;
-  }
+.group-container {
+  position: absolute;
+  width: 1000px;
+  height: 700px;
+  border-radius: 12px;
+  background-color: WhiteSmoke;
+  font-size: 12px;
+  cursor: move;
+      z-index: 9999;
 
-  .group-container ul {
+  ul {
     margin-left: 25px;
     padding: 0;
-  }
 
-  .group-container ul li {
-    list-style-type: circle;
-    margin-bottom: 7px;
+    li {
+      list-style-type: circle;
+      margin-bottom: 7px;
+    }
   }
+}
 
-  .group-container.collapsed {
-    height: 40px;
-  }
+.large {
+  width: 600px;
+  height: 600px;
+}
 
-  .title {
-    background-color: #abc1bb;
-    padding-right: 16px;
-    font-size: 13px;
-    height: 30px;
-    line-height: 30px;
-    padding-left: 10px;
-  }
+.group-container.collapsed {
+  height: 40px;
+}
 
-  .del,
-  .node-collapse {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    background-color: white;
-    padding: 1px;
-    cursor: pointer;
-    font-size: 13px;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    text-align: center;
-    display: block;
-  }
+.title {
+  background-color: #abc1bb;
+  padding-right: 16px;
+  font-size: 13px;
+  height: 30px;
+}
 
-  .del:after {
-    content: "X";
-  }
+.del, .node-collapse {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: white;
+  padding: 1px;
+  cursor: pointer;
+  font-size: 13px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  text-align: center;
+  display: block;
+}
 
-  .node-collapse {
-    right: 29px;
-    text-align: center;
-  }
+.del:after {
+  content: "X";
+}
 
-  .node-collapse:after {
+.node-collapse {
+  right: 29px;
+  text-align: center;
+
+  &:after {
     content: "-";
   }
+}
 
-  .group-container.collapsed .node-collapse:after {
-    content: "+";
+.group-container.collapsed .node-collapse:after {
+  content: "+";
+}
+
+.del[delete-all] {
+  background-color: pink;
+}
+
+.jtk-connector path {
+  stroke-width: 1;
+}
+
+.jtk-group-collapsed {
+  .w, ul, .container, .name {
+    display: none;
   }
+}
+
+.jtk-drag-hover {
+  outline: 4px solid cornflowerblue;
+}
+
+.katavorio-ghost-proxy {
+  outline: 2px solid red;
+}
+
+.events {
+  position: absolute;
+  right: 0;
+  top: 0;
+  border-left: 4px solid #58775d;
+  bottom: 0;
+  width: 156px;
+  font-size: 11px;
+  padding-left: 11px;
+  background-color: white;
+}
+
+#events {
+  position: absolute;
+  right: 0;
+  top: 0;
+  border-left: 1px solid #58775d;
+  bottom: 0;
+  width: 256px;
+  font-size: 11px;
+  padding-left: 11px;
+  background-color: white;
+}
+
+.events h3 {
+  font-size: 20px;
+  margin-top: 10px;
+}
 }
 </style>

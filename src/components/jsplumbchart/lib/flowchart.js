@@ -169,26 +169,26 @@ export const addEndpointToNode = (jsplumbInstance, self, steps, flowType, flowDa
 				dataIndex = data.id;
 
 			if (drawType == 'group') {
-				console.log("if (drawType == 'group') {", data);
+				//console.log("if (drawType == 'group') {", data);
 				if (_.isEmpty(jsplumbInstance._groups && jsplumbInstance._groups[dataIndex])) {
+					console.log('if (_.isEmpty(jsplumbInstance._groups && jsplumbInstance._groups[dataIndex])) {');
 					let subflow = data.subflow;
 
 					//jsplumbInstance.removeGroup(dataIndex, true);
 					jsplumbInstance.addGroup({
 						el: document.querySelector('#' + dataIndex),
 						id: dataIndex,
-						constrain: true
-						// anchor: 'Continuous',
-						// endpoint: 'Blank',
-						// droppable: false
+						constrain: true,
+						anchor: 'Continuous',
+						endpoint: 'Blank',
+						droppable: false
 					});
 
 					_.forEach(subflow.steps, (item) => {
 						jsplumbInstance.draggable(item.id);
-						// self.$nextTick(() => {
-						// 	//jsplumbInstance.draggable(item.id);
-						// 	//jsplumbInstance.addToGroup(dataIndex, item.id);
-						// });
+						self.$nextTick(() => {
+							jsplumbInstance.addToGroup(dataIndex, item.id);
+						});
 					});
 				}
 

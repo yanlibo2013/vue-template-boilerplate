@@ -2,7 +2,7 @@
   <div class="jsplumb-chart">
     <div class="cavansClass" id="cavans">
       <flowchartNode
-        :data="{stepData:stepData}"
+        :data="{stepData:stepData,jsplumbInstance:jsplumbInstance}"
         @dblClick="dblClick"
         @copyNode="copyNode"
         @delNode="delNode"
