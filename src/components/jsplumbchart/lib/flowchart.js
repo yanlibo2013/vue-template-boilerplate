@@ -175,10 +175,11 @@ export const addEndpointToNode = (jsplumbInstance, self, steps, flowType, flowDa
 					jsplumbInstance.addGroup({
 						el: document.querySelector('#' + dataIndex),
 						id: dataIndex,
-						constrain: true,
-						anchor: 'Continuous',
-						endpoint: 'Blank',
-						droppable: false
+						orphan: true
+						// constrain: true,
+						// anchor: 'Continuous',
+						// endpoint: 'Blank',
+						// droppable: false
 						// dropOptions: {
 						// 	drop(p) {
 						// 		console.log(p);

@@ -246,7 +246,7 @@
       "flowName": "更多法规规定",
       "links": [
         {
-          "name": "con_9",
+          "name": "con_42",
           "source": "source_1",
           "sourceOutput": "output",
           "target": "sink_4",
@@ -254,10 +254,18 @@
           "input": "input"
         },
         {
-          "name": "con_14",
+          "name": "con_47",
           "source": "source_2_define_fd609168-5ee9-44f8-b035-d0c86aae6b11",
           "sourceOutput": "output",
           "target": "sink_1_define_fd609168-5ee9-44f8-b035-d0c86aae6b11",
+          "targetInput": "input",
+          "input": "input"
+        },
+        {
+          "name": "con_52",
+          "source": "source_2_define_6c7d0737-ade4-4e92-bfc6-312ace177443",
+          "sourceOutput": "output",
+          "target": "sink_1_define_6c7d0737-ade4-4e92-bfc6-312ace177443",
           "targetInput": "input",
           "input": "input"
         }
@@ -356,9 +364,53 @@
               }
             ]
           }
+        },
+        {
+          "id": "group_6",
+          "name": "group1",
+          "type": "group",
+          "x": 1442,
+          "y": 426,
+          "stepSettings": {},
+          "subflow": {
+            "steps": [
+              {
+                "id": "sink_1_define_6c7d0737-ade4-4e92-bfc6-312ace177443",
+                "name": "sink",
+                "type": "sink",
+                "x": 523,
+                "y": 187,
+                "stepSettings": {},
+                "inputConfigurations": {
+                  "input": []
+                }
+              },
+              {
+                "id": "source_2_define_6c7d0737-ade4-4e92-bfc6-312ace177443",
+                "name": "source",
+                "type": "source",
+                "x": 110,
+                "y": 78,
+                "stepSettings": {},
+                "outputConfigurations": {
+                  "output": []
+                }
+              }
+            ],
+            "links": [
+              {
+                "name": "con_55",
+                "source": "source_2_define_6c7d0737-ade4-4e92-bfc6-312ace177443",
+                "sourceOutput": "output",
+                "target": "sink_1_define_6c7d0737-ade4-4e92-bfc6-312ace177443",
+                "targetInput": "input",
+                "input": "input"
+              }
+            ]
+          }
         }
       ],
-      "date": "2020-03-09 18:18:24",
+      "date": "2020-03-09 18:45:24",
       "id": 2
     },
     {

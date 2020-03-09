@@ -240,19 +240,6 @@ export default {
 
       return result;
     },
-    getScale(instance) {
-      let container = instance.getContainer();
-      let scale1;
-      if (instance.pan) {
-        const { scale } = instance.pan.getTransform();
-        scale1 = scale;
-      } else {
-        const matrix = window.getComputedStyle(container).transform;
-        scale1 = matrix.split(", ")[3] * 1;
-      }
-      instance.setZoom(scale1);
-      return scale1;
-    },
     getCurrentNode(data, container) {
       let uuid = jsPlumbUtil.uuid();
       let stepId = data.drawIcon.id + "_" + (this.steps.length + 1);

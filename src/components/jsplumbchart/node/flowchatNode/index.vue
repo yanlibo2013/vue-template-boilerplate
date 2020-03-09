@@ -156,11 +156,12 @@ export default {
     //   jsplumbInstance.removeGroup(id, true);
     // },jsplumbInstance
     delNode(val) {
-      // console.log(' delNode(val) {',val);
+      //console.log(' delNode(val) {',val);
       // console.log('this.jsplumbInstance',this.data.jsplumbInstance);
       // // //jsplumbInstance.removeGroup(dataIndex, true);if (_.isEmpty(jsplumbInstance._groups && jsplumbInstance._groups[dataIndex])) {
       // if(val.type=="group"){
-      //  this.data.jsplumbInstance.removeGroup(val.id, true);
+      //  //console.log("this.data.jsplumbInstance",this.data.jsplumbInstance);
+      //  //this.data.jsplumbInstance.removeGroup(val.id, true);
       // }
       this.$emit("delNode", val);
     },
