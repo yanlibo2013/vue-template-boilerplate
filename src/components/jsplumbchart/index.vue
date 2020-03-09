@@ -37,14 +37,20 @@ import {
 export default {
   watch: {
     data(val) {
-      this.stepData = this.data.steps;
-      this.links = this.data.links;
-      this.nodeType = this.data.nodeType;
+      console.log("data(val) {", val);
+      console.log("this.data.steps", this.data.steps);
+      // this.stepData = this.data.steps;
+      // this.links = this.data.links;
+      // this.nodeType = this.data.nodeType;
+      this.stepData = val.steps;
+      this.links = val.links;
+      this.nodeType = val.nodeType;
       this.operationType = val.operationType;
       this.containerRect = val.containerRect;
       this.enablePanZoom = val.enablePanZoom;
     },
     stepData(val) {
+      console.log(" stepData(val) { watcher", val);
       this.$emit("modifyChart", {
         stepData: val,
         links: this.links
@@ -179,29 +185,6 @@ export default {
           },
           () => {
             this.getLinksData();
-            // if (this.enablePanZoom && this.isPanZoomInit) {
-            //   let pan=panzoom.init(this.jsplumbInstance, false);
-            //   if(!pan){
-            //     return;
-            //   }
-            //   this.isPanZoomInit = false;
-
-            //   if (!this.data.matrix) {
-            //     return;
-            //   }
-
-            //   this.canvasMoveTo(this.data.matrix, transformOrigin => {
-            //     this.jsplumbInstance.pan.moveTo(
-            //       transformOrigin.x,
-            //       transformOrigin.y
-            //     );
-            //     this.jsplumbInstance.pan.zoomAbs(
-            //       transformOrigin.x,
-            //       transformOrigin.y,
-            //       transformOrigin.scale
-            //     );
-            //   });
-            // }
           }
         );
       }
@@ -271,11 +254,14 @@ export default {
           if (step.type === "group") {
             this.stepData = _.map(this.stepData, item => {
               if (item.id == step.id) {
+                let subflow = _.find(this.stepData, val => {
+                  return val.id == step.id;
+                }).subflow;
                 return {
                   ...item,
                   subflow: {
-                    ...step.subflow,
-                    steps: _.map(step.subflow.steps, subitem => {
+                    ...subflow,
+                    steps: _.map(subflow.steps, subitem => {
                       if (subitem.id == val.id) {
                         return {
                           ...subitem,
@@ -292,6 +278,11 @@ export default {
                 return item;
               }
             });
+
+            console.log(
+              "_.cloneDeep(this.stepData)",
+              _.cloneDeep(this.stepData)
+            );
           } else {
             this.stepData = _.map(this.stepData, item => {
               if (item.id == val.id) {
