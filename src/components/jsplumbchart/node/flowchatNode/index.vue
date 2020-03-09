@@ -162,7 +162,7 @@ export default {
       if(val.type=="group"){
        this.data.jsplumbInstance.removeGroup(val.id, true);
       }
-      this.$emit("delNode", val.id);
+      this.$emit("delNode", val);
     },
     dblClick(val) {
       if(val.type=="group"){
@@ -408,7 +408,7 @@ export default {
   background-color: WhiteSmoke;
   font-size: 12px;
   cursor: move;
-      z-index: 9999;
+  // z-index: 1000;
 
   ul {
     margin-left: 25px;

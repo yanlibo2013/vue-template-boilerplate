@@ -103,7 +103,7 @@
       "flowName": "热腾腾",
       "links": [
         {
-          "name": "con_17",
+          "name": "con_203",
           "source": "source_2",
           "sourceOutput": "output",
           "target": "sink_1",
@@ -111,7 +111,7 @@
           "input": "input"
         },
         {
-          "name": "con_18",
+          "name": "con_204",
           "source": "source_5",
           "sourceOutput": "output",
           "target": "sink_7",
@@ -119,7 +119,7 @@
           "input": "input"
         },
         {
-          "name": "con_19",
+          "name": "con_205",
           "source": "source_6",
           "sourceOutput": "output",
           "target": "sink_8",
@@ -132,8 +132,8 @@
           "id": "sink_1",
           "name": "sink",
           "type": "sink",
-          "x": 523,
-          "y": 187,
+          "x": 311,
+          "y": 185,
           "stepSettings": {},
           "inputConfigurations": {
             "input": []
@@ -145,28 +145,6 @@
           "type": "source",
           "x": 110,
           "y": 78,
-          "stepSettings": {},
-          "outputConfigurations": {
-            "output": []
-          }
-        },
-        {
-          "id": "source_3",
-          "name": "source",
-          "type": "source",
-          "x": 1372,
-          "y": 76,
-          "stepSettings": {},
-          "outputConfigurations": {
-            "output": []
-          }
-        },
-        {
-          "id": "source_4",
-          "name": "source",
-          "type": "source",
-          "x": 1057,
-          "y": 155,
           "stepSettings": {},
           "outputConfigurations": {
             "output": []
@@ -215,9 +193,53 @@
           "inputConfigurations": {
             "input": []
           }
+        },
+        {
+          "id": "group_7",
+          "name": "group1",
+          "type": "group",
+          "x": 1011,
+          "y": 286,
+          "stepSettings": {},
+          "subflow": {
+            "steps": [
+              {
+                "id": "sink_1_define",
+                "name": "sink",
+                "type": "sink",
+                "x": 523,
+                "y": 187,
+                "stepSettings": {},
+                "inputConfigurations": {
+                  "input": []
+                }
+              },
+              {
+                "id": "source_2_define",
+                "name": "source",
+                "type": "source",
+                "x": 110,
+                "y": 78,
+                "stepSettings": {},
+                "outputConfigurations": {
+                  "output": []
+                }
+              }
+            ],
+            "links": [
+              {
+                "name": "con_55",
+                "source": "source_2",
+                "sourceOutput": "output",
+                "target": "sink_1",
+                "targetInput": "input",
+                "input": "input"
+              }
+            ]
+          }
         }
       ],
-      "date": "2020-03-04 12:32:28",
+      "date": "2020-03-09 12:05:53",
       "id": 1
     },
     {

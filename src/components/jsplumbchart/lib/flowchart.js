@@ -169,11 +169,8 @@ export const addEndpointToNode = (jsplumbInstance, self, steps, flowType, flowDa
 				dataIndex = data.id;
 
 			if (drawType == 'group') {
-				//console.log("if (drawType == 'group') {", data);
 				if (_.isEmpty(jsplumbInstance._groups && jsplumbInstance._groups[dataIndex])) {
-					console.log('if (_.isEmpty(jsplumbInstance._groups && jsplumbInstance._groups[dataIndex])) {');
 					let subflow = data.subflow;
-
 					//jsplumbInstance.removeGroup(dataIndex, true);
 					jsplumbInstance.addGroup({
 						el: document.querySelector('#' + dataIndex),
@@ -182,26 +179,71 @@ export const addEndpointToNode = (jsplumbInstance, self, steps, flowType, flowDa
 						anchor: 'Continuous',
 						endpoint: 'Blank',
 						droppable: false
+						// dropOptions: {
+						// 	drop(p) {
+						// 		console.log(p);
+						// 	},
+						// 	stop(params) {
+						// 		console.log('gropu dropOptions');
+						// 	}
+						// }
 					});
 
 					_.forEach(subflow.steps, (item) => {
-						jsplumbInstance.draggable(item.id);
-						self.$nextTick(() => {
-							jsplumbInstance.addToGroup(dataIndex, item.id);
+						//jsplumbInstance.draggable(item.id);
+						jsplumbInstance.draggable(item.id, {
+							// containment: 'parent',
+							start(params) {
+								// 拖动开始
+								// console.log(params);
+								//console.log("拖动开始");
+							},
+							drag(params) {
+								// 拖动中
+							},
+							stop(params) {
+								let top = params.el.style.top;
+								let left = params.el.style.left;
+								// 拖动结束
+								// console.log("拖动介绍");
+								flowData({
+									x: parseInt(left.replace('px', '')),
+									y: parseInt(top.replace('px', '')),
+									id: params.el.attributes.id.nodeValue
+								});
+							}
 						});
+						// self.$nextTick(() => {
+						// 	jsplumbInstance.addToGroup(dataIndex, item.id);
+						// });
 					});
 				}
 
-				//jsplumbInstance.draggable(c1_1);
-				// jsplumbInstance.addGroup({
-				// 	el: document.querySelector('#' + dataIndex),
-				// 	id: dataIndex,
-				// 	constrain: true,
-				// 	anchor: 'Continuous',
-				// 	endpoint: 'Blank',
-				// 	droppable: false
-				// });
-				//jsplumbInstance.addToGroup('one', c1_1);
+				jsplumbInstance.draggable(dataIndex, {
+					// containment: 'parent',
+					start(params) {
+						console.log('group start');
+						// 拖动开始
+						// console.log(params);
+						//console.log("拖动开始");
+					},
+					drag(params) {
+						// 拖动中
+						console.log('group drag');
+					},
+					stop(params) {
+						console.log('group stop');
+						// let top = params.el.style.top;
+						// let left = params.el.style.left;
+						// // 拖动结束
+						// // console.log("拖动介绍");
+						// flowData({
+						// 	x: parseInt(left.replace('px', '')),
+						// 	y: parseInt(top.replace('px', '')),
+						// 	id: params.el.attributes.id.nodeValue
+						// });
+					}
+				});
 				return;
 			}
 

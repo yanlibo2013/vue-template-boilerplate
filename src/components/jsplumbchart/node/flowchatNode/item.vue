@@ -18,7 +18,7 @@
       id="removeDes"
       class="fa fa-trash-o"
       title="删除"
-      @click="delNode(item.id)"
+      @click="delNode(item)"
       v-show="itemType!='group'"
     ></em>
 
@@ -66,7 +66,11 @@ export default {
   created() {},
   beforeMount() {},
   beforeUpdate() {},
-  updated() {},
+  updated() {
+    //  this.$nextTick(() => {
+    //    console.log(" updated() { this.$nextTick(() => { item");
+    //  });
+  },
   beforeDestroy() {},
   destroyed: function() {},
   methods: {

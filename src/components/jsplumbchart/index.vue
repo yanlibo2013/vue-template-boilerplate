@@ -100,6 +100,7 @@ export default {
   beforeUpdate() {},
   updated() {
     this.$nextTick(() => {
+      console.log(' this.$nextTick(() => {')
       if (this.enablePanZoom && this.containerRect) {
         let lastStep = _.last(this.stepData);
         let result = this.modifyNodePositon({
@@ -125,7 +126,9 @@ export default {
           containerRect: ""
         });
       }
+      
 
+      // this type is not group
       this.drawJsplumbChart(
         {
           ...this.data,
@@ -161,6 +164,48 @@ export default {
           }
         }
       );
+
+      let stepGroup=_.filter(this.stepData,val=>{
+        return val.type=="group";
+      });
+
+      if(stepGroup.length!=0){
+         this.drawJsplumbChart(
+        {
+          ...this.data,
+          jsplumbInstance: this.jsplumbInstance,
+          self: this,
+          flowData: stepGroup[0].subflow.steps,
+          links: stepGroup[0].subflow.links
+        },
+        () => {
+          this.getLinksData();
+          // if (this.enablePanZoom && this.isPanZoomInit) {
+          //   let pan=panzoom.init(this.jsplumbInstance, false);
+          //   if(!pan){
+          //     return;
+          //   }
+          //   this.isPanZoomInit = false;
+
+          //   if (!this.data.matrix) {
+          //     return;
+          //   }
+
+          //   this.canvasMoveTo(this.data.matrix, transformOrigin => {
+          //     this.jsplumbInstance.pan.moveTo(
+          //       transformOrigin.x,
+          //       transformOrigin.y
+          //     );
+          //     this.jsplumbInstance.pan.zoomAbs(
+          //       transformOrigin.x,
+          //       transformOrigin.y,
+          //       transformOrigin.scale
+          //     );
+          //   });
+          // }
+        }
+      );
+      }
     });
   },
   beforeDestroy() {},
@@ -224,6 +269,7 @@ export default {
         data.flowData,
         data.flowType,
         val => {
+          console.log(' val => {', val);
           this.stepData = _.map(this.stepData, item => {
             if (item.id == val.id) {
               return {
@@ -253,7 +299,7 @@ export default {
     },
     delNode(val) {
       this.stepData = _.filter(_.cloneDeep(this.stepData), item => {
-        return item.id != val;
+        return item.id != val.id;
       });
     },
     dblClick(val) {
@@ -289,44 +335,6 @@ export default {
         // id: "rtc_" + val.type + "_" + (this.stepData.length + 1)
       };
       this.$emit("handleDrop", node);
-    },
-    setLineSplit(step) {
-      //console.log("setLineSplit(step){", step); //outputConfigurations
-
-      if (step.type == "split") {
-        let outputConfigurations = _.toArray(step.outputConfigurations);
-
-        switch (outputConfigurations.length) {
-          case 21:
-          case 20:
-            return "height: 280px; top: -100px;";
-          case 19:
-          case 18:
-          case 17:
-            return "height: 270px; top: -95px;";
-
-          case 16:
-          case 15:
-            return "height: 270px; top: -90px;";
-          case 14:
-          case 13:
-          case 12:
-            return "height: 190px; top: -50px;";
-          case 11:
-          case 10:
-            return "height: 155px; top: -43px;";
-          case 9:
-          case 8:
-            // case 7:
-            return "height: 120px; top: -35px;";
-          case 7:
-          case 6:
-          case 5:
-            return "height: 120px; top: -25px;";
-          default:
-            return "height: 70px; top: 0px;";
-        }
-      }
     }
   }
 };
