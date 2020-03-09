@@ -37,11 +37,6 @@ import {
 export default {
   watch: {
     data(val) {
-      console.log("data(val) {", val);
-      console.log("this.data.steps", this.data.steps);
-      // this.stepData = this.data.steps;
-      // this.links = this.data.links;
-      // this.nodeType = this.data.nodeType;
       this.stepData = val.steps;
       this.links = val.links;
       this.nodeType = val.nodeType;
@@ -50,7 +45,6 @@ export default {
       this.enablePanZoom = val.enablePanZoom;
     },
     stepData(val) {
-      console.log(" stepData(val) { watcher", val);
       this.$emit("modifyChart", {
         stepData: val,
         links: this.links
@@ -106,7 +100,6 @@ export default {
   beforeUpdate() {},
   updated() {
     this.$nextTick(() => {
-      console.log(" this.$nextTick(() => {");
       if (this.enablePanZoom && this.containerRect) {
         let lastStep = _.last(this.stepData);
         let result = this.modifyNodePositon({
@@ -175,18 +168,20 @@ export default {
       });
 
       if (stepGroup.length != 0) {
-        this.drawJsplumbChart(
-          {
-            ...this.data,
-            jsplumbInstance: this.jsplumbInstance,
-            self: this,
-            flowData: stepGroup[0].subflow.steps,
-            links: stepGroup[0].subflow.links
-          },
-          () => {
-            this.getLinksData();
-          }
-        );
+        _.forEach(stepGroup, item => {
+          this.drawJsplumbChart(
+            {
+              ...this.data,
+              jsplumbInstance: this.jsplumbInstance,
+              self: this,
+              flowData: item.subflow.steps,
+              links: item.subflow.links
+            },
+            () => {
+              this.getLinksData();
+            }
+          );
+        });
       }
     });
   },
@@ -278,11 +273,6 @@ export default {
                 return item;
               }
             });
-
-            console.log(
-              "_.cloneDeep(this.stepData)",
-              _.cloneDeep(this.stepData)
-            );
           } else {
             this.stepData = _.map(this.stepData, item => {
               if (item.id == val.id) {
@@ -300,10 +290,21 @@ export default {
         _
       );
 
-      // if(!_.last(data.steps)||_.last(data.steps).type=="group"){
-      //   return;
-      // }
       connect(data.jsplumbInstance, data.self, data.links, connectCallback);
+
+      let stepGroup = _.filter(data.steps, val => {
+        return val.type == "group";
+      });
+      if (stepGroup.length != 0) {
+        _.forEach(stepGroup, item => {
+          connect(
+            data.jsplumbInstance,
+            data.self,
+            item.subflow.links,
+            connectCallback
+          );
+        });
+      }
     },
     completedConnect() {
       this.getLinksData();

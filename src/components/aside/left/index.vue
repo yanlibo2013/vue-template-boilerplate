@@ -114,9 +114,9 @@ export default {
           links: [
             {
               name: "con_55",
-              source: "source_2",
+              source: "source_2_define",
               sourceOutput: "output",
-              target: "sink_1",
+              target: "sink_1_define",
               targetInput: "input",
               input: "input"
             }
