@@ -202,48 +202,49 @@ export const addEndpointToNode = (jsplumbInstance, self, steps, flowType, flowDa
 								// 拖动中
 							},
 							stop(params) {
+								console.log('stop(params) { group step');
 								let top = params.el.style.top;
 								let left = params.el.style.left;
 								// 拖动结束
 								// console.log("拖动介绍");
-								flowData({
-									x: parseInt(left.replace('px', '')),
-									y: parseInt(top.replace('px', '')),
-									id: params.el.attributes.id.nodeValue
-								});
+								flowData(
+									{
+										x: parseInt(left.replace('px', '')),
+										y: parseInt(top.replace('px', '')),
+										id: params.el.attributes.id.nodeValue
+									},
+									data
+								);
 							}
 						});
-						// self.$nextTick(() => {
-						// 	jsplumbInstance.addToGroup(dataIndex, item.id);
-						// });
 					});
 				}
 
-				jsplumbInstance.draggable(dataIndex, {
-					// containment: 'parent',
-					start(params) {
-						console.log('group start');
-						// 拖动开始
-						// console.log(params);
-						//console.log("拖动开始");
-					},
-					drag(params) {
-						// 拖动中
-						console.log('group drag');
-					},
-					stop(params) {
-						console.log('group stop');
-						// let top = params.el.style.top;
-						// let left = params.el.style.left;
-						// // 拖动结束
-						// // console.log("拖动介绍");
-						// flowData({
-						// 	x: parseInt(left.replace('px', '')),
-						// 	y: parseInt(top.replace('px', '')),
-						// 	id: params.el.attributes.id.nodeValue
-						// });
-					}
-				});
+				// jsplumbInstance.draggable(dataIndex, {
+				// 	// containment: 'parent',
+				// 	start(params) {
+				// 		console.log('group start');
+				// 		// 拖动开始
+				// 		// console.log(params);
+				// 		//console.log("拖动开始");
+				// 	},
+				// 	drag(params) {
+				// 		// 拖动中
+				// 		console.log('group drag');
+				// 	},
+				// 	stop(params) {
+				// 		console.log('group stop');
+				// 		// let top = params.el.style.top;
+				// 		// let left = params.el.style.left;
+				// 		// // 拖动结束
+				// 		// // console.log("拖动介绍");
+				// 		// flowData({
+				// 		// 	x: parseInt(left.replace('px', '')),
+				// 		// 	y: parseInt(top.replace('px', '')),
+				// 		// 	id: params.el.attributes.id.nodeValue
+				// 		// });
+				// 	}
+				// });
 				return;
 			}
 
@@ -491,15 +492,19 @@ export const addEndpointToNode = (jsplumbInstance, self, steps, flowType, flowDa
 					// 拖动中
 				},
 				stop(params) {
+					console.log('	jsplumbInstance.draggable(dataIndex, {  step');
 					let top = params.el.style.top;
 					let left = params.el.style.left;
 					// 拖动结束
 					// console.log("拖动介绍");
-					flowData({
-						x: parseInt(left.replace('px', '')),
-						y: parseInt(top.replace('px', '')),
-						id: params.el.attributes.id.nodeValue
-					});
+					flowData(
+						{
+							x: parseInt(left.replace('px', '')),
+							y: parseInt(top.replace('px', '')),
+							id: params.el.attributes.id.nodeValue
+						},
+						data
+					);
 				}
 			});
 		});

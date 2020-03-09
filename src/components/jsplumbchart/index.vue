@@ -100,7 +100,7 @@ export default {
   beforeUpdate() {},
   updated() {
     this.$nextTick(() => {
-      console.log(' this.$nextTick(() => {')
+      console.log(" this.$nextTick(() => {");
       if (this.enablePanZoom && this.containerRect) {
         let lastStep = _.last(this.stepData);
         let result = this.modifyNodePositon({
@@ -126,7 +126,6 @@ export default {
           containerRect: ""
         });
       }
-      
 
       // this type is not group
       this.drawJsplumbChart(
@@ -140,8 +139,8 @@ export default {
         () => {
           this.getLinksData();
           if (this.enablePanZoom && this.isPanZoomInit) {
-            let pan=panzoom.init(this.jsplumbInstance, false);
-            if(!pan){
+            let pan = panzoom.init(this.jsplumbInstance, false);
+            if (!pan) {
               return;
             }
             this.isPanZoomInit = false;
@@ -165,46 +164,46 @@ export default {
         }
       );
 
-      let stepGroup=_.filter(this.stepData,val=>{
-        return val.type=="group";
+      let stepGroup = _.filter(this.stepData, val => {
+        return val.type == "group";
       });
 
-      if(stepGroup.length!=0){
-         this.drawJsplumbChart(
-        {
-          ...this.data,
-          jsplumbInstance: this.jsplumbInstance,
-          self: this,
-          flowData: stepGroup[0].subflow.steps,
-          links: stepGroup[0].subflow.links
-        },
-        () => {
-          this.getLinksData();
-          // if (this.enablePanZoom && this.isPanZoomInit) {
-          //   let pan=panzoom.init(this.jsplumbInstance, false);
-          //   if(!pan){
-          //     return;
-          //   }
-          //   this.isPanZoomInit = false;
+      if (stepGroup.length != 0) {
+        this.drawJsplumbChart(
+          {
+            ...this.data,
+            jsplumbInstance: this.jsplumbInstance,
+            self: this,
+            flowData: stepGroup[0].subflow.steps,
+            links: stepGroup[0].subflow.links
+          },
+          () => {
+            this.getLinksData();
+            // if (this.enablePanZoom && this.isPanZoomInit) {
+            //   let pan=panzoom.init(this.jsplumbInstance, false);
+            //   if(!pan){
+            //     return;
+            //   }
+            //   this.isPanZoomInit = false;
 
-          //   if (!this.data.matrix) {
-          //     return;
-          //   }
+            //   if (!this.data.matrix) {
+            //     return;
+            //   }
 
-          //   this.canvasMoveTo(this.data.matrix, transformOrigin => {
-          //     this.jsplumbInstance.pan.moveTo(
-          //       transformOrigin.x,
-          //       transformOrigin.y
-          //     );
-          //     this.jsplumbInstance.pan.zoomAbs(
-          //       transformOrigin.x,
-          //       transformOrigin.y,
-          //       transformOrigin.scale
-          //     );
-          //   });
-          // }
-        }
-      );
+            //   this.canvasMoveTo(this.data.matrix, transformOrigin => {
+            //     this.jsplumbInstance.pan.moveTo(
+            //       transformOrigin.x,
+            //       transformOrigin.y
+            //     );
+            //     this.jsplumbInstance.pan.zoomAbs(
+            //       transformOrigin.x,
+            //       transformOrigin.y,
+            //       transformOrigin.scale
+            //     );
+            //   });
+            // }
+          }
+        );
       }
     });
   },
@@ -212,8 +211,8 @@ export default {
   destroyed: function() {},
   methods: {
     //...mapActions([""]),
-    modifyStepData(val){
-      this.stepData=val;
+    modifyStepData(val) {
+      this.stepData = val;
     },
     getScale(instance) {
       let container = instance.getContainer();
@@ -268,19 +267,44 @@ export default {
         data.self,
         data.flowData,
         data.flowType,
-        val => {
-          console.log(' val => {', val);
-          this.stepData = _.map(this.stepData, item => {
-            if (item.id == val.id) {
-              return {
-                ...item,
-                x: val.x,
-                y: val.y
-              };
-            } else {
-              return item;
-            }
-          });
+        (val, step) => {
+          if (step.type === "group") {
+            this.stepData = _.map(this.stepData, item => {
+              if (item.id == step.id) {
+                return {
+                  ...item,
+                  subflow: {
+                    ...step.subflow,
+                    steps: _.map(step.subflow.steps, subitem => {
+                      if (subitem.id == val.id) {
+                        return {
+                          ...subitem,
+                          x: val.x,
+                          y: val.y
+                        };
+                      } else {
+                        return subitem;
+                      }
+                    })
+                  }
+                };
+              } else {
+                return item;
+              }
+            });
+          } else {
+            this.stepData = _.map(this.stepData, item => {
+              if (item.id == val.id) {
+                return {
+                  ...item,
+                  x: val.x,
+                  y: val.y
+                };
+              } else {
+                return item;
+              }
+            });
+          }
         },
         _
       );
