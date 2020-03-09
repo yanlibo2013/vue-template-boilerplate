@@ -292,19 +292,19 @@ export default {
 
       connect(data.jsplumbInstance, data.self, data.links, connectCallback);
 
-      let stepGroup = _.filter(data.steps, val => {
-        return val.type == "group";
-      });
-      if (stepGroup.length != 0) {
-        _.forEach(stepGroup, item => {
-          connect(
-            data.jsplumbInstance,
-            data.self,
-            item.subflow.links,
-            connectCallback
-          );
-        });
-      }
+      // let stepGroup = _.filter(data.steps, val => {
+      //   return val.type == "group";
+      // });
+      // if (stepGroup.length != 0) {
+      //   _.forEach(stepGroup, item => {
+      //     connect(
+      //       data.jsplumbInstance,
+      //       data.self,
+      //       item.subflow.links,
+      //       connectCallback
+      //     );
+      //   });
+      // }
     },
     completedConnect() {
       this.getLinksData();

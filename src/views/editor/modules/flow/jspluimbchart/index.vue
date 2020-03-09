@@ -296,22 +296,22 @@ export default {
           let uuid = jsPlumbUtil.uuid();
           return {
             ...node,
-            subflow:data.drawIcon.subflow
-            // subflow: {
-            //   steps: _.map(data.drawIcon.subflow.steps, item => {
-            //     return {
-            //       ...item,
-            //       id: item.id + uuid
-            //     };
-            //   }),
-            //   links: _.map(data.drawIcon.subflow.links, item => {
-            //     return {
-            //       ...item,
-            //       source: item.source + uuid,
-            //       target: item.target + uuid
-            //     };
-            //   })
-            // }
+            // subflow:data.drawIcon.subflow
+            subflow: {
+              steps: _.map(data.drawIcon.subflow.steps, item => {
+                return {
+                  ...item,
+                  id: item.id+"_" + uuid
+                };
+              }),
+              links: _.map(data.drawIcon.subflow.links, item => {
+                return {
+                  ...item,
+                  source: item.source+"_" + uuid,
+                  target: item.target+"_" + uuid
+                };
+              })
+            }
           };
         default:
           return {
