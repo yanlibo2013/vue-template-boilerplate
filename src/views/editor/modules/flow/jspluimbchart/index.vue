@@ -13,6 +13,7 @@
 
           <el-col :span="6" justify="space-around">
             <div class="grid-content bg-purple-light">
+              <el-button size="small" @click="addGroup">Add Group</el-button>
               <el-button size="small" @click="clearall">清空</el-button>
               <el-button size="small" @click="reset">还原</el-button>
               <el-button size="small" @click="saveFlow">保存</el-button>
@@ -150,6 +151,46 @@ export default {
   destroyed: function() {},
   methods: {
     //...mapActions([""]),
+        addGroup() {
+      let selectedSteps = _.filter(this.steps, item => {
+        return item.isSelected == true;
+      });
+
+      let steps = _.map(_.cloneDeep(selectedSteps), item => {
+        delete item.isSelected;
+        return item;
+      });
+
+      let links = _.filter(this.links, item => {
+        let isSource = _.find(steps, subitem => {
+          return subitem.id == item.source;
+        });
+
+        let isTarget = _.find(steps, subitem => {
+          return subitem.id == item.target;
+        });
+
+        if (isSource && isTarget) {
+          return item;
+        }
+      });
+
+      console.log("steps", steps);
+      console.log("links", links);
+
+      // let subflow = { steps: steps, links: links };
+
+      // console.log("subflow", subflow);
+      // console.log(JSON.stringify(subflow));
+
+      // console.log("stepslist", this.$refs.vaside.stepList);
+      // let result = _.find(this.$refs.vaside.stepList, item => {
+      //   return item.group == "Set";
+      // });
+
+      // console.log("result", result);
+      // console.log(JSON.stringify(result));
+    },
     modifyJsplumbchartOption(val) {
       this.jsplumbchartOption = val;
     },
