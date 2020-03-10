@@ -26,6 +26,11 @@
       <em id="removeDes" class="fa fa-trash-o" title="删除" @click="delNode(data.id)"></em>
 
       <div class="line-split" v-show="data.type=='split'" :style="setLineSplit(data)"></div>
+
+      <div v-show="data.isSelected" class="resize top"></div>
+      <div v-show="data.isSelected" class="resize left"></div>
+      <div v-show="data.isSelected" class="resize bottom"></div>
+      <div v-show="data.isSelected" class="resize right"></div>
     </div>
   </div>
 </template>
@@ -58,8 +63,7 @@ export default {
   computed: {
     //...mapState([""])
   },
-  mounted() {
-  },
+  mounted() {},
   beforeCreate() {},
   created() {},
   beforeMount() {},
@@ -125,100 +129,6 @@ export default {
   width: 100%;
   position: relative;
   // ////////////////////////node style begin///////////////////
-  .designIconBig {
-    height: 70px;
-    width: 150px;
-    margin: 0 auto;
-    padding: 12px;
-    box-sizing: border-box;
-    box-shadow: 0 10px 18px -9px rgba(0, 0, 0, 0.5);
-    background: #ffffff;
-    text-align: center;
-    position: absolute;
-    margin-right: 15px;
-    margin-bottom: 20px;
-    float: left;
-    cursor:pointer;
-  }
-
-  .designIconBig i {
-    float: none !important;
-    position: absolute;
-    left: 5px;
-    top: 8px;
-    width: 30px !important;
-    height: 30px !important;
-    line-height: 30px !important;
-    font-size: 30px !important;
-  }
-
-  .designIconBig h4 {
-    position: absolute;
-    top: 5px;
-    left: 38px;
-    margin: 0px;
-    padding: 2px 0;
-    width: 110px;
-    text-align: left;
-    font-size: 14px;
-    font-weight: bold;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .designIconBig h5 {
-    position: absolute;
-    top: 25px;
-    left: 38px;
-    margin: 0px;
-    padding: 0px;
-    width: 110px;
-    text-align: left;
-    font-size: 12px;
-    font-weight: normal;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .designIconBig #removeDes {
-    position: absolute;
-    top: 46px;
-    right: 15px;
-    font-size: 14px;
-    color: #b9c0d8;
-    margin: 0px;
-    padding: 0px;
-  }
-
-  .designIconBig #copeDes {
-    position: absolute;
-    top: 45px;
-    right: 35px;
-    font-size: 14px;
-    color: #b9c0d8;
-    margin: 0px;
-    padding: 0px;
-  }
-  .designIconBig #pitchOnDes {
-    position: absolute;
-    top: 47px;
-    right: 60px;
-    font-size: 14px;
-    color: #b9c0d8;
-    margin: 0px;
-    padding: 0px;
-  }
-  .desingIconBig #markDes {
-    position: absolute;
-    top: 45px;
-    right: 20px;
-    font-size: 14px;
-    color: #b9c0d8;
-    margin: 0px;
-    padding: 0px;
-  }
 
   .t1Style {
     border: 2px solid #48c038;
@@ -235,25 +145,101 @@ export default {
     color: #8367df;
     border-radius: 2px;
   }
-
   .redStyle {
     border: 2px solid red;
+  }
+  .designIconBig {
+    height: 70px;
+    width: 150px;
+    margin: 0 auto;
+    padding: 12px;
+    box-sizing: border-box;
+    box-shadow: 0 10px 18px -9px rgba(0, 0, 0, 0.5);
+    background: #ffffff;
+    text-align: center;
+    position: absolute;
+    margin-right: 15px;
+    margin-bottom: 20px;
+    float: left;
+    cursor: pointer;
+    i {
+      float: none !important;
+      position: absolute;
+      left: 5px;
+      top: 8px;
+      width: 30px !important;
+      height: 30px !important;
+      line-height: 30px !important;
+      font-size: 30px !important;
+    }
+    h4 {
+      position: absolute;
+      top: 5px;
+      left: 38px;
+      margin: 0px;
+      padding: 2px 0;
+      width: 110px;
+      text-align: left;
+      font-size: 14px;
+      font-weight: bold;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    h5 {
+      position: absolute;
+      top: 25px;
+      left: 38px;
+      margin: 0px;
+      padding: 0px;
+      width: 110px;
+      text-align: left;
+      font-size: 12px;
+      font-weight: normal;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    #removeDes {
+      position: absolute;
+      top: 46px;
+      right: 15px;
+      font-size: 14px;
+      color: #b9c0d8;
+      margin: 0px;
+      padding: 0px;
+      &:hover {
+        color: #ff4e4e;
+      }
+    }
+    #copeDes {
+      position: absolute;
+      top: 45px;
+      right: 35px;
+      font-size: 14px;
+      color: #b9c0d8;
+      margin: 0px;
+      padding: 0px;
+      &:hover {
+        color: #ff4e4e;
+      }
+    }
+    #pitchOnDes {
+      position: absolute;
+      top: 47px;
+      right: 60px;
+      font-size: 14px;
+      color: #b9c0d8;
+      margin: 0px;
+      padding: 0px;
+      &:hover {
+        color: #ff4e4e;
+      }
+    }
   }
   .designIconBg {
     position: absolute;
     color: #ffffff !important;
-  }
-
-  .designIconBig #removeDes:hover {
-    color: #ff4e4e;
-  }
-
-  .designIconBig #copeDes:hover {
-    color: #ff4e4e;
-  }
-
-  .designIconBig #pitchOnDes:hover {
-    color: #ff4e4e;
   }
 
   // ////////////////////////node style end///////////////////
@@ -271,6 +257,36 @@ export default {
     // z-index: 12;
     // opacity: 0.8;
     cursor: default;
+  }
+
+  .resize {
+    width: 8px;
+    height: 8px;
+    background-color: #ddd;
+    border: 1px solid #000;
+    position: absolute;
+    &.left {
+      top: 50%;
+      left: -4px;
+      cursor: ew-resize;
+    }
+    &.right {
+      top: 50%;
+      right: -4px;
+      cursor: ew-resize;
+    }
+    &.top {
+      top: -4px;
+      left: 50%;
+      margin-left: -4px;
+      cursor: ns-resize;
+    }
+    &.bottom {
+      bottom: -4px;
+      left: 50%;
+      margin-left: -4px;
+      cursor: ns-resize;
+    }
   }
 }
 </style>

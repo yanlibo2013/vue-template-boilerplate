@@ -55,6 +55,28 @@ export default {
         stepData: this.stepData,
         links: val
       });
+    },
+    selectableObjects(val) {
+      if (val.length == 0) {
+        this.stepData = _.map(this.stepData, item => {
+          delete item.isSelected;
+          return item;
+        });
+        return;
+      }
+
+      _.forEach(val, selecteditem => {
+        this.stepData = _.map(this.stepData, step => {
+          if (selecteditem == step.id) {
+            return {
+              ...step,
+              isSelected: true
+            };
+          } else {
+            return step;
+          }
+        });
+      });
     }
   },
   props: {
@@ -86,7 +108,8 @@ export default {
       isPanZoomInit: true,
       cssText: "",
       containerRect: "",
-      isDragSelect: true
+      isDragSelect: true,
+      selectableObjects: []
     };
   },
   computed: {
@@ -137,9 +160,9 @@ export default {
         },
         () => {
           this.getLinksData();
-          if(this.isDragSelect){
+          if (this.isDragSelect) {
             this.initDragSelect();
-            this.isDragSelect=false;
+            this.isDragSelect = false;
           }
 
           if (this.enablePanZoom && this.isPanZoomInit) {
@@ -172,16 +195,26 @@ export default {
     //...mapActions([""]),
     initDragSelect() {
       new DragSelect({
+        //multiSelectMode:true,
         area: document.getElementById("cavans"),
         selectables: document.querySelectorAll(".designIconBig"),
         // selector: document.getElementById("selector"),
         onElementSelect: e => {
-          console.log(" onElementSelect: e => {", e);
+          this.selectableObjects.push(e.getAttribute("id"));
         },
         onElementUnselect: e => {
-          console.log("onElementUnselect: e => {", e);
+          this.selectableObjects = [];
         },
-        multiSelectKeys: ["ctrlKey", "shiftKey", "metaKey"] // special keys that allow multiselection.
+        // onDragStartBegin: e => {
+        //   console.log('onDragStartBegin: e => {',e);
+        // },
+        // onDragStart: e => {
+        //   console.log('onDragStart: e => {',e);
+        // },
+        // onDragMove: e => {
+        //   console.log('onDragMove: e => {}',e);
+        // }
+        //multiSelectKeys: ["ctrlKey", "shiftKey", "metaKey"] // special keys that allow multiselection.
       });
     },
     getScale(instance) {
