@@ -85,8 +85,7 @@ export default {
         flowType: "flink",
         jsPlumb: jsPlumb,
         containerRect: "",
-        enablePanZoom:false
-
+        enablePanZoom: true
       },
       nodeTab: [
         {
@@ -151,7 +150,7 @@ export default {
   destroyed: function() {},
   methods: {
     //...mapActions([""]),
-        addGroup() {
+    addGroup() {
       let selectedSteps = _.filter(this.steps, item => {
         return item.isSelected == true;
       });
@@ -177,6 +176,8 @@ export default {
 
       console.log("steps", steps);
       console.log("links", links);
+
+      console.log("group",this.$refs.jsplumbchart.group);
 
       // let subflow = { steps: steps, links: links };
 
@@ -207,7 +208,9 @@ export default {
     handleDrop(val) {
       let stepData = "";
       let containerRect = "";
-      let container = this.jsplumbchartOption.enablePanZoom?this.$refs.jsplumbchart.jsplumbInstance.getContainer():"";
+      let container = this.jsplumbchartOption.enablePanZoom
+        ? this.$refs.jsplumbchart.jsplumbInstance.getContainer()
+        : "";
       // add step
       if (val.drawIcon) {
         stepData = this.getCurrentNode(

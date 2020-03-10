@@ -6,7 +6,6 @@
         @dblClick="dblClick"
         @copyNode="copyNode"
         @delNode="delNode"
-        v-show="nodeType=='flowchartnode'"
       ></flowchartNode>
     </div>
   </div>
@@ -109,7 +108,10 @@ export default {
       cssText: "",
       containerRect: "",
       isDragSelect: true,
-      selectableObjects: []
+      selectableObjects: [],
+      startClient: {},
+      endClient: {},
+      group: {}
     };
   },
   computed: {
@@ -205,15 +207,28 @@ export default {
         onElementUnselect: e => {
           this.selectableObjects = [];
         },
-        // onDragStartBegin: e => {
-        //   console.log('onDragStartBegin: e => {',e);
-        // },
-        // onDragStart: e => {
-        //   console.log('onDragStart: e => {',e);
-        // },
-        // onDragMove: e => {
-        //   console.log('onDragMove: e => {}',e);
-        // }
+        onDragStart: e => {
+          this.startClient = {
+            clientX: e.clientX,
+            clientY: e.clientY
+          };
+        },
+        onDragMove: e => {
+          this.endClient = {
+            clientX: e.clientX,
+            clientY: e.clientY
+          };
+
+          let dx = Math.abs(this.endClient.clientX - this.startClient.clientX);
+          let dy = Math.abs(this.endClient.clientY - this.startClient.clientY);
+
+          //console.log(dx,dy);
+          this.group = {
+            dx: dx,
+            dy: dy
+          };
+        },
+        multiSelectKeys:["shiftKey"]
         //multiSelectKeys: ["ctrlKey", "shiftKey", "metaKey"] // special keys that allow multiselection.
       });
     },
