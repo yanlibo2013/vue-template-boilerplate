@@ -175,8 +175,9 @@ export const addEndpointToNode = (jsplumbInstance, self, steps, flowType, flowDa
 					jsplumbInstance.addGroup({
 						el: document.querySelector('#' + dataIndex),
 						id: dataIndex,
-						orphan: true
-						// constrain: true,
+						// collapsed:true,
+						// orphan: true
+						constrain:true,
 						// anchor: 'Continuous',
 						// endpoint: 'Blank',
 						// droppable: false
@@ -189,6 +190,8 @@ export const addEndpointToNode = (jsplumbInstance, self, steps, flowType, flowDa
 						// 	}
 						// }
 					});
+
+					//jsplumbInstance.repaintEverything();
 
 					_.forEach(subflow.steps, (item) => {
 						//jsplumbInstance.draggable(item.id);
