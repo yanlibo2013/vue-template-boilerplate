@@ -58,7 +58,8 @@ export default {
   computed: {
     //...mapState([""])
   },
-  mounted() {},
+  mounted() {
+  },
   beforeCreate() {},
   created() {},
   beforeMount() {},

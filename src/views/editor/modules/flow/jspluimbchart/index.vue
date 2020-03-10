@@ -84,7 +84,7 @@ export default {
         flowType: "flink",
         jsPlumb: jsPlumb,
         containerRect: "",
-        enablePanZoom:true
+        enablePanZoom:false
 
       },
       nodeTab: [

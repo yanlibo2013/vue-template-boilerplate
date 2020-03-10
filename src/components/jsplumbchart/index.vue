@@ -19,6 +19,7 @@ import getInstance from "./lib/getInstance";
 import _ from "lodash";
 import flowchartNode from "./node/flowchatNode/index.vue";
 import panzoom from "./lib/pan";
+import DragSelect from "dragselect";
 import {
   message,
   filterLinkData,
@@ -41,7 +42,7 @@ export default {
       this.nodeType = this.data.nodeType;
       this.operationType = val.operationType;
       this.containerRect = val.containerRect;
-      this.enablePanZoom=val.enablePanZoom;
+      this.enablePanZoom = val.enablePanZoom;
     },
     stepData(val) {
       this.$emit("modifyChart", {
@@ -84,7 +85,8 @@ export default {
       nodeType: "",
       isPanZoomInit: true,
       cssText: "",
-      containerRect: ""
+      containerRect: "",
+      isDragSelect: true
     };
   },
   computed: {
@@ -99,7 +101,7 @@ export default {
   beforeUpdate() {},
   updated() {
     this.$nextTick(() => {
-      if (this.enablePanZoom&&this.containerRect) {
+      if (this.enablePanZoom && this.containerRect) {
         let lastStep = _.last(this.stepData);
         let result = this.modifyNodePositon({
           x: lastStep.x,
@@ -135,7 +137,12 @@ export default {
         },
         () => {
           this.getLinksData();
-          if (this.enablePanZoom&&this.isPanZoomInit) {
+          if(this.isDragSelect){
+            this.initDragSelect();
+            this.isDragSelect=false;
+          }
+
+          if (this.enablePanZoom && this.isPanZoomInit) {
             panzoom.init(this.jsplumbInstance, false);
             this.isPanZoomInit = false;
 
@@ -163,6 +170,20 @@ export default {
   destroyed: function() {},
   methods: {
     //...mapActions([""]),
+    initDragSelect() {
+      new DragSelect({
+        area: document.getElementById("cavans"),
+        selectables: document.querySelectorAll(".designIconBig"),
+        // selector: document.getElementById("selector"),
+        onElementSelect: e => {
+          console.log(" onElementSelect: e => {", e);
+        },
+        onElementUnselect: e => {
+          console.log("onElementUnselect: e => {", e);
+        },
+        multiSelectKeys: ["ctrlKey", "shiftKey", "metaKey"] // special keys that allow multiselection.
+      });
+    },
     getScale(instance) {
       let container = instance.getContainer();
       let scale1;
@@ -191,7 +212,6 @@ export default {
       };
     },
     canvasMoveTo(data, fn) {
-
       fn(data);
     },
     setCavansMatrix(data) {
