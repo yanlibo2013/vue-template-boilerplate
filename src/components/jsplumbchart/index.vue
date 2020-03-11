@@ -1,12 +1,22 @@
 <template>
   <div class="jsplumb-chart">
     <div class="cavansClass" id="cavans">
-      <flowchartNode
+      <!-- <flowchartNode
         :data="{stepData:stepData}"
         @dblClick="dblClick"
         @copyNode="copyNode"
         @delNode="delNode"
+      ></flowchartNode>-->
+      <!-- <flowchartGroup :data="{groupData:groupData}"></flowchartGroup> -->
+      <flowchartNode
+        v-for="(item,index) in stepData"
+        :key="index"
+        :stepItem="item"
+        @dblClick="dblClick"
+        @copyNode="copyNode"
+        @delNode="delNode"
       ></flowchartNode>
+      <flowchartGroup v-for="(item,index) in groupData" :key="index" :data="{item:item}"></flowchartGroup>
     </div>
   </div>
 </template>
@@ -17,6 +27,7 @@
 import getInstance from "./lib/getInstance";
 import _ from "lodash";
 import flowchartNode from "./node/flowchatNode/index.vue";
+import flowchartGroup from "./node/group/index.vue";
 import panzoom from "./lib/pan";
 import DragSelect from "dragselect";
 import {
@@ -36,12 +47,33 @@ import {
 export default {
   watch: {
     data(val) {
-      this.stepData = this.data.steps;
-      this.links = this.data.links;
-      this.nodeType = this.data.nodeType;
-      this.operationType = val.operationType;
-      this.containerRect = val.containerRect;
-      this.enablePanZoom = val.enablePanZoom;
+      // console.log(" data(val) {", val);
+      // this.stepData = this.data.steps;
+      // this.groupData = this.data.groupData;
+      // console.log("this.groupData", this.groupData);
+      // this.links = this.data.links;
+      // this.nodeType = this.data.nodeType;
+      // this.operationType = val.operationType;
+      // this.containerRect = val.containerRect;
+      // this.enablePanZoom = val.enablePanZoom;
+
+      // this.$nextTick(() => {
+      //   this.stepData = val.steps;
+      //   this.groupData = val.groupData;
+      //   this.links = val.links;
+      //   this.nodeType = val.nodeType;
+      //   this.operationType = val.operationType;
+      //   this.containerRect = val.containerRect;
+      //   this.enablePanZoom = val.enablePanZoom;
+      // });
+
+        this.stepData = val.steps;
+        this.groupData = val.groupData;
+        this.links = val.links;
+        this.nodeType = val.nodeType;
+        this.operationType = val.operationType;
+        this.containerRect = val.containerRect;
+        this.enablePanZoom = val.enablePanZoom;
     },
     stepData(val) {
       this.$emit("modifyChart", {
@@ -85,8 +117,8 @@ export default {
     }
   },
   components: {
-    flowchartNode
-    // cepNode
+    flowchartNode,
+    flowchartGroup
   },
   data: function() {
     return {
@@ -97,6 +129,7 @@ export default {
         completedConnect: this.completedConnect,
         jsPlumb: this.data.jsPlumb
       }),
+      groupData: [],
       stepData: [],
       links: [],
       nodeClass: nodeClass,
@@ -126,31 +159,31 @@ export default {
   beforeUpdate() {},
   updated() {
     this.$nextTick(() => {
-      if (this.enablePanZoom && this.containerRect) {
-        let lastStep = _.last(this.stepData);
-        let result = this.modifyNodePositon({
-          x: lastStep.x,
-          y: lastStep.y
-        });
-        this.stepData = _.map(_.cloneDeep(this.stepData), item => {
-          if (lastStep.id == item.id) {
-            return {
-              ...item,
-              x: result.x,
-              y: result.y
-            };
-          } else {
-            return item;
-          }
-        });
+      // if (this.enablePanZoom && this.containerRect) {
+      //   let lastStep = _.last(this.stepData);
+      //   let result = this.modifyNodePositon({
+      //     x: lastStep.x,
+      //     y: lastStep.y
+      //   });
+      //   this.stepData = _.map(_.cloneDeep(this.stepData), item => {
+      //     if (lastStep.id == item.id) {
+      //       return {
+      //         ...item,
+      //         x: result.x,
+      //         y: result.y
+      //       };
+      //     } else {
+      //       return item;
+      //     }
+      //   });
 
-        this.$emit("modifyJsplumbchartOption", {
-          ...this.data,
-          steps: this.stepData,
-          links: this.links,
-          containerRect: ""
-        });
-      }
+      //   this.$emit("modifyJsplumbchartOption", {
+      //     ...this.data,
+      //     steps: this.stepData,
+      //     links: this.links,
+      //     containerRect: ""
+      //   });
+      // }
 
       this.drawJsplumbChart(
         {
@@ -162,31 +195,31 @@ export default {
         },
         () => {
           this.getLinksData();
-          if (this.isDragSelect) {
-            this.initDragSelect();
-            this.isDragSelect = false;
-          }
+          // if (this.isDragSelect) {
+          //   this.initDragSelect();
+          //   this.isDragSelect = false;
+          // }
 
-          if (this.enablePanZoom && this.isPanZoomInit) {
-            panzoom.init(this.jsplumbInstance, false);
-            this.isPanZoomInit = false;
+          // if (this.enablePanZoom && this.isPanZoomInit) {
+          //   panzoom.init(this.jsplumbInstance, false);
+          //   this.isPanZoomInit = false;
 
-            if (!this.data.matrix) {
-              return;
-            }
+          //   if (!this.data.matrix) {
+          //     return;
+          //   }
 
-            this.canvasMoveTo(this.data.matrix, transformOrigin => {
-              this.jsplumbInstance.pan.moveTo(
-                transformOrigin.x,
-                transformOrigin.y
-              );
-              this.jsplumbInstance.pan.zoomAbs(
-                transformOrigin.x,
-                transformOrigin.y,
-                transformOrigin.scale
-              );
-            });
-          }
+          //   this.canvasMoveTo(this.data.matrix, transformOrigin => {
+          //     this.jsplumbInstance.pan.moveTo(
+          //       transformOrigin.x,
+          //       transformOrigin.y
+          //     );
+          //     this.jsplumbInstance.pan.zoomAbs(
+          //       transformOrigin.x,
+          //       transformOrigin.y,
+          //       transformOrigin.scale
+          //     );
+          //   });
+          // }
         }
       );
     });

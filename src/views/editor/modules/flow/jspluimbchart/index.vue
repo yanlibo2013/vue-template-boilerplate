@@ -45,6 +45,7 @@
 </template>
 
 <script>
+import _ from "lodash";
 import vaside from "@/components/aside/left/index";
 import jsplumbchart from "@/components/jsplumbchart/index";
 
@@ -60,8 +61,7 @@ import {
 export default {
   name: "jsplumb-chart",
   watch: {
-    // flowData(val) {
-    // }
+    steps(val) {}
   },
   props: {
     // data: {
@@ -111,6 +111,7 @@ export default {
       input1: "",
       links: [],
       steps: [],
+      groupData: [],
       jsPlumb: jsPlumb,
       matrix: ""
     };
@@ -124,20 +125,24 @@ export default {
         id: this.$route.query.id
       }).then(res => {
         let flowData = res.data[0];
-        this.steps = flowData.steps;
+        this.steps = _.filter(flowData.steps, item => {
+          return item.type != "group";
+        });
+        this.groupData = _.difference(flowData.steps, this.steps);
         this.links = flowData.links;
         this.input1 = flowData.flowName;
         this.matrix = flowData.matrix;
         this.jsplumbchartOption = {
           ...this.jsplumbchartOption,
           steps: this.steps,
+          groupData: this.groupData,
           links: this.links,
           container: "workplace",
           jsPlumb: this.jsPlumb,
           matrix: flowData.matrix && JSON.parse(flowData.matrix)
         };
 
-        //console.log("this.jsplumbchartOption",this.jsplumbchartOption);
+        console.log("this.jsplumbchartOption",this.jsplumbchartOption);
       });
     }
   },
@@ -278,11 +283,18 @@ export default {
         stepData = this.copyNode(val);
       }
       console.log("stepData", stepData);
-      this.steps.push(stepData);
+      //this.steps.push(stepData);
+
+      if (stepData.type == "group") {
+        this.groupData.push(stepData);
+      } else {
+        this.steps.push(stepData);
+      }
 
       this.jsplumbchartOption = {
         ...this.jsplumbchartOption,
         steps: this.steps,
+        groupData: this.groupData,
         links: this.links,
         containerRect: containerRect
       };

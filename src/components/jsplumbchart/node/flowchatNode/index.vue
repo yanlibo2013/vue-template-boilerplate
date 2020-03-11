@@ -1,5 +1,5 @@
 <template>
-  <div class="flowchart-node" id="flowchartnode">
+  <!-- <div class="flowchart-node" id="flowchartnode">
     <div
       v-for="(data,index) in stepData"
       :id="data.id"
@@ -32,6 +32,36 @@
       <div v-show="data.isSelected" class="resize bottom"></div>
       <div v-show="data.isSelected" class="resize right"></div>
     </div>
+  </div>-->
+
+  <div
+    :class="'designIconBig '+setClass(nodeClass(stepItem.type))"
+    :data-sign="stepItem.name"
+    :data-type="stepItem.type"
+    :style="'left:'+stepItem.x+'px;top:'+stepItem.y+'px;position:absolute;'"
+    @dblclick="dblClick(stepItem)"
+  >
+    <i class="icon iconfont icon-ir-designIconBg designIconBg"></i>
+    <i
+      id="changeSte"
+      :class="nodeIcon(stepItem.type) == 'iconTrue'?'icon iconfont icon-ir-d-'+stepItem.type:'icon iconfont icon-ir-d-default'"
+    ></i>
+    <h4 :title="stepItem.name">{{stepItem.name}}</h4>
+    <h5>ID:{{stepItem.id}}</h5>
+    <em
+      id="copeDes"
+      class="icon iconfont icon-ir-copy"
+      title="复制"
+      @click.prevent="copyNode(stepItem)"
+    ></em>
+    <em id="removeDes" class="fa fa-trash-o" title="删除" @click="delNode(stepItem.id)"></em>
+
+    <div class="line-split" v-show="stepItem.type=='split'" :style="setLineSplit(stepItem)"></div>
+
+    <div v-show="stepItem.isSelected" class="resize top"></div>
+    <div v-show="stepItem.isSelected" class="resize left"></div>
+    <div v-show="stepItem.isSelected" class="resize bottom"></div>
+    <div v-show="stepItem.isSelected" class="resize right"></div>
   </div>
 </template>
 
@@ -42,11 +72,13 @@ import { setClass, nodeClass, nodeIcon } from "../../lib/flowchart";
 export default {
   watch: {
     data(val) {
-      this.stepData = val.stepData;
+      // this.stepData = val.stepData;
+      // this.stepItem = val.stepData;
+      // console.log(' this.stepItem', this.stepItem);
     }
   },
   props: {
-    data: {
+    stepItem: {
       type: Object,
       default: {}
     }
@@ -59,6 +91,7 @@ export default {
       nodeIcon: nodeIcon,
       setClass: setClass,
       selectedList: []
+      // stepItem: {}
     };
   },
   computed: {
@@ -125,169 +158,170 @@ export default {
 </script>
 
 <style lang="scss">
-.flowchart-node {
-  height: 100%;
-  width: 100%;
-  position: relative;
-  // ////////////////////////node style begin///////////////////
+// .flowchart-node {
+//   // height: 100%;
+//   // width: 100%;
+//   // position: relative;
+//   // ////////////////////////node style begin///////////////////
 
-  .t1Style {
-    border: 2px solid #48c038;
-    color: #48c038;
-    border-radius: 2px;
-  }
-  .t2Style {
-    border: 2px solid #4586f3;
-    color: #4586f3;
-    border-radius: 2px;
-  }
-  .t3Style {
-    border: 2px solid #8367df;
-    color: #8367df;
-    border-radius: 2px;
-  }
-  .redStyle {
-    border: 2px solid red;
-  }
-  .designIconBig {
-    height: 70px;
-    width: 150px;
-    margin: 0 auto;
-    padding: 12px;
-    box-sizing: border-box;
-    box-shadow: 0 10px 18px -9px rgba(0, 0, 0, 0.5);
-    background: #ffffff;
-    text-align: center;
+// }
+
+.t1Style {
+  border: 2px solid #48c038;
+  color: #48c038;
+  border-radius: 2px;
+}
+.t2Style {
+  border: 2px solid #4586f3;
+  color: #4586f3;
+  border-radius: 2px;
+}
+.t3Style {
+  border: 2px solid #8367df;
+  color: #8367df;
+  border-radius: 2px;
+}
+.redStyle {
+  border: 2px solid red;
+}
+.designIconBig {
+  height: 70px;
+  width: 150px;
+  margin: 0 auto;
+  padding: 12px;
+  box-sizing: border-box;
+  box-shadow: 0 10px 18px -9px rgba(0, 0, 0, 0.5);
+  background: #ffffff;
+  text-align: center;
+  position: absolute;
+  margin-right: 15px;
+  margin-bottom: 20px;
+  float: left;
+  cursor: pointer;
+  i {
+    float: none !important;
     position: absolute;
-    margin-right: 15px;
-    margin-bottom: 20px;
-    float: left;
-    cursor: pointer;
-    i {
-      float: none !important;
-      position: absolute;
-      left: 5px;
-      top: 8px;
-      width: 30px !important;
-      height: 30px !important;
-      line-height: 30px !important;
-      font-size: 30px !important;
-    }
-    h4 {
-      position: absolute;
-      top: 5px;
-      left: 38px;
-      margin: 0px;
-      padding: 2px 0;
-      width: 110px;
-      text-align: left;
-      font-size: 14px;
-      font-weight: bold;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    h5 {
-      position: absolute;
-      top: 25px;
-      left: 38px;
-      margin: 0px;
-      padding: 0px;
-      width: 110px;
-      text-align: left;
-      font-size: 12px;
-      font-weight: normal;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    #removeDes {
-      position: absolute;
-      top: 46px;
-      right: 15px;
-      font-size: 14px;
-      color: #b9c0d8;
-      margin: 0px;
-      padding: 0px;
-      &:hover {
-        color: #ff4e4e;
-      }
-    }
-    #copeDes {
-      position: absolute;
-      top: 45px;
-      right: 35px;
-      font-size: 14px;
-      color: #b9c0d8;
-      margin: 0px;
-      padding: 0px;
-      &:hover {
-        color: #ff4e4e;
-      }
-    }
-    #pitchOnDes {
-      position: absolute;
-      top: 47px;
-      right: 60px;
-      font-size: 14px;
-      color: #b9c0d8;
-      margin: 0px;
-      padding: 0px;
-      &:hover {
-        color: #ff4e4e;
-      }
-    }
+    left: 5px;
+    top: 8px;
+    width: 30px !important;
+    height: 30px !important;
+    line-height: 30px !important;
+    font-size: 30px !important;
   }
-  .designIconBg {
+  h4 {
     position: absolute;
-    color: #ffffff !important;
+    top: 5px;
+    left: 38px;
+    margin: 0px;
+    padding: 2px 0;
+    width: 110px;
+    text-align: left;
+    font-size: 14px;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
-
-  // ////////////////////////node style end///////////////////
-
-  .line-split {
+  h5 {
     position: absolute;
-    height: 100px;
-    width: 2px;
-    background: #4586f3;
-    right: -2px;
-    top: 0;
+    top: 25px;
+    left: 38px;
+    margin: 0px;
+    padding: 0px;
+    width: 110px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: normal;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
-
-  .jtk-endpoint {
-    // z-index: 12;
-    // opacity: 0.8;
-    cursor: default;
-  }
-
-  .resize {
-    width: 8px;
-    height: 8px;
-    background-color: #ddd;
-    border: 1px solid #000;
+  #removeDes {
     position: absolute;
-    &.left {
-      top: 50%;
-      left: -4px;
-      cursor: ew-resize;
+    top: 46px;
+    right: 15px;
+    font-size: 14px;
+    color: #b9c0d8;
+    margin: 0px;
+    padding: 0px;
+    &:hover {
+      color: #ff4e4e;
     }
-    &.right {
-      top: 50%;
-      right: -4px;
-      cursor: ew-resize;
+  }
+  #copeDes {
+    position: absolute;
+    top: 45px;
+    right: 35px;
+    font-size: 14px;
+    color: #b9c0d8;
+    margin: 0px;
+    padding: 0px;
+    &:hover {
+      color: #ff4e4e;
     }
-    &.top {
-      top: -4px;
-      left: 50%;
-      margin-left: -4px;
-      cursor: ns-resize;
+  }
+  #pitchOnDes {
+    position: absolute;
+    top: 47px;
+    right: 60px;
+    font-size: 14px;
+    color: #b9c0d8;
+    margin: 0px;
+    padding: 0px;
+    &:hover {
+      color: #ff4e4e;
     }
-    &.bottom {
-      bottom: -4px;
-      left: 50%;
-      margin-left: -4px;
-      cursor: ns-resize;
-    }
+  }
+}
+.designIconBg {
+  position: absolute;
+  color: #ffffff !important;
+}
+
+// ////////////////////////node style end///////////////////
+
+.line-split {
+  position: absolute;
+  height: 100px;
+  width: 2px;
+  background: #4586f3;
+  right: -2px;
+  top: 0;
+}
+
+.jtk-endpoint {
+  // z-index: 12;
+  // opacity: 0.8;
+  cursor: default;
+}
+
+.resize {
+  width: 8px;
+  height: 8px;
+  background-color: #ddd;
+  border: 1px solid #000;
+  position: absolute;
+  &.left {
+    top: 50%;
+    left: -4px;
+    cursor: ew-resize;
+  }
+  &.right {
+    top: 50%;
+    right: -4px;
+    cursor: ew-resize;
+  }
+  &.top {
+    top: -4px;
+    left: 50%;
+    margin-left: -4px;
+    cursor: ns-resize;
+  }
+  &.bottom {
+    bottom: -4px;
+    left: 50%;
+    margin-left: -4px;
+    cursor: ns-resize;
   }
 }
 </style>
