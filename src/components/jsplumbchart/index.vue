@@ -196,12 +196,21 @@ export default {
   methods: {
     //...mapActions([""]),
     initDragSelect() {
+      //remove //ds-selector
+      // let elementDragSelect = document.getElementsByClassName("ds-selector");
+      // console.log(elementDragSelect.length);
+      // //elementDragSelect.remove();
+      // if (elementDragSelect.length != 0) {
+      //   elementDragSelect[0].remove();
+      // }
+      // console.log("elementDragSelect", elementDragSelect);
       new DragSelect({
         //multiSelectMode:true,
         area: document.getElementById("cavans"),
         selectables: document.querySelectorAll(".designIconBig"),
         // selector: document.getElementById("selector"),
         onElementSelect: e => {
+          console.log(' onElementSelect: e => {');
           this.selectableObjects.push(e.getAttribute("id"));
         },
         onElementUnselect: e => {
@@ -228,7 +237,7 @@ export default {
             dy: dy
           };
         },
-        multiSelectKeys:["shiftKey"]
+        multiSelectKeys: ["shiftKey"]
         //multiSelectKeys: ["ctrlKey", "shiftKey", "metaKey"] // special keys that allow multiselection.
       });
     },

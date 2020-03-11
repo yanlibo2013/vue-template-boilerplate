@@ -57,7 +57,8 @@ export default {
       stepData: [],
       nodeClass: nodeClass,
       nodeIcon: nodeIcon,
-      setClass: setClass
+      setClass: setClass,
+      selectedList: []
     };
   },
   computed: {
