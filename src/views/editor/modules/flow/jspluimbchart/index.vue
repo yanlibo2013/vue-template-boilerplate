@@ -350,9 +350,26 @@ export default {
             ...inputConfigurations
           };
         case "group":
+          let uuid = jsPlumbUtil.uuid();
           return {
             ...node,
-            ...inputConfigurations
+            // subflow:data.drawIcon.subflow
+            subflow: {
+              ...data.drawIcon.subflow,
+              steps: _.map(data.drawIcon.subflow.steps, item => {
+                return {
+                  ...item,
+                  id: item.id + "_" + uuid
+                };
+              }),
+              links: _.map(data.drawIcon.subflow.links, item => {
+                return {
+                  ...item,
+                  source: item.source + "_" + uuid,
+                  target: item.target + "_" + uuid
+                };
+              })
+            }
           };
         default:
           return {
