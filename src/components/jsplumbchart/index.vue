@@ -10,13 +10,13 @@
       <!-- <flowchartGroup :data="{groupData:groupData}"></flowchartGroup> -->
       <flowchartNode
         v-for="(item,index) in stepData"
-        :key="index"
+        :key="index+'step'"
         :stepItem="item"
         @dblClick="dblClick"
         @copyNode="copyNode"
         @delNode="delNode"
       ></flowchartNode>
-      <flowchartGroup v-for="(item,index) in groupData" :key="index" :data="{item:item}"></flowchartGroup>
+      <flowchartGroup v-for="(item,index) in groupData" :key="index+'group'" :groupItem="item"></flowchartGroup>
     </div>
   </div>
 </template>
@@ -47,33 +47,13 @@ import {
 export default {
   watch: {
     data(val) {
-      // console.log(" data(val) {", val);
-      // this.stepData = this.data.steps;
-      // this.groupData = this.data.groupData;
-      // console.log("this.groupData", this.groupData);
-      // this.links = this.data.links;
-      // this.nodeType = this.data.nodeType;
-      // this.operationType = val.operationType;
-      // this.containerRect = val.containerRect;
-      // this.enablePanZoom = val.enablePanZoom;
-
-      // this.$nextTick(() => {
-      //   this.stepData = val.steps;
-      //   this.groupData = val.groupData;
-      //   this.links = val.links;
-      //   this.nodeType = val.nodeType;
-      //   this.operationType = val.operationType;
-      //   this.containerRect = val.containerRect;
-      //   this.enablePanZoom = val.enablePanZoom;
-      // });
-
         this.stepData = val.steps;
         this.groupData = val.groupData;
         this.links = val.links;
         this.nodeType = val.nodeType;
         this.operationType = val.operationType;
         this.containerRect = val.containerRect;
-        this.enablePanZoom = val.enablePanZoom;
+        this.enablePanZoom = val.enablePanZoom;       
     },
     stepData(val) {
       this.$emit("modifyChart", {
@@ -90,8 +70,10 @@ export default {
     selectableObjects(val) {
       if (val.length == 0) {
         this.stepData = _.map(this.stepData, item => {
-          delete item.isSelected;
-          return item;
+          return {
+            ...item,
+            isSelected:false
+          };
         });
         return;
       }
@@ -144,7 +126,8 @@ export default {
       selectableObjects: [],
       startClient: {},
       endClient: {},
-      group: {}
+      group: {},
+      hardReset:false
     };
   },
   computed: {
@@ -158,32 +141,34 @@ export default {
   beforeMount() {},
   beforeUpdate() {},
   updated() {
+    // this.hardReset=false;
     this.$nextTick(() => {
-      // if (this.enablePanZoom && this.containerRect) {
-      //   let lastStep = _.last(this.stepData);
-      //   let result = this.modifyNodePositon({
-      //     x: lastStep.x,
-      //     y: lastStep.y
-      //   });
-      //   this.stepData = _.map(_.cloneDeep(this.stepData), item => {
-      //     if (lastStep.id == item.id) {
-      //       return {
-      //         ...item,
-      //         x: result.x,
-      //         y: result.y
-      //       };
-      //     } else {
-      //       return item;
-      //     }
-      //   });
+      // this.hardReset=true;
+      if (this.enablePanZoom && this.containerRect) {
+        let lastStep = _.last(this.stepData);
+        let result = this.modifyNodePositon({
+          x: lastStep.x,
+          y: lastStep.y
+        });
+        this.stepData = _.map(_.cloneDeep(this.stepData), item => {
+          if (lastStep.id == item.id) {
+            return {
+              ...item,
+              x: result.x,
+              y: result.y
+            };
+          } else {
+            return item;
+          }
+        });
 
-      //   this.$emit("modifyJsplumbchartOption", {
-      //     ...this.data,
-      //     steps: this.stepData,
-      //     links: this.links,
-      //     containerRect: ""
-      //   });
-      // }
+        this.$emit("modifyJsplumbchartOption", {
+          ...this.data,
+          steps: this.stepData,
+          links: this.links,
+          containerRect: ""
+        });
+      }
 
       this.drawJsplumbChart(
         {
@@ -195,31 +180,31 @@ export default {
         },
         () => {
           this.getLinksData();
-          // if (this.isDragSelect) {
-          //   this.initDragSelect();
-          //   this.isDragSelect = false;
-          // }
+          if (this.isDragSelect) {
+            this.initDragSelect();
+            this.isDragSelect = false;
+          }
 
-          // if (this.enablePanZoom && this.isPanZoomInit) {
-          //   panzoom.init(this.jsplumbInstance, false);
-          //   this.isPanZoomInit = false;
+          if (this.enablePanZoom && this.isPanZoomInit) {
+            panzoom.init(this.jsplumbInstance, false);
+            this.isPanZoomInit = false;
 
-          //   if (!this.data.matrix) {
-          //     return;
-          //   }
+            if (!this.data.matrix) {
+              return;
+            }
 
-          //   this.canvasMoveTo(this.data.matrix, transformOrigin => {
-          //     this.jsplumbInstance.pan.moveTo(
-          //       transformOrigin.x,
-          //       transformOrigin.y
-          //     );
-          //     this.jsplumbInstance.pan.zoomAbs(
-          //       transformOrigin.x,
-          //       transformOrigin.y,
-          //       transformOrigin.scale
-          //     );
-          //   });
-          // }
+            this.canvasMoveTo(this.data.matrix, transformOrigin => {
+              this.jsplumbInstance.pan.moveTo(
+                transformOrigin.x,
+                transformOrigin.y
+              );
+              this.jsplumbInstance.pan.zoomAbs(
+                transformOrigin.x,
+                transformOrigin.y,
+                transformOrigin.scale
+              );
+            });
+          }
         }
       );
     });

@@ -12,9 +12,9 @@
     </div>
   </div>-->
 
-  <div class="group-container" :style="'left:'+item.x+'px;top:'+item.y+'px;'">
-    <div class="title">{{item.id}}</div>
-    <div class="del" @click="delNode(item)"></div>
+  <div class="group-container" :style="'left:'+groupItem.x+'px;top:'+groupItem.y+'px;'">
+    <div class="title">{{groupItem.id}}</div>
+    <div class="del" @click="delNode(groupItem)"></div>
     <div class="collapsed node-collapse"></div>
   </div>
 </template>
@@ -23,13 +23,12 @@
 <script>
 import { mapGetters, mapActions, mapState } from "vuex";
 export default {
-  watch: {
-    data(val) {
-      this.item = val.item;
-    }
-  },
+//   watch: {
+//     data(val) {
+//     }
+//   },
   props: {
-    data: {
+    groupItem: {
       type: Object,
       default: {}
     }
@@ -37,7 +36,6 @@ export default {
   components: {},
   data: function() {
     return {
-      item: []
     };
   },
   computed: {

@@ -85,7 +85,7 @@ export default {
         flowType: "flink",
         jsPlumb: jsPlumb,
         containerRect: "",
-        enablePanZoom: true
+        enablePanZoom: false
       },
       nodeTab: [
         {
@@ -159,10 +159,17 @@ export default {
       this.jsplumbchartOption = {
         ...this.jsplumbchartOption,
         steps: _.map(this.steps, item => {
-          delete item.isSelected;
-          return item;
+          //delete item.isSelected;
+          return {
+            ...item,
+            isSelected:false
+          };
         })
       };
+
+     
+
+      console.log('this.jsplumbchartOption ',this.jsplumbchartOption );
     },
     addGroup() {
       let selectedSteps = _.filter(this.steps, item => {

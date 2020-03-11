@@ -36,6 +36,7 @@
 
   <div
     :class="'designIconBig '+setClass(nodeClass(stepItem.type))"
+    :id="stepItem.id"
     :data-sign="stepItem.name"
     :data-type="stepItem.type"
     :style="'left:'+stepItem.x+'px;top:'+stepItem.y+'px;position:absolute;'"
@@ -71,7 +72,8 @@ import _ from "lodash";
 import { setClass, nodeClass, nodeIcon } from "../../lib/flowchart";
 export default {
   watch: {
-    data(val) {
+    stepItem(val) {
+      // console.log("data(val) { flowchartNode");
       // this.stepData = val.stepData;
       // this.stepItem = val.stepData;
       // console.log(' this.stepItem', this.stepItem);
