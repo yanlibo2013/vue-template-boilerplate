@@ -1,39 +1,4 @@
 <template>
-  <!-- <div class="flowchart-node" id="flowchartnode">
-    <div
-      v-for="(data,index) in stepData"
-      :id="data.id"
-      :key="index"
-      :class="'designIconBig '+setClass(nodeClass(data.type))"
-      :data-sign="data.name"
-      :data-type="data.type"
-      :style="'left:'+data.x+'px;top:'+data.y+'px;position:absolute;margin:0'"
-      @dblclick="dblClick(data)"
-    >
-      <i class="icon iconfont icon-ir-designIconBg designIconBg"></i>
-      <i
-        id="changeSte"
-        :class="nodeIcon(data.type) == 'iconTrue'?'icon iconfont icon-ir-d-'+data.type:'icon iconfont icon-ir-d-default'"
-      ></i>
-      <h4 :title="data.name">{{data.name}}</h4>
-      <h5>ID:{{data.id}}</h5>
-      <em
-        id="copeDes"
-        class="icon iconfont icon-ir-copy"
-        title="复制"
-        @click.prevent="copyNode(data)"
-      ></em>
-      <em id="removeDes" class="fa fa-trash-o" title="删除" @click="delNode(data.id)"></em>
-
-      <div class="line-split" v-show="data.type=='split'" :style="setLineSplit(data)"></div>
-
-      <div v-show="data.isSelected" class="resize top"></div>
-      <div v-show="data.isSelected" class="resize left"></div>
-      <div v-show="data.isSelected" class="resize bottom"></div>
-      <div v-show="data.isSelected" class="resize right"></div>
-    </div>
-  </div>-->
-
   <div
     :class="'designIconBig '+setClass(nodeClass(stepItem.type))"
     :id="stepItem.id"
@@ -72,12 +37,7 @@ import _ from "lodash";
 import { setClass, nodeClass, nodeIcon } from "../../lib/flowchart";
 export default {
   watch: {
-    stepItem(val) {
-      // console.log("data(val) { flowchartNode");
-      // this.stepData = val.stepData;
-      // this.stepItem = val.stepData;
-      // console.log(' this.stepItem', this.stepItem);
-    }
+    stepItem(val) {}
   },
   props: {
     stepItem: {

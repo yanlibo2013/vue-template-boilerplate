@@ -142,7 +142,7 @@ export default {
           matrix: flowData.matrix && JSON.parse(flowData.matrix)
         };
 
-        console.log("this.jsplumbchartOption",this.jsplumbchartOption);
+        console.log("this.jsplumbchartOption", this.jsplumbchartOption);
       });
     }
   },
@@ -162,14 +162,12 @@ export default {
           //delete item.isSelected;
           return {
             ...item,
-            isSelected:false
+            isSelected: false
           };
         })
       };
 
-     
-
-      console.log('this.jsplumbchartOption ',this.jsplumbchartOption );
+      console.log("this.jsplumbchartOption ", this.jsplumbchartOption);
     },
     addGroup() {
       let selectedSteps = _.filter(this.steps, item => {
@@ -273,6 +271,7 @@ export default {
       };
     },
     handleDrop(val) {
+      console.log(" handleDrop(val) {", val);
       let stepData = "";
       let containerRect = "";
       let container = this.jsplumbchartOption.enablePanZoom
@@ -293,7 +292,11 @@ export default {
       //this.steps.push(stepData);
 
       if (stepData.type == "group") {
-        this.groupData.push(stepData);
+        console.log(' if (stepData.type == "group") {', this.groupData);
+        this.groupData.push({
+          ...stepData,
+          id: jsPlumbUtil.uuid()
+        });
       } else {
         this.steps.push(stepData);
       }
@@ -305,6 +308,8 @@ export default {
         links: this.links,
         containerRect: containerRect
       };
+
+      console.log("this.jsplumbchartOption ", this.jsplumbchartOption);
     },
     isExitStepID(val) {
       let result = false;
@@ -454,13 +459,15 @@ export default {
       }
     },
     modifyChart(val) {
-      this.steps = val.stepData;
-      this.links = val.links;
+      this.steps = val.stepData ? val.stepData : [];
+      this.links = val.links ? val.links : [];
+      this.groupData = val.groupData ? val.groupData : [];
 
       this.jsplumbchartOption = {
         ...this.jsplumbchartOption,
         steps: val.stepData,
-        links: val.links
+        links: val.links,
+        groupData: val.groupData
       };
     },
     clearall() {

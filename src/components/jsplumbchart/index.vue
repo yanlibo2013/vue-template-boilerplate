@@ -1,13 +1,6 @@
 <template>
   <div class="jsplumb-chart">
     <div class="cavansClass" id="cavans">
-      <!-- <flowchartNode
-        :data="{stepData:stepData}"
-        @dblClick="dblClick"
-        @copyNode="copyNode"
-        @delNode="delNode"
-      ></flowchartNode>-->
-      <!-- <flowchartGroup :data="{groupData:groupData}"></flowchartGroup> -->
       <flowchartNode
         v-for="(item,index) in stepData"
         :key="index+'step'"
@@ -16,7 +9,12 @@
         @copyNode="copyNode"
         @delNode="delNode"
       ></flowchartNode>
-      <flowchartGroup v-for="(item,index) in groupData" :key="index+'group'" :groupItem="item"></flowchartGroup>
+      <flowchartGroup
+        v-for="(item,index) in groupData"
+        :key="index+'group'"
+        :groupItem="item"
+        @delNode="delNode"
+      ></flowchartGroup>
     </div>
   </div>
 </template>
@@ -47,24 +45,35 @@ import {
 export default {
   watch: {
     data(val) {
-        this.stepData = val.steps;
-        this.groupData = val.groupData;
-        this.links = val.links;
-        this.nodeType = val.nodeType;
-        this.operationType = val.operationType;
-        this.containerRect = val.containerRect;
-        this.enablePanZoom = val.enablePanZoom;       
+      this.stepData = val.steps;
+      this.groupData = val.groupData;
+      this.links = val.links;
+      this.nodeType = val.nodeType;
+      this.operationType = val.operationType;
+      this.containerRect = val.containerRect;
+      this.enablePanZoom = val.enablePanZoom;
+
+      console.log(" data(val) { jsplumbchart",val);
     },
     stepData(val) {
       this.$emit("modifyChart", {
         stepData: val,
+        groupData: this.groupData,
+        links: this.links
+      });
+    },
+    groupData(val) {
+      this.$emit("modifyChart", {
+        stepData: this.stepData,
+        groupData: val,
         links: this.links
       });
     },
     links(val) {
       this.$emit("modifyChart", {
         stepData: this.stepData,
-        links: val
+        links: val,
+         groupData: this.groupData,
       });
     },
     selectableObjects(val) {
@@ -72,7 +81,7 @@ export default {
         this.stepData = _.map(this.stepData, item => {
           return {
             ...item,
-            isSelected:false
+            isSelected: false
           };
         });
         return;
@@ -127,7 +136,7 @@ export default {
       startClient: {},
       endClient: {},
       group: {},
-      hardReset:false
+      hardReset: false
     };
   },
   computed: {
@@ -170,7 +179,7 @@ export default {
         });
       }
 
-      this.drawJsplumbChart(
+      this.drawJsplumbChartNode(
         {
           ...this.data,
           jsplumbInstance: this.jsplumbInstance,
@@ -305,7 +314,30 @@ export default {
           "";
       }
     },
-    drawJsplumbChart(data, connectCallback) {
+    drawJsplumbChartNode(data, connectCallback) {
+      addEndpointToNode(
+        data.jsplumbInstance,
+        data.self,
+        data.flowData,
+        data.flowType,
+        val => {
+          this.stepData = _.map(this.stepData, item => {
+            if (item.id == val.id) {
+              return {
+                ...item,
+                x: val.x,
+                y: val.y
+              };
+            } else {
+              return item;
+            }
+          });
+        },
+        _
+      );
+      connect(data.jsplumbInstance, data.self, data.links, connectCallback);
+    },
+    drawJsplumbChartGroup(data, connectCallback) {
       addEndpointToNode(
         data.jsplumbInstance,
         data.self,
@@ -336,9 +368,15 @@ export default {
       this.getLinksData();
     },
     delNode(val) {
-      this.stepData = _.filter(_.cloneDeep(this.stepData), item => {
-        return item.id != val;
-      });
+      if (val.type == "group") {
+        this.groupData = _.filter(_.cloneDeep(this.groupData), item => {
+          return item.id != val.id;
+        });
+      } else {
+        this.stepData = _.filter(_.cloneDeep(this.stepData), item => {
+          return item.id != val;
+        });
+      }
     },
     dblClick(val) {
       this.$emit("nodedblClick", val);

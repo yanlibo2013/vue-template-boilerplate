@@ -1,21 +1,9 @@
 <template>
-  <!-- <div class="group">
-    <div
-      class="group-container"
-      v-for="(item,index) in groupData"
-      :key="index"
-      :style="'left:'+item.x+'px;top:'+item.y+'px;'"
-    >
-      <div class="title">{{item.id}}</div>
-      <div class="del" @click="delNode(item)"></div>
-      <div class="collapsed node-collapse"></div>
-    </div>
-  </div>-->
-
   <div class="group-container" :style="'left:'+groupItem.x+'px;top:'+groupItem.y+'px;'">
     <div class="title">{{groupItem.id}}</div>
     <div class="del" @click="delNode(groupItem)"></div>
-    <div class="collapsed node-collapse"></div>
+    <div class="node-collapse"></div>
+    <!-- <div id="c1_1" class="w" style="left:30px;top:35px">1.1</div> -->
   </div>
 </template>
 
@@ -23,10 +11,10 @@
 <script>
 import { mapGetters, mapActions, mapState } from "vuex";
 export default {
-//   watch: {
-//     data(val) {
-//     }
-//   },
+  //   watch: {
+  //     data(val) {
+  //     }
+  //   },
   props: {
     groupItem: {
       type: Object,
@@ -35,8 +23,7 @@ export default {
   },
   components: {},
   data: function() {
-    return {
-    };
+    return {};
   },
   computed: {
     //...mapState([""])
@@ -51,79 +38,100 @@ export default {
   destroyed: function() {},
   methods: {
     //...mapActions([""]),
+    delNode(val) {
+      console.log('delNode(val) {',val)
+      this.$emit("delNode", val);
+    }
   }
 };
 </script>
 
 <style lang="scss">
-  .group-container {
-    position: absolute;
-    width: 250px;
-    height: 70px;
-    .collapsed {
-      height: 40px;
-    }
-  }
+.group-container {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border-radius: 12px;
+  background-color: WhiteSmoke;
+  font-size: 12px;
+  cursor: move;
+}
 
-  .title {
-    background-color: #abc1bb;
-    padding: 0 16px;
-    font-size: 13px;
-    height: 30px;
-    line-height: 30px;
-  }
+.group-container ul {
+  margin-left: 25px;
+  padding: 0;
+}
 
-  .del,
-  .node-collapse {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    background-color: white;
-    padding: 1px;
-    cursor: pointer;
-    font-size: 13px;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    text-align: center;
-    display: block;
-  }
+.group-container ul li {
+  list-style-type: circle;
+  margin-bottom: 7px;
+}
 
-  .del:after {
-    content: "X";
-  }
+/* .large {
+  width: 600px;
+  height: 600px;
+} */
 
-  .node-collapse {
-    right: 29px;
-    text-align: center;
+.group-container.collapsed {
+  height: 40px;
+}
 
-    &:after {
-      content: "-";
-    }
-  }
+.title {
+  background-color: #abc1bb;
+  padding-right: 16px;
+  font-size: 13px;
+  height: 30px;
+}
 
-  .group-container.collapsed .node-collapse:after {
-    content: "+";
-  }
+.del,
+.node-collapse {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: white;
+  padding: 1px;
+  cursor: pointer;
+  font-size: 13px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  text-align: center;
+  display: block;
+}
 
-  .del[delete-all] {
-    background-color: pink;
-  }
+.del:after {
+  content: "X";
+}
 
-  .jtk-connector path {
-    stroke-width: 1;
-  }
+.node-collapse {
+  right: 29px;
+  text-align: center;
+}
 
-  .jtk-group-collapsed {
-    .w,
-    ul,
-    .container,
-    .name {
-      display: none;
-    }
-  }
+.node-collapse:after {
+  content: "-";
+}
 
-  .jtk-drag-hover {
-    outline: 4px solid cornflowerblue;
-  }
+.group-container.collapsed .node-collapse:after {
+  content: "+";
+}
+
+.del[delete-all] {
+  background-color: pink;
+}
+
+.jtk-connector path {
+  stroke-width: 1;
+}
+
+.jtk-group-collapsed .w,
+.jtk-group-collapsed ul,
+.jtk-group-collapsed .container,
+.jtk-group-collapsed .name {
+  display: none;
+}
+
+.jtk-drag-hover {
+  outline: 4px solid cornflowerblue;
+}
 </style>
