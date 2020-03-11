@@ -35,7 +35,7 @@
           </drop>
         </el-main>
         <el-aside width="250px">
-          <vaside></vaside>
+          <vaside ref="vaside"></vaside>
         </el-aside>
       </el-container>
     </el-container>
@@ -150,10 +150,28 @@ export default {
   destroyed: function() {},
   methods: {
     //...mapActions([""]),
+    unAllSelectedSteps(val){
+      this.jsplumbchartOption={
+        ...this.jsplumbchartOption,
+        steps:_.map(this.steps,item=>{
+          delete item.isSelected
+          return item;
+        })
+      }
+
+    },
     addGroup() {
       let selectedSteps = _.filter(this.steps, item => {
         return item.isSelected == true;
       });
+
+      if (selectedSteps.length == 0) {
+        this.$message({
+          message: "请选择节点!",
+          type: "warning"
+        });
+        return;
+      }
 
       let steps = _.map(_.cloneDeep(selectedSteps), item => {
         delete item.isSelected;
@@ -174,23 +192,61 @@ export default {
         }
       });
 
-      console.log("steps", steps);
-      console.log("links", links);
+      // console.log("steps", steps);
+      // console.log("links", links);
 
-      console.log("group",this.$refs.jsplumbchart.group);
-
-      // let subflow = { steps: steps, links: links };
+      // console.log("group", this.$refs.jsplumbchart.group);
+      let group = this.$refs.jsplumbchart.group;
+      let subflow = {
+        steps: steps,
+        links: links,
+        width: group.dx,
+        height: group.dy
+      };
 
       // console.log("subflow", subflow);
       // console.log(JSON.stringify(subflow));
+      // console.log(
+      //   "this.$refs.vaside.stepList before",
+      //   this.$refs.vaside.stepList
+      // );
 
-      // console.log("stepslist", this.$refs.vaside.stepList);
-      // let result = _.find(this.$refs.vaside.stepList, item => {
-      //   return item.group == "Set";
-      // });
+      let stepList = this.$refs.vaside.stepList;
 
-      // console.log("result", result);
-      // console.log(JSON.stringify(result));
+      let groupStepIcon = _.find(stepList, item => {
+        return item.group == "Define";
+      });
+      let uuid = jsPlumbUtil.uuid();
+      let groupStepIconItem = {
+        id: uuid,
+        type: "group",
+        subflow: subflow
+      };
+      // console.log("stepList before",stepList);
+      // console.log("groupStepIcon", groupStepIcon);
+      if (groupStepIcon) {
+        stepList = _.map(stepList, item => {
+          if (item.group == "Define") {
+            return {
+              ...item,
+              thisIcon: [...item.thisIcon, groupStepIconItem]
+            };
+          } else {
+            return item;
+          }
+        });
+      } else {
+        stepList = [
+          ...stepList,
+          {
+            group: "Define",
+            thisIcon: [groupStepIconItem]
+          }
+        ];
+      }
+
+      this.$refs.vaside.stepList = stepList;
+      this.unAllSelectedSteps();
     },
     modifyJsplumbchartOption(val) {
       this.jsplumbchartOption = val;
