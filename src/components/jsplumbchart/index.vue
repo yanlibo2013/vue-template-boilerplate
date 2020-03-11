@@ -210,7 +210,6 @@ export default {
         selectables: document.querySelectorAll(".designIconBig"),
         // selector: document.getElementById("selector"),
         onElementSelect: e => {
-          console.log(' onElementSelect: e => {');
           this.selectableObjects.push(e.getAttribute("id"));
         },
         onElementUnselect: e => {

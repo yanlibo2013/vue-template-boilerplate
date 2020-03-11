@@ -150,15 +150,14 @@ export default {
   destroyed: function() {},
   methods: {
     //...mapActions([""]),
-    unAllSelectedSteps(val){
-      this.jsplumbchartOption={
+    unAllSelectedSteps(val) {
+      this.jsplumbchartOption = {
         ...this.jsplumbchartOption,
-        steps:_.map(this.steps,item=>{
-          delete item.isSelected
+        steps: _.map(this.steps, item => {
+          delete item.isSelected;
           return item;
         })
-      }
-
+      };
     },
     addGroup() {
       let selectedSteps = _.filter(this.steps, item => {
@@ -278,6 +277,7 @@ export default {
         // copy step
         stepData = this.copyNode(val);
       }
+      console.log("stepData", stepData);
       this.steps.push(stepData);
 
       this.jsplumbchartOption = {
@@ -345,6 +345,11 @@ export default {
             ...outputConfigurations
           };
         case "sink":
+          return {
+            ...node,
+            ...inputConfigurations
+          };
+        case "group":
           return {
             ...node,
             ...inputConfigurations
