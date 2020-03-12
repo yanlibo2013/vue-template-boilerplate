@@ -8,7 +8,7 @@
     <div class="title">{{groupItem.id}}</div>
     <div class="del" delete-all @click="delNode(groupItem)"></div>
     <div class="node-collapse" @click="groupCollapse(groupItem.id)"></div>
-    <div id="c1_1" class="w" style="left:30px;top:35px">1.1</div>
+    <!-- <div id="c1_1" class="w" style="left:30px;top:35px">1.1</div> -->
   </div>
 </template>
 
@@ -88,14 +88,14 @@ export default {
     },
     drawJsplumbChartGroup() {
       let j=this.jsplumbInstance;
-      j.draggable("c1_1");
+      //j.draggable("c1_1");
       j.addGroup({
         el: this.$refs[this.groupItem.id],
         id: this.groupItem.id,
         constrain: true
       });
 
-      j.addToGroup(this.groupItem.id, c1_1);
+      //j.addToGroup(this.groupItem.id, c1_1);
     }
   }
 };
