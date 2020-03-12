@@ -9,12 +9,19 @@
     <div class="del" delete-all @click="delNode(groupItem)"></div>
     <div class="node-collapse" @click="groupCollapse(groupItem.id)"></div>
     <!-- <div id="c1_1" class="w" style="left:30px;top:35px">1.1</div> -->
+
+    <flowchartNode
+      v-for="(item,index) in groupItem.subflow.steps"
+      :key="index+'step'"
+      :stepItem="item"
+    ></flowchartNode>
   </div>
 </template>
 
 
 <script>
 import { mapGetters, mapActions, mapState } from "vuex";
+import flowchartNode from "../flowchatNode/index.vue";
 export default {
   // watch: {
   //   groupItem(val) {
@@ -34,7 +41,9 @@ export default {
       default: {}
     }
   },
-  components: {},
+  components: {
+    flowchartNode
+  },
   data: function() {
     return {
       collapsed: true,
@@ -87,7 +96,7 @@ export default {
       this.collapsed = collapsed;
     },
     drawJsplumbChartGroup() {
-      let j=this.jsplumbInstance;
+      let j = this.jsplumbInstance;
       //j.draggable("c1_1");
       j.addGroup({
         el: this.$refs[this.groupItem.id],
@@ -102,7 +111,6 @@ export default {
 </script>
 
 <style lang="scss">
-
 .group-container {
   position: absolute;
   height: 40px;
@@ -113,19 +121,19 @@ export default {
   cursor: move;
 
   .w {
-  position: absolute;
-  width: 30px;
-  height: 30px;
-  border: 1px solid black;
-  font-size: 12px;
-  border-radius: 3px;
-  text-align: center;
-  background-color: WhiteSmoke;
-  opacity: 0.7;
-  z-index: 10;
-  color: black;
-  cursor: move;
-}
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border: 1px solid black;
+    font-size: 12px;
+    border-radius: 3px;
+    text-align: center;
+    background-color: WhiteSmoke;
+    opacity: 0.7;
+    z-index: 10;
+    color: black;
+    cursor: move;
+  }
 }
 
 .group-container ul {
