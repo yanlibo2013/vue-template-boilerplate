@@ -53,8 +53,6 @@ export default {
       this.operationType = val.operationType;
       this.containerRect = val.containerRect;
       this.enablePanZoom = val.enablePanZoom;
-
-      console.log("groupData",this.groupData);
     },
     stepData(val) {
       this.$emit("modifyChart", {
@@ -74,7 +72,7 @@ export default {
       this.$emit("modifyChart", {
         stepData: this.stepData,
         links: val,
-         groupData: this.groupData,
+        groupData: this.groupData
       });
     },
     selectableObjects(val) {
@@ -217,6 +215,7 @@ export default {
           }
         }
       );
+
     });
   },
   beforeDestroy() {},
@@ -316,29 +315,6 @@ export default {
       }
     },
     drawJsplumbChartNode(data, connectCallback) {
-      addEndpointToNode(
-        data.jsplumbInstance,
-        data.self,
-        data.flowData,
-        data.flowType,
-        val => {
-          this.stepData = _.map(this.stepData, item => {
-            if (item.id == val.id) {
-              return {
-                ...item,
-                x: val.x,
-                y: val.y
-              };
-            } else {
-              return item;
-            }
-          });
-        },
-        _
-      );
-      connect(data.jsplumbInstance, data.self, data.links, connectCallback);
-    },
-    drawJsplumbChartGroup(data, connectCallback) {
       addEndpointToNode(
         data.jsplumbInstance,
         data.self,

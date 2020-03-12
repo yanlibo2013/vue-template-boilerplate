@@ -1,22 +1,14 @@
 <template>
-  <!-- <div
-    class="group-container"
-    :style="'left:'+groupItem.x+'px;top:'+groupItem.y+'px;height:'+groupItem.subflow.height+'px;width:'+groupItem.subflow.width+'px'"
-    :group="groupItem.id"
-    :ref="groupItem.id"
-  >-->
-
   <div
     class="group-container"
     :style="!collapsed?collapsedStyle:expandStyle"
     :group="groupItem.id"
     :ref="groupItem.id"
   >
-    <!-- <div class="title">{{groupItem.id}}</div> -->
-    <div class="title"></div>
+    <div class="title">{{groupItem.id}}</div>
     <div class="del" delete-all @click="delNode(groupItem)"></div>
     <div class="node-collapse" @click="groupCollapse(groupItem.id)"></div>
-    <!-- <div id="c1_1" class="w" style="left:30px;top:35px">1.1</div> -->
+    <div id="c1_1" class="w" style="left:30px;top:35px">1.1</div>
   </div>
 </template>
 
@@ -24,10 +16,14 @@
 <script>
 import { mapGetters, mapActions, mapState } from "vuex";
 export default {
-  //   watch: {
-  //     data(val) {
-  //     }
-  //   },
+  // watch: {
+  //   groupItem(val) {
+  //     this.$nextTick(() => {
+  //       //this.drawJsplumbChartGroup();
+  //       console.log(this.$refs[groupItem.id]);
+  //     });
+  //   }
+  // },
   props: {
     groupItem: {
       type: Object,
@@ -59,12 +55,19 @@ export default {
   computed: {
     //...mapState([""])
   },
-  mounted() {},
+  mounted() {
+    this.drawJsplumbChartGroup();
+  },
   beforeCreate() {},
   created() {},
   beforeMount() {},
   beforeUpdate() {},
-  updated() {},
+  updated() {
+    // this.$nextTick(() => {
+    //   //this.drawJsplumbChartGroup();
+    //      console.log(this.$refs[item.id]);
+    // });
+  },
   beforeDestroy() {},
   destroyed: function() {},
   methods: {
@@ -80,28 +83,26 @@ export default {
       let g = parentNode.getAttribute("group"),
         collapsed = j.hasClass(parentNode, "collapsed");
       j[collapsed ? "removeClass" : "addClass"](parentNode, "collapsed");
-      this.collapsed=collapsed;
-      // j[collapsed ? "expandGroup" : "collapseGroup"](g);
-      // let expandStyle =
-      //   "left:" +
-      //   groupItem.x +
-      //   "px;top:" +
-      //   groupItem.y +
-      //   "px;height:" +
-      //   groupItem.subflow.height +
-      //   "px;width:" +
-      //   groupItem.subflow.width +
-      //   "px";
-      // let collapsedStyle =
-      //   "left:" + groupItem.x + "px;top:" + groupItem.y + "px;";
+      j[collapsed ? "expandGroup" : "collapseGroup"](g);
+      this.collapsed = collapsed;
+    },
+    drawJsplumbChartGroup() {
+      let j=this.jsplumbInstance;
+      j.draggable("c1_1");
+      j.addGroup({
+        el: this.$refs[this.groupItem.id],
+        id: this.groupItem.id,
+        constrain: true
+      });
 
-      //console.log("collapsed", collapsed);
+      j.addToGroup(this.groupItem.id, c1_1);
     }
   }
 };
 </script>
 
 <style lang="scss">
+
 .group-container {
   position: absolute;
   height: 40px;
@@ -110,6 +111,21 @@ export default {
   background-color: WhiteSmoke;
   font-size: 12px;
   cursor: move;
+
+  .w {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border: 1px solid black;
+  font-size: 12px;
+  border-radius: 3px;
+  text-align: center;
+  background-color: WhiteSmoke;
+  opacity: 0.7;
+  z-index: 10;
+  color: black;
+  cursor: move;
+}
 }
 
 .group-container ul {
