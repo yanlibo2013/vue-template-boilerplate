@@ -23,6 +23,7 @@
 <script>
 import { mapGetters, mapActions, mapState } from "vuex";
 import flowchartNode from "../flowchatNode/index.vue";
+import { addEndpoint } from "../../lib/flowchart";
 export default {
   // watch: {
   //   groupItem(val) {
@@ -66,7 +67,9 @@ export default {
     //...mapState([""])
   },
   mounted() {
-    this.drawJsplumbChartGroup();
+    this.$nextTick(() => {
+      this.drawJsplumbChartGroup();
+    });
   },
   beforeCreate() {},
   created() {},
@@ -112,7 +115,13 @@ export default {
       _.forEach(this.groupItem.subflow.steps, item => {
         let element = document.getElementById(item.id);
         j.draggable(element);
-        j.addToGroup(this.groupItem.id,element);
+        j.addToGroup(this.groupItem.id, element);
+
+        console.log("element", element);
+
+        console.log(" _.forEach(this.groupItem.subflow.steps, item => {", item);
+
+        addEndpoint(j, item.type, item.id, "");
       });
     }
   }

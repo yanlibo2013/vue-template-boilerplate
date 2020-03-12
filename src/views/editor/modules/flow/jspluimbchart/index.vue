@@ -369,7 +369,6 @@ export default {
         case "group":
           let uuid = jsPlumbUtil.uuid();
           let subflow = data.drawIcon.subflow;
-          console.log("subflow", subflow);
           return {
             ...node,
             subflow: {
