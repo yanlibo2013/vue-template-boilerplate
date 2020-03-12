@@ -374,7 +374,9 @@ export default {
               steps: _.map(data.drawIcon.subflow.steps, item => {
                 return {
                   ...item,
-                  id: item.id + "_" + uuid
+                  id: item.id + "_" + uuid,
+                  x: item.x - node.x,
+                  y: item.y - node.y + 100
                 };
               }),
               links: _.map(data.drawIcon.subflow.links, item => {
