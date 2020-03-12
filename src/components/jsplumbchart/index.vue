@@ -13,6 +13,7 @@
         v-for="(item,index) in groupData"
         :key="index+'group'"
         :groupItem="item"
+        :jsplumbInstance="jsplumbInstance"
         @delNode="delNode"
       ></flowchartGroup>
     </div>
@@ -53,7 +54,7 @@ export default {
       this.containerRect = val.containerRect;
       this.enablePanZoom = val.enablePanZoom;
 
-      console.log(" data(val) { jsplumbchart",val);
+      console.log("groupData",this.groupData);
     },
     stepData(val) {
       this.$emit("modifyChart", {

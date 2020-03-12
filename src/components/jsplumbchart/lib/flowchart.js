@@ -406,7 +406,7 @@ export const addEndpointToNode = (jsplumbInstance, self, steps, flowType, flowDa
 				start(params) {
 					// 拖动开始
 					// console.log(params);
-					console.log('拖动开始');
+					//console.log('拖动开始');
 				},
 				drag(params) {
 					// 拖动中
@@ -415,7 +415,7 @@ export const addEndpointToNode = (jsplumbInstance, self, steps, flowType, flowDa
 					let top = params.el.style.top;
 					let left = params.el.style.left;
 					// 拖动结束
-					console.log('拖动介绍');
+					//console.log('拖动介绍');
 					flowData({
 						x: parseInt(left.replace('px', '')),
 						y: parseInt(top.replace('px', '')),

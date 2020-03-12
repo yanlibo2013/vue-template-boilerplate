@@ -1,8 +1,21 @@
 <template>
-  <div class="group-container" :style="'left:'+groupItem.x+'px;top:'+groupItem.y+'px;'">
-    <div class="title">{{groupItem.id}}</div>
-    <div class="del" @click="delNode(groupItem)"></div>
-    <div class="node-collapse"></div>
+  <!-- <div
+    class="group-container"
+    :style="'left:'+groupItem.x+'px;top:'+groupItem.y+'px;height:'+groupItem.subflow.height+'px;width:'+groupItem.subflow.width+'px'"
+    :group="groupItem.id"
+    :ref="groupItem.id"
+  >-->
+
+  <div
+    class="group-container"
+    :style="!collapsed?collapsedStyle:expandStyle"
+    :group="groupItem.id"
+    :ref="groupItem.id"
+  >
+    <!-- <div class="title">{{groupItem.id}}</div> -->
+    <div class="title"></div>
+    <div class="del" delete-all @click="delNode(groupItem)"></div>
+    <div class="node-collapse" @click="groupCollapse(groupItem.id)"></div>
     <!-- <div id="c1_1" class="w" style="left:30px;top:35px">1.1</div> -->
   </div>
 </template>
@@ -19,11 +32,29 @@ export default {
     groupItem: {
       type: Object,
       default: {}
+    },
+    jsplumbInstance: {
+      type: Object,
+      default: {}
     }
   },
   components: {},
   data: function() {
-    return {};
+    return {
+      collapsed: true,
+      expandStyle:
+        "left:" +
+        this.groupItem.x +
+        "px;top:" +
+        this.groupItem.y +
+        "px;height:" +
+        this.groupItem.subflow.height +
+        "px;width:" +
+        this.groupItem.subflow.width +
+        "px",
+      collapsedStyle:
+        "left:" + this.groupItem.x + "px;top:" + this.groupItem.y + "px;"
+    };
   },
   computed: {
     //...mapState([""])
@@ -39,8 +70,32 @@ export default {
   methods: {
     //...mapActions([""]),
     delNode(val) {
-      console.log('delNode(val) {',val)
       this.$emit("delNode", val);
+    },
+    groupCollapse(val) {
+      //console.log(this.$refs[val]);
+      let j = this.jsplumbInstance;
+      let parentNode = this.$refs[val];
+
+      let g = parentNode.getAttribute("group"),
+        collapsed = j.hasClass(parentNode, "collapsed");
+      j[collapsed ? "removeClass" : "addClass"](parentNode, "collapsed");
+      this.collapsed=collapsed;
+      // j[collapsed ? "expandGroup" : "collapseGroup"](g);
+      // let expandStyle =
+      //   "left:" +
+      //   groupItem.x +
+      //   "px;top:" +
+      //   groupItem.y +
+      //   "px;height:" +
+      //   groupItem.subflow.height +
+      //   "px;width:" +
+      //   groupItem.subflow.width +
+      //   "px";
+      // let collapsedStyle =
+      //   "left:" + groupItem.x + "px;top:" + groupItem.y + "px;";
+
+      //console.log("collapsed", collapsed);
     }
   }
 };
@@ -49,8 +104,8 @@ export default {
 <style lang="scss">
 .group-container {
   position: absolute;
+  height: 40px;
   width: 200px;
-  height: 200px;
   border-radius: 12px;
   background-color: WhiteSmoke;
   font-size: 12px;
@@ -72,9 +127,10 @@ export default {
   height: 600px;
 } */
 
-.group-container.collapsed {
-  height: 40px;
-}
+// .group-container.collapsed {
+//   height: 40px;
+//   width: 200px;
+// }
 
 .title {
   background-color: #abc1bb;

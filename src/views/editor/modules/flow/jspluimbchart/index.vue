@@ -141,8 +141,6 @@ export default {
           jsPlumb: this.jsPlumb,
           matrix: flowData.matrix && JSON.parse(flowData.matrix)
         };
-
-        console.log("this.jsplumbchartOption", this.jsplumbchartOption);
       });
     }
   },
@@ -166,8 +164,6 @@ export default {
           };
         })
       };
-
-      console.log("this.jsplumbchartOption ", this.jsplumbchartOption);
     },
     addGroup() {
       let selectedSteps = _.filter(this.steps, item => {
@@ -271,7 +267,6 @@ export default {
       };
     },
     handleDrop(val) {
-      console.log(" handleDrop(val) {", val);
       let stepData = "";
       let containerRect = "";
       let container = this.jsplumbchartOption.enablePanZoom
@@ -288,11 +283,9 @@ export default {
         // copy step
         stepData = this.copyNode(val);
       }
-      console.log("stepData", stepData);
       //this.steps.push(stepData);
 
       if (stepData.type == "group") {
-        console.log(' if (stepData.type == "group") {', this.groupData);
         this.groupData.push({
           ...stepData,
           id: jsPlumbUtil.uuid()
@@ -308,8 +301,6 @@ export default {
         links: this.links,
         containerRect: containerRect
       };
-
-      console.log("this.jsplumbchartOption ", this.jsplumbchartOption);
     },
     isExitStepID(val) {
       let result = false;
