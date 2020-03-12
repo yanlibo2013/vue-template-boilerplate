@@ -215,7 +215,6 @@ export default {
           }
         }
       );
-
     });
   },
   beforeDestroy() {},
@@ -237,6 +236,7 @@ export default {
         selectables: document.querySelectorAll(".designIconBig"),
         // selector: document.getElementById("selector"),
         onElementSelect: e => {
+          //console.log(" onElementSelect: e => {", e);
           this.selectableObjects.push(e.getAttribute("id"));
         },
         onElementUnselect: e => {
@@ -249,6 +249,7 @@ export default {
           };
         },
         onDragMove: e => {
+          //console.log(' onDragMove: e => {',e);
           this.endClient = {
             clientX: e.clientX,
             clientY: e.clientY
@@ -257,10 +258,51 @@ export default {
           let dx = Math.abs(this.endClient.clientX - this.startClient.clientX);
           let dy = Math.abs(this.endClient.clientY - this.startClient.clientY);
 
-          //console.log(dx,dy);
+          let topleft = {};
+          let startClientX = this.startClient.clientX;
+          let startClientY = this.startClient.clientY;
+          let endClientX = this.endClient.clientX;
+          let endClienty = this.endClient.clientY;
+
+          if (endClientX - startClientX < 0 && endClienty - startClientY < 0) {
+            //console.log(' if (endClientX - startClientX < 0 && endClienty - startClientY < 0) { 1');
+            topleft = {
+              x: endClientX,
+              y: endClienty
+            };
+          }
+
+          if (endClientX - startClientX > 0 && endClienty - startClientY > 0) {
+           // console.log('if (endClientX - startClientX > 0 && endClienty - startClientY > 0) { 2');
+            topleft = {
+              x: startClientX,
+              y: startClientY
+            };
+          }
+
+          if (endClientX - startClientX > 0 && endClienty - startClientY < 0) {
+            //console.log('if (endClientX - startClientX > 0 && endClienty - startClientY < 0) { 3');
+            topleft = {
+              x: startClientX,
+              y: endClienty
+            };
+          }
+
+          if (endClientX - startClientX < 0 && endClienty - startClientY > 0) {
+            //console.log('if (endClientX - startClientX < 0 && endClienty - startClientY > 0) { 4');
+            topleft = {
+              x: endClienty,
+              y: startClientY
+            };
+          }
+
+          // console.log("topleft",topleft);
+
           this.group = {
             dx: dx,
-            dy: dy
+            dy: dy,
+            top: topleft.x-250,
+            left: topleft.y-150
           };
         },
         multiSelectKeys: ["shiftKey"]

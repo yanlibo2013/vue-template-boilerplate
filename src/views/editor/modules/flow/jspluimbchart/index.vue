@@ -206,7 +206,9 @@ export default {
         steps: steps,
         links: links,
         width: group.dx,
-        height: group.dy
+        height: group.dy,
+        top: group.top,
+        left: group.left
       };
 
       // console.log("subflow", subflow);
@@ -366,17 +368,20 @@ export default {
           };
         case "group":
           let uuid = jsPlumbUtil.uuid();
+          let subflow = data.drawIcon.subflow;
+          console.log("subflow", subflow);
           return {
             ...node,
-            // subflow:data.drawIcon.subflow
             subflow: {
-              ...data.drawIcon.subflow,
-              steps: _.map(data.drawIcon.subflow.steps, item => {
+              ...subflow,
+              steps: _.map(subflow.steps, item => {
                 return {
                   ...item,
                   id: item.id + "_" + uuid,
-                  x: item.x - node.x,
-                  y: item.y - node.y + 100
+                  x: item.x - subflow.left,
+                  y: item.y - subflow.top 
+                  // x: subflow.left-item.x,
+                  // y: subflow.top -item.y 
                 };
               }),
               links: _.map(data.drawIcon.subflow.links, item => {

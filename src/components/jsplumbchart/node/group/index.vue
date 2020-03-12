@@ -12,8 +12,9 @@
 
     <flowchartNode
       v-for="(item,index) in groupItem.subflow.steps"
-      :key="index+'step'"
+      :key="index"
       :stepItem="item"
+      :ref="item.id"
     ></flowchartNode>
   </div>
 </template>
@@ -97,14 +98,22 @@ export default {
     },
     drawJsplumbChartGroup() {
       let j = this.jsplumbInstance;
-      //j.draggable("c1_1");
+      //j.draggable(c1_1);
       j.addGroup({
         el: this.$refs[this.groupItem.id],
         id: this.groupItem.id,
         constrain: true
       });
+      // j.draggable(c1_1);
+      // j.addToGroup(this.groupItem.id, c1_1);
 
-      //j.addToGroup(this.groupItem.id, c1_1);
+      //console.log("c1_1",c1_1);
+
+      _.forEach(this.groupItem.subflow.steps, item => {
+        let element = document.getElementById(item.id);
+        j.draggable(element);
+        j.addToGroup(this.groupItem.id,element);
+      });
     }
   }
 };
@@ -203,7 +212,8 @@ export default {
 .jtk-connector path {
   stroke-width: 1;
 }
-
+//
+.jtk-group-collapsed .designIconBig,
 .jtk-group-collapsed .w,
 .jtk-group-collapsed ul,
 .jtk-group-collapsed .container,
