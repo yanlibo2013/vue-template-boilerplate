@@ -161,8 +161,7 @@ export var destination = {
 	connectorOverlays: [ [ 'Arrow', { width: 10, length: 10, location: 1 } ] ]
 };
 
-export var addEndpoint = (jsplumbInstance, drawType, dataIndex, flowType) => {
-	console.log('export var addEndpoint = (jsplumbInstance, drawType, dataIndex, flowType) => {',origin);
+export var addEndpoint = (jsplumbInstance, drawType, dataIndex, flowType, data) => {
 	if (nodeClass(drawType) == 'classD_A') {
 		//jsplumbInstance.deleteEndpoint(dataIndex + "output" + "origin");
 		jsplumbInstance.addEndpoint(
@@ -190,6 +189,7 @@ export var addEndpoint = (jsplumbInstance, drawType, dataIndex, flowType) => {
 		);
 	} else if (specialNodeClass(drawType) == 'classD_D1') {
 		if (flowType === 'flink') {
+			console.log("if (flowType === 'flink') { flowType", flowType);
 			let anchors = addMultioutput(getOutputConfigurations(data.outputConfigurations, _));
 			_.forEach(anchors, (val, index) => {
 				jsplumbInstance.addEndpoint(
@@ -403,7 +403,7 @@ export const addEndpointToNode = (jsplumbInstance, self, steps, flowType, flowDa
 			let drawType = data.type,
 				dataIndex = data.id;
 
-			addEndpoint(jsplumbInstance, drawType, dataIndex, flowType);
+			addEndpoint(jsplumbInstance, drawType, dataIndex, flowType, data);
 
 			jsplumbInstance.draggable(dataIndex, {
 				// containment: 'parent',

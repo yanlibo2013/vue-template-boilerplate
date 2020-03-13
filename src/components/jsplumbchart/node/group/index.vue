@@ -60,7 +60,8 @@ export default {
         this.groupItem.subflow.width +
         "px",
       collapsedStyle:
-        "left:" + this.groupItem.x + "px;top:" + this.groupItem.y + "px;"
+        "left:" + this.groupItem.x + "px;top:" + this.groupItem.y +"px;width:" +
+        this.groupItem.subflow.width 
     };
   },
   computed: {
@@ -105,7 +106,9 @@ export default {
       j.addGroup({
         el: this.$refs[this.groupItem.id],
         id: this.groupItem.id,
-        constrain: true
+        constrain: true,
+          prune: true,
+       endpoint: ["Dot", { radius: 6 }]
       });
       // j.draggable(c1_1);
       // j.addToGroup(this.groupItem.id, c1_1);
@@ -114,14 +117,38 @@ export default {
 
       _.forEach(this.groupItem.subflow.steps, item => {
         let element = document.getElementById(item.id);
-        j.draggable(element);
-        j.addToGroup(this.groupItem.id, element);
+        // j.draggable(element);
+        // j.addToGroup(this.groupItem.id, element);
 
-        console.log("element", element);
-
-        console.log(" _.forEach(this.groupItem.subflow.steps, item => {", item);
-
-        addEndpoint(j, item.type, item.id, "");
+        this.$nextTick(() => {
+          console.log("  this.$nextTick(() => { addEndpoint");
+          addEndpoint(j, item.type, item.id, "", item);
+          j.draggable(element, {
+            start(params) {
+              //console.log('start(params) {');
+              // 拖动开始
+              // console.log(params);
+              //console.log('拖动开始');
+            },
+            drag(params) {
+              //console.log('drag(params) {');
+              // 拖动中
+            },
+            stop(params) {
+              //console.log('stop(params) {');
+              // let top = params.el.style.top;
+              // let left = params.el.style.left;
+              // // 拖动结束
+              // //console.log('拖动介绍');
+              // flowData({
+              //   x: parseInt(left.replace("px", "")),
+              //   y: parseInt(top.replace("px", "")),
+              //   id: params.el.attributes.id.nodeValue
+              // });
+            }
+          });
+          j.addToGroup(this.groupItem.id, element);
+        });
       });
     }
   }
