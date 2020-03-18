@@ -46,6 +46,7 @@ import {
 export default {
   watch: {
     data(val) {
+      console.log('data(val) {',val);
       this.stepData = val.steps;
       this.groupData = val.groupData;
       this.links = val.links;
@@ -53,26 +54,32 @@ export default {
       this.operationType = val.operationType;
       this.containerRect = val.containerRect;
       this.enablePanZoom = val.enablePanZoom;
+      this.isDragSelect = val.isDragSelect ? val.isDragSelect : false;
+
+      console.log("this.isDragSelect=", this.isDragSelect);
     },
     stepData(val) {
       this.$emit("modifyChart", {
         stepData: val,
         groupData: this.groupData,
-        links: this.links
+        links: this.links,
+        isDragSelect: false
       });
     },
     groupData(val) {
       this.$emit("modifyChart", {
         stepData: this.stepData,
         groupData: val,
-        links: this.links
+        links: this.links,
+        isDragSelect: false
       });
     },
     links(val) {
       this.$emit("modifyChart", {
         stepData: this.stepData,
         links: val,
-        groupData: this.groupData
+        groupData: this.groupData,
+        isDragSelect: false
       });
     },
     selectableObjects(val) {
@@ -135,7 +142,8 @@ export default {
       startClient: {},
       endClient: {},
       group: {},
-      hardReset: false
+      hardReset: false,
+      isDragSelectRemove: true
     };
   },
   computed: {
@@ -174,7 +182,8 @@ export default {
           ...this.data,
           steps: this.stepData,
           links: this.links,
-          containerRect: ""
+          containerRect: "",
+          isDragSelect: false
         });
       }
 
@@ -188,11 +197,13 @@ export default {
         },
         () => {
           this.getLinksData();
+
           if (this.isDragSelect) {
             this.initDragSelect();
             this.isDragSelect = false;
           }
 
+          // this.initDragSelect();
           if (this.enablePanZoom && this.isPanZoomInit) {
             panzoom.init(this.jsplumbInstance, false);
             this.isPanZoomInit = false;
@@ -222,31 +233,33 @@ export default {
   methods: {
     //...mapActions([""]),
     initDragSelect() {
-      //remove //ds-selector
-      // let elementDragSelect = document.getElementsByClassName("ds-selector");
-      // console.log(elementDragSelect.length);
-      // //elementDragSelect.remove();
-      // if (elementDragSelect.length != 0) {
-      //   elementDragSelect[0].remove();
-      // }
-      // console.log("elementDragSelect", elementDragSelect);
+      if (this.isDragSelectRemove) {
+        let selectorNodes = document.getElementsByClassName("ds-selector");
+        _.forEach(selectorNodes, item => {
+          item.remove();
+        });
+      }
+
       new DragSelect({
         //multiSelectMode:true,
         area: document.getElementById("cavans"),
         selectables: document.querySelectorAll(".designIconBig"),
         // selector: document.getElementById("selector"),
         onElementSelect: e => {
-          //console.log(" onElementSelect: e => {", e);
+          console.log(" onElementSelect: e => {", e);
           this.selectableObjects.push(e.getAttribute("id"));
         },
         onElementUnselect: e => {
           this.selectableObjects = [];
         },
         onDragStart: e => {
+          console.log("onDragStart: e => {");
           this.startClient = {
             clientX: e.clientX,
             clientY: e.clientY
           };
+
+          this.isDragSelectRemove = false;
         },
         onDragMove: e => {
           //console.log(' onDragMove: e => {',e);
@@ -273,7 +286,7 @@ export default {
           }
 
           if (endClientX - startClientX > 0 && endClienty - startClientY > 0) {
-           // console.log('if (endClientX - startClientX > 0 && endClienty - startClientY > 0) { 2');
+            // console.log('if (endClientX - startClientX > 0 && endClienty - startClientY > 0) { 2');
             topleft = {
               x: startClientX,
               y: startClientY
@@ -301,9 +314,13 @@ export default {
           this.group = {
             dx: dx,
             dy: dy,
-            top: topleft.x-250,
-            left: topleft.y-150
+            top: topleft.x - 250,
+            left: topleft.y - 150
           };
+        },
+        callback: () => {
+          console.log("callback:()=>{");
+          this.isDragSelectRemove = true;
         },
         multiSelectKeys: ["shiftKey"]
         //multiSelectKeys: ["ctrlKey", "shiftKey", "metaKey"] // special keys that allow multiselection.

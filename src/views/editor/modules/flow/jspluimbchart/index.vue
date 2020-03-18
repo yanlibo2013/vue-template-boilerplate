@@ -85,7 +85,7 @@ export default {
         flowType: "flink",
         jsPlumb: jsPlumb,
         containerRect: "",
-        enablePanZoom: false
+        enablePanZoom: true
       },
       nodeTab: [
         {
@@ -301,7 +301,8 @@ export default {
         steps: this.steps,
         groupData: this.groupData,
         links: this.links,
-        containerRect: containerRect
+        containerRect: containerRect,
+        isDragSelect:true
       };
     },
     isExitStepID(val) {

@@ -17,6 +17,7 @@ function init(instance, shouldIgnore) {
 		minZoom: 0.5,
 		maxZoom: 2,
 		beforeWheel: function(e) {
+			//console.log('beforeWheel: function(e) {', e);
 			//return shouldIgnore;
 			var shouldIgnore = !e.ctrlKey;
 			return shouldIgnore;
