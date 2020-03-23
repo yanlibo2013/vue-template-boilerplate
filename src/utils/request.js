@@ -14,6 +14,8 @@ console.log("process.env.BASE_URL", process.env.BASE_URL);
 console.log("baseURL", baseURL);
 console.log("baseENV", baseENV);
 
+console.log('process.env.npm_config_baseenv', process.env.npm_config_baseenv);
+
 // create an axios instance
 const service = axios.create({
   // baseURL: process.env.VUE_APP_BASE_API, // api 的 base_url

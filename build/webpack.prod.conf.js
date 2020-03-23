@@ -51,7 +51,7 @@ const webpackConfig = merge(baseWebpackConfig, {
         compress: {
           warnings: false,
           drop_debugger: true, //自动删除debugger
-          drop_console: true //自动删除console.log
+          drop_console: false //自动删除console.log
         }
       },
       sourceMap: config.build.productionSourceMap,
