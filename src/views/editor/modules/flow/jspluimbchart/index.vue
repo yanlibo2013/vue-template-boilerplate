@@ -44,8 +44,10 @@
 </template>
 
 <script>
+import _ from "lodash";
 import vaside from "@/components/aside/left/index";
 import jsplumbchart from "@/components/jsplumbchart/index";
+import moment from "moment";
 
 // import "@/components/jsplumbchart/dist/jsplumbchart.css"
 // import * as jsplumbchart from "@/components/jsplumbchart/dist/jsplumbchart.umd.min.js";
@@ -112,7 +114,9 @@ export default {
       jsPlumb: jsPlumb,
       matrix: "",
       operationType: "copy",
-      input1Test: ""
+      input1Test: "",
+      cloneSteps: [],
+      cloneLinks: []
     };
   },
   // computed: {
@@ -137,6 +141,9 @@ export default {
           jsPlumb: this.jsPlumb,
           matrix: flowData.matrix && JSON.parse(flowData.matrix)
         };
+
+        this.cloneSteps = _.cloneDeep(this.steps);
+        this.cloneLinks = _.cloneDeep(this.links);
 
         //console.log("this.jsplumbchartOption",this.jsplumbchartOption);
       });
@@ -338,7 +345,12 @@ export default {
       this.$refs.jsplumbchart.reset();
     },
     reset() {
-      this.$refs.jsplumbchart.resume();
+      //this.$refs.jsplumbchart.resume();
+      this.jsplumbchartOption = {
+        ...this.jsplumbchartOption,
+        steps: this.cloneSteps,
+        links: this.cloneLinks
+      };
     },
     nodedblClick(val) {
       if (this.isOpenStepDialog(val)) {
