@@ -1,6 +1,7 @@
 export default {
   route: {
     dashboard: '首页',
+    chartjs: "Chartjs",
     documentation: '流程设计器',
     guide: '引导页',
     permission: '权限测试页',

@@ -1,6 +1,7 @@
 export default {
   route: {
-    dashboard: 'Dashboard test',
+    dashboard: 'Dashboard',
+    chartjs: "Chartjs",
     documentation: 'flow desiger',
     guide: 'Guide',
     permission: 'Permission',
