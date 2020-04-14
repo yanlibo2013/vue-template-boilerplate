@@ -12,7 +12,12 @@
       class="header-search-select"
       @change="change"
     >
-      <el-option v-for="item in options" :key="item.path" :value="item" :label="item.title.join(' > ')" />
+      <el-option
+        v-for="item in options"
+        :key="item.path"
+        :value="item"
+        :label="item.title.join(' > ')"
+      />
     </el-select>
   </div>
 </template>
@@ -37,7 +42,6 @@ export default {
   },
   computed: {
     routes() {
-      // console.log(JSON.stringify(this.$store.getters.permission_routes));
       return this.$store.getters.permission_routes
     },
     lang() {
@@ -93,13 +97,16 @@ export default {
         distance: 100,
         maxPatternLength: 32,
         minMatchCharLength: 1,
-        keys: [{
-          name: 'title',
-          weight: 0.7
-        }, {
-          name: 'path',
-          weight: 0.3
-        }]
+        keys: [
+          {
+            name: 'title',
+            weight: 0.7
+          },
+          {
+            name: 'path',
+            weight: 0.3
+          }
+        ]
       })
     },
     // Filter out the routes that can be displayed in the sidebar
@@ -109,7 +116,9 @@ export default {
 
       for (const router of routes) {
         // skip hidden router
-        if (router.hidden) { continue }
+        if (router.hidden) {
+          continue
+        }
 
         const data = {
           path: path.resolve(basePath, router.path),
@@ -122,7 +131,7 @@ export default {
 
           data.title = [...data.title, i18ntitle]
 
-          if (router.redirect !== 'noredirect') {
+          if (router.redirect !== 'noRedirect') {
             // only push the routes with title
             // special case: need to exclude parent router without redirect
             res.push(data)
@@ -131,7 +140,11 @@ export default {
 
         // recursive child routes
         if (router.children) {
-          const tempRoutes = this.generateRoutes(router.children, data.path, data.title)
+          const tempRoutes = this.generateRoutes(
+            router.children,
+            data.path,
+            data.title
+          )
           if (tempRoutes.length >= 1) {
             res = [...res, ...tempRoutes]
           }

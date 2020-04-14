@@ -1,13 +1,13 @@
 <template>
   <div class="jsplumb-chart">
-    <div class="cavansClass" id="cavans">
+    <div id="cavans" class="cavansClass">
       <flowchartNode
+        v-show="nodeType=='flowchartnode'"
         :data="{stepData:stepData}"
         @dblClick="dblClick"
         @copyNode="copyNode"
         @delNode="delNode"
-        v-show="nodeType=='flowchartnode'"
-      ></flowchartNode>
+      />
     </div>
   </div>
 </template>

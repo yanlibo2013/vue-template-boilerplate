@@ -1,5 +1,5 @@
 <template>
-  <div class="flowchart-node" id="flowchartnode">
+  <div id="flowchartnode" class="flowchart-node">
     <div
       v-for="(data,index) in stepData"
       :id="data.id"
@@ -10,53 +10,52 @@
       :style="'left:'+data.x+'px;top:'+data.y+'px;position:absolute;margin:0'"
       @dblclick="dblClick(data)"
     >
-      <i class="icon iconfont icon-ir-designIconBg designIconBg"></i>
+      <i class="icon iconfont icon-ir-designIconBg designIconBg" />
       <i
         id="changeSte"
         :class="nodeIcon(data.type) == 'iconTrue'?'icon iconfont icon-ir-d-'+data.type:'icon iconfont icon-ir-d-default'"
-      ></i>
-      <h4 :title="data.name">{{data.name}}</h4>
-      <h5>ID:{{data.id}}</h5>
+      />
+      <h4 :title="data.name">{{ data.name }}</h4>
+      <h5>ID:{{ data.id }}</h5>
       <em
         id="copeDes"
         class="icon iconfont icon-ir-copy"
         title="复制"
         @click.prevent="copyNode(data)"
-      ></em>
-      <em id="removeDes" class="fa fa-trash-o" title="删除" @click="delNode(data.id)"></em>
+      />
+      <em id="removeDes" class="fa fa-trash-o" title="删除" @click="delNode(data.id)" />
 
-      <div class="line-split" v-show="data.type=='split'" :style="setLineSplit(data)"></div>
+      <div v-show="data.type=='split'" class="line-split" :style="setLineSplit(data)" />
     </div>
   </div>
 </template>
 
-
 <script>
-import _ from "lodash";
-import { setClass, nodeClass, nodeIcon } from "../../lib/flowchart";
+import _ from 'lodash'
+import { setClass, nodeClass, nodeIcon } from '../../lib/flowchart'
 export default {
-  watch: {
-    data(val) {
-      this.stepData = val.stepData;
-    }
-  },
+  components: {},
   props: {
     data: {
       type: Object,
       default: {}
     }
   },
-  components: {},
   data: function() {
     return {
       stepData: [],
       nodeClass: nodeClass,
       nodeIcon: nodeIcon,
       setClass: setClass
-    };
+    }
   },
   computed: {
-    //...mapState([""])
+    // ...mapState([""])
+  },
+  watch: {
+    data(val) {
+      this.stepData = val.stepData
+    }
   },
   mounted() {},
   beforeCreate() {},
@@ -67,55 +66,55 @@ export default {
   beforeDestroy() {},
   destroyed: function() {},
   methods: {
-    //...mapActions([""]),
+    // ...mapActions([""]),
 
     delNode(val) {
-      this.$emit("delNode", val);
+      this.$emit('delNode', val)
     },
     dblClick(val) {
-      this.$emit("dblClick", val);
+      this.$emit('dblClick', val)
     },
     copyNode(val) {
-      this.$emit("copyNode", val);
+      this.$emit('copyNode', val)
     },
     setLineSplit(step) {
-      if (step.type == "split") {
-        let outputConfigurations = _.toArray(step.outputConfigurations);
+      if (step.type == 'split') {
+        const outputConfigurations = _.toArray(step.outputConfigurations)
 
         switch (outputConfigurations.length) {
           case 21:
           case 20:
-            return "height: 280px; top: -100px;";
+            return 'height: 280px; top: -100px;'
           case 19:
           case 18:
           case 17:
-            return "height: 270px; top: -95px;";
+            return 'height: 270px; top: -95px;'
 
           case 16:
           case 15:
-            return "height: 270px; top: -90px;";
+            return 'height: 270px; top: -90px;'
           case 14:
           case 13:
           case 12:
-            return "height: 190px; top: -50px;";
+            return 'height: 190px; top: -50px;'
           case 11:
           case 10:
-            return "height: 155px; top: -43px;";
+            return 'height: 155px; top: -43px;'
           case 9:
           case 8:
             // case 7:
-            return "height: 120px; top: -35px;";
+            return 'height: 120px; top: -35px;'
           case 7:
           case 6:
           case 5:
-            return "height: 120px; top: -25px;";
+            return 'height: 120px; top: -25px;'
           default:
-            return "height: 70px; top: 0px;";
+            return 'height: 70px; top: 0px;'
         }
       }
     }
   }
-};
+}
 </script>
 
 <style lang="scss">
