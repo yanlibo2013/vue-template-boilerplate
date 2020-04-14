@@ -37,7 +37,7 @@ export function parseTime(time, cFormat) {
   const time_str = format.replace(/{([ymdhisa])+}/g, (result, key) => {
     const value = formatObj[key]
     // Note: getDay() returns 0 on Sunday
-    if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value ] }
+    if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value] }
     return value.toString().padStart(2, '0')
   })
   return time_str
@@ -160,12 +160,12 @@ export function param2Obj(url) {
   }
   return JSON.parse(
     '{"' +
-      decodeURIComponent(search)
-        .replace(/"/g, '\\"')
-        .replace(/&/g, '","')
-        .replace(/=/g, '":"')
-        .replace(/\+/g, ' ') +
-      '"}'
+    decodeURIComponent(search)
+      .replace(/"/g, '\\"')
+      .replace(/&/g, '","')
+      .replace(/=/g, '":"')
+      .replace(/\+/g, ' ') +
+    '"}'
   )
 }
 
@@ -244,7 +244,7 @@ export function getTime(type) {
 export function debounce(func, wait, immediate) {
   let timeout, args, context, timestamp, result
 
-  const later = function() {
+  const later = function () {
     // 据上一次触发时间间隔
     const last = +new Date() - timestamp
 
@@ -261,7 +261,7 @@ export function debounce(func, wait, immediate) {
     }
   }
 
-  return function(...args) {
+  return function (...args) {
     context = this
     timestamp = +new Date()
     const callNow = immediate && !timeout
@@ -343,5 +343,46 @@ export function removeClass(ele, cls) {
   if (hasClass(ele, cls)) {
     const reg = new RegExp('(\\s|^)' + cls + '(\\s|$)')
     ele.className = ele.className.replace(reg, ' ')
+  }
+}
+
+
+//字体图标的变量（需跟iconFont字体包同步）
+var nodeIconFont = {
+  source: 'source',
+  sqlsource: 'sqlsource',
+  sink: 'sink',
+  decision: 'decision',
+  validate: 'validate',
+  supplement: 'supplement',
+  sql: 'sql',
+  transform: 'transform',
+  filter: 'filter',
+  sample: 'sample',
+  lookup: 'lookup',
+  join: 'join',
+  starjoin: 'starjoin',
+  productjoin: 'productjoin',
+  aggregate: 'aggregate',
+  top: 'top',
+  union: 'union',
+  intersect: 'intersect',
+  minus: 'minus',
+  split: 'split',
+  Correlation: 'Correlation',
+  Summary: 'Summary',
+  gradientboogradientbostedtrees_predict: 'gradientboogradientbostedtrees_predict',
+  MultilayerPerceptronPredict: 'MultilayerPerceptronPredict',
+  MultilayerPerceptronTrain: 'MultilayerPerceptronTrain',
+  kmeans_predict: 'kmeans_predict',
+  kmeans_train: 'kmeans_train'
+  // aggregate: "aggregate"
+};
+//节点图标函数
+export function nodeIcon(type) {
+  if (type in nodeIconFont) {
+    return 'iconTrue';
+  } else {
+    return false;
   }
 }

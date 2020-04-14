@@ -3,7 +3,7 @@
     <el-collapse accordion>
       <el-collapse-item
         v-for="(drawNav, index) in stepList"
-        v-if="drawNav.thisIcon.length != '0'"
+        v-show="drawNav.thisIcon.length != '0'"
         :key="index + '-gQuery'"
         track-by="$index"
         :name="index"
@@ -37,22 +37,22 @@
 </template>
 
 <script>
-import { nodeIcon } from '@/utils/index'
+import { nodeIcon } from "@/utils/index";
 // import { getAllStepList } from "@/api/flow";
 // import _ from "lodash";
 export default {
   filters: {
     // 过滤右侧图标
     iconFilter: function(value) {
-      if (nodeIcon(value) == 'iconTrue') {
-        return 'icon iconfont icon-ir-d-' + value
+      if (nodeIcon(value) == "iconTrue") {
+        return "icon iconfont icon-ir-d-" + value;
       } else {
-        return 'icon iconfont icon-ir-d-default'
+        return "icon iconfont icon-ir-d-default";
       }
     },
     // 过滤历史版本下拉内容的时间，返回 YYYY-MM-DD HH:mm:ss 格式
     updateTimeFilter: function(val) {
-      return moment(val).format('YYYY-MM-DD HH:mm:ss')
+      return moment(val).format("YYYY-MM-DD HH:mm:ss");
     }
   },
   data() {
@@ -60,58 +60,208 @@ export default {
       gqueryTree: [],
       stepList: [],
       cnObj: {}
-    }
+    };
   },
   mounted() {
     // this.initData();
+
+    this.stepList = [
+      {
+        group: "IO",
+        thisIcon: [
+          {
+            id: "source",
+            name: "source",
+            type: "source",
+            tags: ["IO", "rtcflow"],
+            stepSettings: {},
+            outputConfigurations: {
+              output: [{ column: "", type: "", alias: "", description: "" }]
+            }
+          },
+          {
+            id: "dummy_source",
+            name: "dummy_source",
+            type: "source_dummy",
+            tags: ["IO", "rtcflow"],
+            stepSettings: { dataType: "userClick", storage: "DUMMY" },
+            outputConfigurations: {
+              output: [{ column: "", type: "", alias: "", description: "" }]
+            }
+          },
+          {
+            id: "sink",
+            name: "sink",
+            type: "sink",
+            tags: ["IO", "rtcflow"],
+            stepSettings: {},
+            inputConfigurations: {
+              input: [{ column: "", type: "", alias: "", description: "" }]
+            }
+          }
+        ]
+      },
+      {
+        group: "Transform",
+        thisIcon: [
+          {
+            id: "filter",
+            name: "filter",
+            type: "filter",
+            tags: ["Transform", "rtcflow"],
+            stepSettings: {},
+            inputConfigurations: {
+              input: [{ column: "", type: "", alias: "", description: "" }]
+            },
+            outputConfigurations: {
+              output: [{ column: "", type: "", alias: "", description: "" }]
+            }
+          },
+          {
+            id: "transform",
+            name: "transform",
+            type: "transform",
+            tags: ["Transform", "rtcflow"],
+            stepSettings: {},
+            inputConfigurations: {
+              input: [{ column: "", type: "", alias: "", description: "" }]
+            },
+            outputConfigurations: {
+              output: [{ column: "", type: "", alias: "", description: "" }]
+            }
+          },
+          {
+            id: "sql",
+            name: "sql",
+            type: "sql",
+            tags: ["Transform", "rtcflow"],
+            stepSettings: {},
+            inputConfigurations: {
+              input: [{ column: "", type: "", alias: "", description: "" }]
+            },
+            outputConfigurations: {
+              output: [{ column: "", type: "", alias: "", description: "" }]
+            }
+          }
+        ]
+      },
+      {
+        group: "Join",
+        thisIcon: [
+          {
+            id: "join",
+            name: "join",
+            type: "join",
+            tags: ["Join", "rtcflow"],
+            stepSettings: {},
+            inputConfigurations: {
+              left: [{ column: "", type: "", alias: "", description: "" }],
+              right: [{ column: "", type: "", alias: "", description: "" }]
+            },
+            outputConfigurations: {
+              output: [{ column: "", type: "", alias: "", description: "" }]
+            }
+          },
+          {
+            id: "lookup",
+            name: "lookup",
+            type: "lookup",
+            tags: ["Join", "rtcflow"],
+            stepSettings: {},
+            inputConfigurations: {
+              input: [{ column: "", type: "", alias: "", description: "" }]
+            },
+            outputConfigurations: {
+              output: [{ column: "", type: "", alias: "", description: "" }]
+            }
+          }
+        ]
+      },
+      {
+        group: "Group",
+        thisIcon: [
+          {
+            id: "aggregate",
+            name: "aggregate",
+            type: "aggregate",
+            tags: ["Group", "rtcflow"],
+            stepSettings: {},
+            inputConfigurations: {
+              input: [{ column: "", type: "", alias: "", description: "" }]
+            },
+            outputConfigurations: {
+              output: [{ column: "", type: "", alias: "", description: "" }]
+            }
+          }
+        ]
+      },
+      {
+        group: "Set",
+        thisIcon: [
+          {
+            id: "split",
+            name: "split",
+            type: "split",
+            tags: ["Set", "rtcflow"],
+            stepSettings: {},
+            inputConfigurations: {
+              input: [{ column: "", type: "", alias: "", description: "" }]
+            },
+            outputConfigurations: {
+              output: [{ column: "", type: "", alias: "", description: "" }]
+            }
+          }
+        ]
+      }
+    ];
   },
   methods: {
     nodeIcon() {
       if (type in nodeIconFont) {
-        return 'iconTrue'
+        return "iconTrue";
       } else {
-        return false
+        return false;
       }
     },
     handleDragstart() {},
     start() {
-      console.log('拖动开始')
+      console.log("拖动开始");
     },
     drag(ev, item) {
       //   console.log(ev);
       //   console.log(item);
-      console.log('元素正在拖动')
+      console.log("元素正在拖动");
     },
-    initData() {
-      getAllStepList().then(res => {
-        this.stepList = this.getLeftAsideData(
-          res.data.data,
-          _.uniq(this.getGroupData(res.data.data))
-        )
-      })
-    },
+    // initData() {
+    //   getAllStepList().then(res => {
+    //     this.stepList = this.getLeftAsideData(
+    //       res.data.data,
+    //       _.uniq(this.getGroupData(res.data.data))
+    //     );
+    //   });
+    // },
     getLeftAsideData(data, group) {
       return _.map(group, item => {
         return {
           group: item,
           thisIcon: _.compact(this.getIconData(data, item))
-        }
-      })
+        };
+      });
     },
     getGroupData(val) {
       return _.map(val, item => {
-        return item.tags[0]
-      })
+        return item.tags[0];
+      });
     },
     getIconData(data, val) {
       return _.map(data, item => {
         if (item.tags[0] == val) {
-          return item
+          return item;
         }
-      })
+      });
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 .right-aside {

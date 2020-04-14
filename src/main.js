@@ -9,6 +9,9 @@ import './styles/element-variables.scss'
 
 import '@/styles/index.scss' // global css
 
+import "./assets/fonts/iconfont.css";// step icons
+
+
 import App from './App'
 import store from './store'
 import router from './router'
