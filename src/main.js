@@ -27,6 +27,8 @@ import VueDragDrop from 'vue-drag-drop' // https://github.com/cameronhimself/vue
 
 Vue.use(VueDragDrop)
 
+
+
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api

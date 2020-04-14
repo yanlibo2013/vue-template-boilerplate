@@ -18,9 +18,9 @@
     <div class="Chart">
       <h1 style="text-align:center;">Barchart with reactive mixing for live data as props</h1>
       <reactive-prop-example :chart-data="dataPoints"/>
-    </div> -->
+    </div>-->
 
-    <div class="Chart">
+    <!-- <div class="Chart">
       <h1 style="text-align:center;">Linechart</h1>
       <line-example/>
     </div>
@@ -57,101 +57,146 @@
     <div class="Chart">
       <h1 style="text-align:center;">Custom Line Chart</h1>
       <custom-line />
-    </div>
+    </div>-->
+    <!-- <geo-chart :data="[['United States', 44], ['Germany', 23], ['Brazil', 22]]"></geo-chart> -->
+
+    <!-- <geo-chart :data="[['United States', 44], ['Germany', 23], ['Brazil', 22]]"></geo-chart> -->
+
+    <!-- <pie-chart :data="[['Blueberry', 44], ['Strawberry', 23]]"></pie-chart>
+
+    <line-chart :data="{'2017-05-13': 2, '2017-05-14': 5}"></line-chart>
+
+    <line-chart :data="{'2017-01-01': 11, '2017-01-02': 6}"></line-chart>
+
+    <geo-chart :data="[['United States', 44], ['Germany', 23], ['Brazil', 22]]"></geo-chart>-->
+
+    <!-- <div id="chart-1" style="height: 300px;"></div> -->
   </div>
 </template>
 
 <script>
-  import BarExample from './BarExample'
-  import LineExample from './LineExample'
-  import DoughnutExample from './DoughnutExample'
-  import PieExample from './PieExample'
-  import RadarExample from './RadarExample'
-  import PolarAreaExample from './PolarAreaExample'
-  import BubbleExample from './BubbleExample'
-  import ReactiveExample from './ReactiveExample'
-  import ReactivePropExample from './ReactivePropExample'
-  import ScatterExample from './ScatterExample'
-  import HorizontalBarExample from './HorizontalBarExample'
-  import CustomLine from './CustomExample'
+// import BarExample from "./BarExample";
+// import LineExample from "./LineExample";
+// import DoughnutExample from "./DoughnutExample";
+// import PieExample from "./PieExample";
+// import RadarExample from "./RadarExample";
+// import PolarAreaExample from "./PolarAreaExample";
+// import BubbleExample from "./BubbleExample";
+// import ReactiveExample from "./ReactiveExample";
+// import ReactivePropExample from "./ReactivePropExample";
+// import ScatterExample from "./ScatterExample";
+// import HorizontalBarExample from "./HorizontalBarExample";
+// import CustomLine from "./CustomExample";
+import Chartkick from "chartkick";
+import Chart from "chart.js";
 
-  export default {
-    components: {
-      BarExample,
-      LineExample,
-      DoughnutExample,
-      CustomLine,
-      PieExample,
-      RadarExample,
-      PolarAreaExample,
-      BubbleExample,
-      ReactiveExample,
-      ReactivePropExample,
-      ScatterExample,
-      HorizontalBarExample
+Chartkick.use(Chart);
+
+export default {
+  // components: {
+  //   BarExample,
+  //   LineExample,
+  //   DoughnutExample,
+  //   CustomLine,
+  //   PieExample,
+  //   RadarExample,
+  //   PolarAreaExample,
+  //   BubbleExample,
+  //   ReactiveExample,
+  //   ReactivePropExample,
+  //   ScatterExample,
+  //   HorizontalBarExample
+  // },
+  data() {
+    return {
+      dataPoints: null,
+      height: 20
+    };
+  },
+  mounted() {
+    // setInterval(() => {
+    //   this.fillData();
+    // }, 2000);
+    //new Chartkick.GeoChart("chart-1", [["United States", 44], ["Germany", 23], ["Brazil", 22]])
+    //new Chartkick.LineChart("chart-1", { "2017-01-01": 11, "2017-01-02": 6 });
+  },
+  methods: {
+    increaseHeight() {
+      this.height += 10;
     },
-    data () {
+    getRandomInt() {
+      return Math.floor(Math.random() * (50 - 5 + 1)) + 5;
+    },
+    fillData() {
+      this.dataPoints = {
+        labels: [
+          "January" + this.getRandomInt(),
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+          "August",
+          "September",
+          "October",
+          "November",
+          "December"
+        ],
+        datasets: [
+          {
+            label: "Data One",
+            backgroundColor: "#f87979",
+            data: [
+              this.getRandomInt(),
+              this.getRandomInt(),
+              this.getRandomInt(),
+              this.getRandomInt(),
+              this.getRandomInt(),
+              this.getRandomInt(),
+              this.getRandomInt(),
+              this.getRandomInt(),
+              this.getRandomInt(),
+              this.getRandomInt(),
+              this.getRandomInt(),
+              this.getRandomInt()
+            ]
+          }
+        ]
+      };
+    }
+  },
+  computed: {
+    myStyles() {
       return {
-        dataPoints: null,
-        height: 20
-      }
-    },
-    mounted () {
-      setInterval(() => {
-        this.fillData()
-      }, 2000)
-    },
-    methods: {
-      increaseHeight () {
-        this.height += 10
-      },
-      getRandomInt () {
-        return Math.floor(Math.random() * (50 - 5 + 1)) + 5
-      },
-      fillData () {
-        this.dataPoints = {
-          labels: ['January' + this.getRandomInt(), 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-          datasets: [
-            {
-              label: 'Data One',
-              backgroundColor: '#f87979',
-              data: [this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt()]
-            }
-          ]
-        }
-      }
-    },
-    computed: {
-      myStyles () {
-        return {
-          height: `${this.height}px`,
-          position: 'relative'
-        }
-      }
+        height: `${this.height}px`,
+        position: "relative"
+      };
     }
   }
+};
 </script>
 
 <style>
-  .container {
-    max-width: 800px;
-    margin: 0 auto;
-  }
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+}
 
-  h1 {
-    font-family: 'Helvetica', Arial;
-    color: #464646;
-    text-transform: uppercase;
-    border-bottom: 1px solid #f1f1f1;
-    padding-bottom: 15px;
-    font-size: 28px;
-    margin-top: 0;
-  }
+h1 {
+  font-family: "Helvetica", Arial;
+  color: #464646;
+  text-transform: uppercase;
+  border-bottom: 1px solid #f1f1f1;
+  padding-bottom: 15px;
+  font-size: 28px;
+  margin-top: 0;
+}
 
-  .Chart {
-    padding: 20px;
-    box-shadow: 0px 0px 20px 2px rgba(0, 0, 0, .4);
-    border-radius: 20px;
-    margin: 50px 0;
-  }
+.Chart {
+  padding: 20px;
+  box-shadow: 0px 0px 20px 2px rgba(0, 0, 0, 0.4);
+  border-radius: 20px;
+  margin: 50px 0;
+}
 </style>

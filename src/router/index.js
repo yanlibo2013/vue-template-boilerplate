@@ -95,18 +95,18 @@ export const constantRoutes = [
       }
     ]
   },
-  {
-    path: '/chartjs',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/chartjs/index'),
-        name: 'chartjs',
-        meta: { title: 'chartjs', icon: 'documentation', affix: true }
-      }
-    ]
-  },
+  // {
+  //   path: '/chartjs',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/chartjs/index'),
+  //       name: 'chartjs',
+  //       meta: { title: 'chartjs', icon: 'documentation', affix: true }
+  //     }
+  //   ]
+  // },
   {
     path: '/guide',
     component: Layout,
