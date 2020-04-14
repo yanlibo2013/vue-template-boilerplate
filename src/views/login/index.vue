@@ -87,6 +87,7 @@
       <div class="tips">
         <span style="color:#44BB74">
           <h1>基于vuejs最新技术栈开发,借鉴整合第三Eelment UI框架,也添加自己核心组件流程设计器(jsplumbchart),该系统完整覆盖现有业务常用功能需求，流程开发(可自定义)，国际化，图表(echart),自适应布局,python数据可视化等,可实现公司业务快速定制化开发,也非常感谢Elment Ui开源库贡献!</h1>
+          <h4 style="color:red">备注:此程序部署在heroku,初次访问等待时间较长，翻墙情况访问更流畅!!!</h4>
         </span>
       </div>
     </div>
