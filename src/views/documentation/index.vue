@@ -671,7 +671,7 @@ export default {
   .jspluimbchart {
     position: absolute;
     width: 100%;
-    height: 100%;
+    height: 1000px;
     background: #fff;
 
     .el-aside {
